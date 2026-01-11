@@ -16,7 +16,7 @@ import Material from './models/Material';
 import Claim from './models/Claim';
 import Attendance from './models/Attendance';
 import Schedule from './models/Schedule';
-import Subject from './models/subject.model';
+import Subject from './models/Subject';
 import Notification from './models/Notification';
 import Message from './models/Message';
 import Contact from './models/Contact';

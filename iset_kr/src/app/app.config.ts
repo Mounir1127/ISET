@@ -7,11 +7,13 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 
 import { provideHttpClient } from '@angular/common/http';
 
+import { provideZoneChangeDetection } from '@angular/core';
+
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideHttpClient(),
-    provideClientHydration(withEventReplay()),
     provideAnimations()
   ]
 };

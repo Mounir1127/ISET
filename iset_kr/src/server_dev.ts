@@ -16,9 +16,10 @@ import Material from './models/Material';
 import Claim from './models/Claim';
 import Attendance from './models/Attendance';
 import Schedule from './models/Schedule';
-import Subject from './models/subject.model';
+import Subject from './models/Subject';
 import Notification from './models/Notification';
 import Message from './models/Message';
+import Contact from './models/Contact';
 
 const envPath = join(process.cwd(), '.env');
 dotenv.config({ path: envPath });
@@ -257,6 +258,21 @@ app.get('/api/public/modules', async (req: any, res: any) => {
   }
 });
 
+app.post('/api/public/contact', async (req: any, res: any) => {
+  try {
+    const contact = new Contact({
+      name: req.body.name,
+      email: req.body.email,
+      message: req.body.message
+    });
+    await contact.save();
+    res.status(201).json({ message: 'Message envoyé avec succès' });
+  } catch (err) {
+    console.error('Error saving contact message:', err);
+    res.status(500).json({ message: 'Erreur lors de l\'envoi du message' });
+  }
+});
+
 // --- Notification API ---
 app.get('/api/notifications', async (req: any, res: any) => {
   try {
@@ -297,6 +313,34 @@ app.post('/api/messages', async (req: any, res: any) => {
     res.status(201).json(message);
   } catch (err) {
     res.status(500).json({ message: 'Error sending message' });
+  }
+});
+
+// Admin Contact Management
+app.get('/api/admin/contacts', async (req: any, res: any) => {
+  try {
+    const contacts = await Contact.find().sort({ createdAt: -1 });
+    res.status(200).json(contacts);
+  } catch (err) {
+    res.status(500).json({ message: 'Error fetching contact messages' });
+  }
+});
+
+app.put('/api/admin/contacts/:id/read', async (req: any, res: any) => {
+  try {
+    await Contact.findByIdAndUpdate(req.params.id, { status: 'read' });
+    res.status(200).json({ message: 'Message marked as read' });
+  } catch (err) {
+    res.status(500).json({ message: 'Error updating message status' });
+  }
+});
+
+app.delete('/api/admin/contacts/:id', async (req: any, res: any) => {
+  try {
+    await Contact.findByIdAndDelete(req.params.id);
+    res.status(200).json({ message: 'Message deleted' });
+  } catch (err) {
+    res.status(500).json({ message: 'Error deleting message' });
   }
 });
 
