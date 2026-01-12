@@ -225,17 +225,11 @@ import { AdminService } from '../../../services/admin.service';
   `,
   styles: [`
     :host {
+      --color-cours: #10b981;
+      --color-td: #0369a1;
+      --color-tp: #475569;
       --admin-navy: #0f172a;
-      --admin-navy-light: #1e293b;
-      --admin-blue: #0ea5e9;
-      --admin-blue-dark: #0369a1;
       --admin-gold: #f59e0b;
-      --admin-indigo: #6366f1;
-      --admin-emerald: #10b981;
-      --admin-slate: #64748b;
-      --glass-bg: rgba(255, 255, 255, 0.7);
-      --glass-border: rgba(255, 255, 255, 0.1);
-      --session-radius: 16px;
     }
 
     .academic-management {
@@ -506,9 +500,9 @@ import { AdminService } from '../../../services/admin.service';
             .btn-delete-mini { opacity: 1; transform: scale(1); }
         }
         
-        &.cours { background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%); } 
-        &.td { background: linear-gradient(135deg, #334155 0%, #475569 100%); } 
-        &.tp { background: linear-gradient(135deg, #059669 0%, #10b981 100%); } 
+        &.cours { background: var(--color-cours); } 
+        &.td { background: var(--color-td); } 
+        &.tp { background: var(--color-tp); } 
 
         .session-main { position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; }
     }
