@@ -419,7 +419,87 @@
     </div>
   </section>
 
-  <!-- 9. Final CTA -->
+  <!-- 10. Location & Contact Map -->
+  <section class="map-section py-10 bg-light">
+    <div class="container">
+      <div class="section-header text-center mb-8 animate-on-scroll slide-up">
+        <span class="text-gold fw-black ls-3 uppercase">Nous Trouver</span>
+        <h2 class="display-4 fw-black text-navy mt-2">Localisation & Contact</h2>
+        <div class="divider-gold mx-auto"></div>
+      </div>
+
+      <div class="row g-5 align-items-stretch">
+        <!-- Contact Info -->
+        <div class="col-lg-4 animate-on-scroll slide-right">
+          <div class="card border-0 rounded-4 shadow-lg h-100 p-5">
+            <div class="mb-4">
+              <div class="icon-box-pro bg-navy text-white mb-3">
+                <i class="fas fa-map-marker-alt"></i>
+              </div>
+              <h4 class="fw-bold text-navy mb-3">Adresse</h4>
+              <p class="text-secondary mb-0">
+                Route de Sousse Km 5<br>
+                3100 Kairouan, Tunisie
+              </p>
+            </div>
+
+            <div class="mb-4">
+              <div class="icon-box-pro bg-navy text-white mb-3">
+                <i class="fas fa-phone-alt"></i>
+              </div>
+              <h4 class="fw-bold text-navy mb-3">Téléphone</h4>
+              <p class="text-secondary mb-0">
+                <a href="tel:+21677234400" class="text-decoration-none text-secondary hover-gold">
+                  +216 77 234 400
+                </a>
+              </p>
+            </div>
+
+            <div class="mb-4">
+              <div class="icon-box-pro bg-navy text-white mb-3">
+                <i class="fas fa-envelope"></i>
+              </div>
+              <h4 class="fw-bold text-navy mb-3">Email</h4>
+              <p class="text-secondary mb-0">
+                <a href="mailto:contact@isetkr.rnu.tn" class="text-decoration-none text-secondary hover-gold">
+                  contact@isetkr.rnu.tn
+                </a>
+              </p>
+            </div>
+
+            <div>
+              <div class="icon-box-pro bg-navy text-white mb-3">
+                <i class="fas fa-clock"></i>
+              </div>
+              <h4 class="fw-bold text-navy mb-3">Horaires</h4>
+              <p class="text-secondary mb-2">
+                <strong>Lundi - Vendredi:</strong> 8h00 - 17h00<br>
+                <strong>Samedi:</strong> 8h00 - 13h00
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Google Map -->
+        <div class="col-lg-8 animate-on-scroll slide-left">
+          <div class="map-container rounded-4 overflow-hidden shadow-2xl" style="height: 100%; min-height: 500px;">
+            <iframe 
+              [src]="mapUrl" 
+              width="100%" 
+              height="100%" 
+              style="border:0; display: block;" 
+              allowfullscreen="" 
+              loading="lazy" 
+              referrerpolicy="no-referrer-when-downgrade"
+              title="Localisation ISET Kairouan">
+            </iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11. Final CTA -->
   <section class="final-cta-section border-top border-white-10">
     <div class="cta-bg-premium position-absolute w-100 h-100 top-0"></div>
     <div class="container cta-content text-center text-white">
