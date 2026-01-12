@@ -34,6 +34,12 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Request logging for debugging production
+app.use((req, res, next) => {
+    console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+    next();
+});
+
 // Create uploads directory if it doesn't exist
 const uploadsDir = join(process.cwd(), 'uploads');
 if (!existsSync(uploadsDir)) {
@@ -817,6 +823,17 @@ app.put('/api/notifications/:id/read', async (req: any, res: any) => {
 
 // Port
 const port = process.env['PORT'] || 4000;
+
+// Catch-all 404 for debugging
+app.use((req, res) => {
+    console.warn(`[404] Unmatched Request: ${req.method} ${req.url}`);
+    res.status(404).json({
+        message: 'Endpoint non trouvé (Backend Production)',
+        method: req.method,
+        url: req.url
+    });
+});
+
 app.listen(port, () => {
-    console.log(`API Server listening on http://localhost:${port}`);
+    console.log(`API Server listening on port ${port}`);
 });

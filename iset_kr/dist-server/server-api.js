@@ -1,813 +1,803 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || (function () {
-    var ownKeys = function(o) {
-        ownKeys = Object.getOwnPropertyNames || function (o) {
-            var ar = [];
-            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
-            return ar;
-        };
-        return ownKeys(o);
-    };
-    return function (mod) {
-        if (mod && mod.__esModule) return mod;
-        var result = {};
-        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
-        __setModuleDefault(result, mod);
-        return result;
-    };
-})();
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var __generator = (this && this.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype);
-    return g.next = verb(0), g["throw"] = verb(1), g["return"] = verb(2), typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (g && (g = 0, op[0] && (_ = 0)), _) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-    }
-};
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var express_1 = __importDefault(require("express"));
+const tslib_1 = require("tslib");
+const express_1 = tslib_1.__importDefault(require("express"));
 // @ts-ignore
-var cors_1 = __importDefault(require("cors"));
-var multer_1 = __importDefault(require("multer"));
-var path_1 = require("path");
-var fs_1 = require("fs");
-var mongoose_1 = __importDefault(require("mongoose"));
-var dotenv = __importStar(require("dotenv"));
-var User_1 = __importDefault(require("./models/User"));
-var Department_1 = __importDefault(require("./models/Department"));
-var ClassGroup_1 = __importDefault(require("./models/ClassGroup"));
-var Module_1 = __importDefault(require("./models/Module"));
-var Grade_1 = __importDefault(require("./models/Grade"));
-var Announcement_1 = __importDefault(require("./models/Announcement"));
-var subject_model_1 = __importDefault(require("./models/subject.model"));
-var bcryptjs_1 = __importDefault(require("bcryptjs"));
-var envPath = (0, path_1.join)(process.cwd(), '.env');
+const cors_1 = tslib_1.__importDefault(require("cors"));
+const multer_1 = tslib_1.__importDefault(require("multer"));
+const path_1 = require("path");
+const fs_1 = require("fs");
+const mongoose_1 = tslib_1.__importDefault(require("mongoose"));
+const dotenv = tslib_1.__importStar(require("dotenv"));
+const User_1 = tslib_1.__importDefault(require("./models/User"));
+const Department_1 = tslib_1.__importDefault(require("./models/Department"));
+const ClassGroup_1 = tslib_1.__importDefault(require("./models/ClassGroup"));
+const Module_1 = tslib_1.__importDefault(require("./models/Module"));
+const Grade_1 = tslib_1.__importDefault(require("./models/Grade"));
+const Announcement_1 = tslib_1.__importDefault(require("./models/Announcement"));
+const Material_1 = tslib_1.__importDefault(require("./models/Material"));
+const Claim_1 = tslib_1.__importDefault(require("./models/Claim"));
+const Attendance_1 = tslib_1.__importDefault(require("./models/Attendance"));
+const Schedule_1 = tslib_1.__importDefault(require("./models/Schedule"));
+const Subject_1 = tslib_1.__importDefault(require("./models/Subject"));
+const Notification_1 = tslib_1.__importDefault(require("./models/Notification"));
+const Contact_1 = tslib_1.__importDefault(require("./models/Contact"));
+const bcryptjs_1 = tslib_1.__importDefault(require("bcryptjs"));
+const envPath = (0, path_1.join)(process.cwd(), '.env');
 dotenv.config({ path: envPath });
 console.log('--- API Server Debug ---');
 console.log('CWD:', process.cwd());
-var app = (0, express_1.default)();
+const app = (0, express_1.default)();
 // Middleware
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
+// Request logging for debugging production
+app.use((req, res, next) => {
+    console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+    next();
+});
 // Create uploads directory if it doesn't exist
-var uploadsDir = (0, path_1.join)(process.cwd(), 'uploads');
+const uploadsDir = (0, path_1.join)(process.cwd(), 'uploads');
 if (!(0, fs_1.existsSync)(uploadsDir)) {
     (0, fs_1.mkdirSync)(uploadsDir, { recursive: true });
 }
 app.use('/uploads', express_1.default.static(uploadsDir));
-var storage = multer_1.default.diskStorage({
-    destination: function (req, file, cb) {
+const storage = multer_1.default.diskStorage({
+    destination: (req, file, cb) => {
         cb(null, uploadsDir);
     },
-    filename: function (req, file, cb) {
-        var uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        var ext = file.originalname.split('.').pop();
-        cb(null, "material-".concat(uniqueSuffix, ".").concat(ext));
+    filename: (req, file, cb) => {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        const ext = file.originalname.split('.').pop();
+        cb(null, `material-${uniqueSuffix}.${ext}`);
     }
 });
-var upload = (0, multer_1.default)({
+const upload = (0, multer_1.default)({
     storage: storage,
     limits: { fileSize: 50 * 1024 * 1024 }
 });
 mongoose_1.default.set('debug', true);
 // MongoDB Connection
-var mongodbUri = process.env['MONGODB_URI'] || 'mongodb://localhost:27017/iset_kr';
-console.log('Connecting to MongoDB...');
-mongoose_1.default.connect(mongodbUri)
-    .then(function () { return console.log('✅ Connected to MongoDB Successfully'); })
-    .catch(function (err) { return console.error('❌ Database connection failed:', err); });
+const mongodbUri = process.env['MONGODB_URI'];
+if (!mongodbUri) {
+    console.error('❌ CRITICAL: MONGODB_URI is not defined in environment variables!');
+}
+else {
+    console.log('Connecting to MongoDB Atlas...');
+    mongoose_1.default.connect(mongodbUri)
+        .then(() => console.log('✅ Connected to MongoDB Atlas Successfully'))
+        .catch((err) => {
+        console.error('❌ Database connection failed!');
+        console.error('Error Details:', err.message);
+        if (err.message.includes('User not authorized')) {
+            console.error('TIP: Check if your database user and password are correct in the URI.');
+        }
+        else if (err.message.includes('MongoNetworkError')) {
+            console.error('TIP: Check if you have whitelisted "Allow access from anywhere" (0.0.0.0/0) in MongoDB Atlas.');
+        }
+    });
+}
 // Auth & Public API Endpoints
 // Register
-app.post('/api/register', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, email, matricule, existingUser, cleanData_1, hashedPassword, newUser, savedUser, err_1, messages;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
-            case 0:
-                _b.trys.push([0, 3, , 4]);
-                _a = req.body, email = _a.email, matricule = _a.matricule;
-                return [4 /*yield*/, User_1.default.findOne({ $or: [{ email: email }, { matricule: matricule }] })];
-            case 1:
-                existingUser = _b.sent();
-                if (existingUser) {
-                    return [2 /*return*/, res.status(400).json({ message: 'L\'utilisateur avec cet email ou matricule existe déjà.' })];
-                }
-                cleanData_1 = {};
-                Object.keys(req.body).forEach(function (key) {
-                    var value = req.body[key];
-                    cleanData_1[key] = (value === '' || (Array.isArray(value) && value.length === 0)) ? undefined : value;
-                });
-                hashedPassword = cleanData_1.password ? bcryptjs_1.default.hashSync(cleanData_1.password, 10) : undefined;
-                newUser = new User_1.default(__assign(__assign({}, cleanData_1), { name: cleanData_1.fullName || cleanData_1.name, password: hashedPassword, status: 'pending' }));
-                return [4 /*yield*/, newUser.save()];
-            case 2:
-                savedUser = _b.sent();
-                res.status(201).json({
-                    message: 'Inscription réussie',
-                    user: { name: savedUser.name, role: savedUser.role, _id: savedUser._id }
-                });
-                return [3 /*break*/, 4];
-            case 3:
-                err_1 = _b.sent();
-                console.error('Registration error:', err_1);
-                if (err_1.name === 'ValidationError') {
-                    messages = Object.values(err_1.errors).map(function (val) { return val.message; });
-                    return [2 /*return*/, res.status(400).json({ message: 'Erreur de validation: ' + messages.join(', ') })];
-                }
-                res.status(500).json({ message: 'Erreur lors de l\'inscription: ' + err_1.message });
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
+app.post('/api/register', async (req, res) => {
+    try {
+        const { email, matricule } = req.body;
+        const existingUser = await User_1.default.findOne({ $or: [{ email }, { matricule }] });
+        if (existingUser) {
+            return res.status(400).json({ message: 'L\'utilisateur avec cet email ou matricule existe déjà.' });
         }
-    });
-}); });
+        const cleanData = {};
+        Object.keys(req.body).forEach(key => {
+            const value = req.body[key];
+            cleanData[key] = (value === '' || (Array.isArray(value) && value.length === 0)) ? undefined : value;
+        });
+        const hashedPassword = cleanData.password ? bcryptjs_1.default.hashSync(cleanData.password, 10) : undefined;
+        const newUser = new User_1.default({
+            ...cleanData,
+            name: cleanData.fullName || cleanData.name, // Map fullName from frontend to name in model
+            password: hashedPassword,
+            status: 'pending'
+        });
+        const savedUser = await newUser.save();
+        res.status(201).json({
+            message: 'Inscription réussie',
+            user: { name: savedUser.name, role: savedUser.role, _id: savedUser._id }
+        });
+    }
+    catch (err) {
+        console.error('Registration error:', err);
+        if (err.name === 'ValidationError') {
+            const messages = Object.values(err.errors).map((val) => val.message);
+            return res.status(400).json({ message: 'Erreur de validation: ' + messages.join(', ') });
+        }
+        res.status(500).json({ message: 'Erreur lors de l\'inscription: ' + err.message });
+    }
+});
 // Login
-app.post('/api/login', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, username, password, user, isMatch, err_2;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
-            case 0:
-                _b.trys.push([0, 2, , 3]);
-                _a = req.body, username = _a.username, password = _a.password;
-                if (!username || !password)
-                    return [2 /*return*/, res.status(400).json({ message: 'Identifiants requis' })];
-                return [4 /*yield*/, User_1.default.findOne({ $or: [{ email: username }, { matricule: username }] })];
-            case 1:
-                user = _b.sent();
-                if (!user)
-                    return [2 /*return*/, res.status(401).json({ message: 'Identifiants incorrects' })];
-                isMatch = false;
-                if (user.password) {
-                    if (user.password.startsWith('$2a$') || user.password.startsWith('$2b$')) {
-                        isMatch = bcryptjs_1.default.compareSync(password, user.password);
-                    }
-                    else {
-                        isMatch = user.password === password;
-                    }
-                }
-                if (!isMatch)
-                    return [2 /*return*/, res.status(401).json({ message: 'Identifiants incorrects' })];
-                if (user.status === 'pending')
-                    return [2 /*return*/, res.status(403).json({ message: 'Compte en attente' })];
-                if (user.status === 'inactive')
-                    return [2 /*return*/, res.status(403).json({ message: 'Compte désactivé' })];
-                res.status(200).json({
-                    message: 'Connexion réussie',
-                    user: {
-                        id: user._id,
-                        name: user.name,
-                        email: user.email,
-                        matricule: user.matricule,
-                        role: user.role,
-                        status: user.status
-                    }
-                });
-                return [3 /*break*/, 3];
-            case 2:
-                err_2 = _b.sent();
-                res.status(500).json({ message: 'Erreur de connexion' });
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
+app.post('/api/login', async (req, res) => {
+    try {
+        const { username, password } = req.body;
+        if (!username || !password)
+            return res.status(400).json({ message: 'Identifiants requis' });
+        const user = await User_1.default.findOne({ $or: [{ email: username }, { matricule: username }] });
+        if (!user)
+            return res.status(401).json({ message: 'Identifiants incorrects' });
+        let isMatch = false;
+        if (user.password) {
+            if (user.password.startsWith('$2a$') || user.password.startsWith('$2b$')) {
+                isMatch = bcryptjs_1.default.compareSync(password, user.password);
+            }
+            else {
+                isMatch = user.password === password;
+            }
         }
-    });
-}); });
+        if (!isMatch)
+            return res.status(401).json({ message: 'Identifiants incorrects' });
+        if (user.status === 'pending')
+            return res.status(403).json({ message: 'Compte en attente' });
+        if (user.status === 'inactive')
+            return res.status(403).json({ message: 'Compte désactivé' });
+        res.status(200).json({
+            message: 'Connexion réussie',
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email,
+                matricule: user.matricule,
+                role: user.role,
+                status: user.status
+            }
+        });
+    }
+    catch (err) {
+        console.error('Login Error:', err.message);
+        res.status(500).json({ message: 'Erreur interne au serveur lors de la connexion' });
+    }
+});
+// Update User Profile
+app.put('/api/user/profile/:id', async (req, res) => {
+    try {
+        const { email, matricule, name } = req.body;
+        const user = await User_1.default.findById(req.params.id);
+        if (!user)
+            return res.status(404).json({ message: 'Utilisateur non trouvé' });
+        user.email = email || user.email;
+        user.matricule = matricule || user.matricule;
+        user.name = name || user.name;
+        await user.save();
+        res.status(200).json({
+            message: 'Profil mis à jour',
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email,
+                matricule: user.matricule,
+                role: user.role
+            }
+        });
+    }
+    catch (err) {
+        res.status(500).json({ message: 'Erreur lors de la mise à jour du profil' });
+    }
+});
+// Change Password
+app.put('/api/user/password/:id', async (req, res) => {
+    try {
+        const { currentPassword, newPassword } = req.body;
+        const user = await User_1.default.findById(req.params.id);
+        if (!user)
+            return res.status(404).json({ message: 'Utilisateur non trouvé' });
+        // Check current password
+        let isMatch = false;
+        if (user.password) {
+            if (user.password.startsWith('$2a$') || user.password.startsWith('$2b$')) {
+                isMatch = bcryptjs_1.default.compareSync(currentPassword, user.password);
+            }
+            else {
+                isMatch = user.password === currentPassword;
+            }
+        }
+        if (!isMatch) {
+            return res.status(401).json({ message: 'Ancien mot de passe incorrect' });
+        }
+        user.password = bcryptjs_1.default.hashSync(newPassword, 10);
+        await user.save();
+        res.status(200).json({ message: 'Mot de passe modifié avec succès' });
+    }
+    catch (err) {
+        res.status(500).json({ message: 'Erreur lors du changement de mot de passe' });
+    }
+});
 // Structural Data Public APIs
-app.get('/api/public/departments', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var departments, err_3;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, Department_1.default.find().sort({ name: 1 }).populate('headOfDepartment').lean()];
-            case 1:
-                departments = _a.sent();
-                res.status(200).json(departments);
-                return [3 /*break*/, 3];
-            case 2:
-                err_3 = _a.sent();
-                console.error('Error fetching departments:', err_3);
-                res.status(500).json({ message: 'Error fetching departments' });
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
-        }
-    });
-}); });
-app.get('/api/public/classes', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var classes, err_4;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, ClassGroup_1.default.find().populate('department').lean()];
-            case 1:
-                classes = _a.sent();
-                res.status(200).json(classes);
-                return [3 /*break*/, 3];
-            case 2:
-                err_4 = _a.sent();
-                res.status(500).json({ message: 'Error fetching classes' });
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
-        }
-    });
-}); });
-app.get('/api/public/modules', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var modules, err_5;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, Module_1.default.find().populate('department').lean()];
-            case 1:
-                modules = _a.sent();
-                res.status(200).json(modules);
-                return [3 /*break*/, 3];
-            case 2:
-                err_5 = _a.sent();
-                res.status(500).json({ message: 'Error fetching modules' });
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
-        }
-    });
-}); });
+app.get('/api/public/departments', async (req, res) => {
+    try {
+        const departments = await Department_1.default.find().sort({ name: 1 }).populate('headOfDepartment').lean();
+        res.status(200).json(departments);
+    }
+    catch (err) {
+        console.error('Error fetching departments:', err);
+        res.status(500).json({ message: 'Error fetching departments' });
+    }
+});
+app.get('/api/public/classes', async (req, res) => {
+    try {
+        const classes = await ClassGroup_1.default.find().populate('department').lean();
+        res.status(200).json(classes);
+    }
+    catch (err) {
+        res.status(500).json({ message: 'Error fetching classes' });
+    }
+});
+app.get('/api/public/modules', async (req, res) => {
+    try {
+        const modules = await Module_1.default.find().populate('department').lean();
+        res.status(200).json(modules);
+    }
+    catch (err) {
+        res.status(500).json({ message: 'Error fetching modules' });
+    }
+});
 // --- Admin API Endpoints ---
 // User Management
-app.post('/api/admin/users', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, email, matricule, existingUser, newUser, savedUser, err_6;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
-            case 0:
-                _b.trys.push([0, 3, , 4]);
-                _a = req.body, email = _a.email, matricule = _a.matricule;
-                return [4 /*yield*/, User_1.default.findOne({ $or: [{ email: email }, { matricule: matricule }] })];
-            case 1:
-                existingUser = _b.sent();
-                if (existingUser)
-                    return [2 /*return*/, res.status(400).json({ message: 'Utilisateur existant.' })];
-                newUser = new User_1.default(__assign(__assign({}, req.body), { password: req.body.password ? bcryptjs_1.default.hashSync(req.body.password, 10) : undefined, status: req.body.status || 'active' }));
-                return [4 /*yield*/, newUser.save()];
-            case 2:
-                savedUser = _b.sent();
-                res.status(201).json(savedUser);
-                return [3 /*break*/, 4];
-            case 3:
-                err_6 = _b.sent();
-                res.status(500).json({ message: 'Erreur création utilisateur: ' + err_6.message });
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
-        }
-    });
-}); });
-app.get('/api/admin/users', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var users, err_7;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, User_1.default.find().sort({ createdAt: -1 })];
-            case 1:
-                users = _a.sent();
-                res.status(200).json(users);
-                return [3 /*break*/, 3];
-            case 2:
-                err_7 = _a.sent();
-                res.status(500).json({ message: 'Error fetching users' });
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
-        }
-    });
-}); });
-app.put('/api/admin/users/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var updateData, updatedUser, err_8;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 2, , 3]);
-                updateData = __assign({}, req.body);
-                if (updateData.password)
-                    updateData.password = bcryptjs_1.default.hashSync(updateData.password, 10);
-                return [4 /*yield*/, User_1.default.findByIdAndUpdate(req.params.id, { $set: updateData }, { new: true })];
-            case 1:
-                updatedUser = _a.sent();
-                res.status(200).json(updatedUser);
-                return [3 /*break*/, 3];
-            case 2:
-                err_8 = _a.sent();
-                res.status(500).json({ message: 'Error updating user' });
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
-        }
-    });
-}); });
-app.delete('/api/admin/users/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var err_9;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, User_1.default.findByIdAndDelete(req.params.id)];
-            case 1:
-                _a.sent();
-                res.status(200).json({ message: 'User deleted' });
-                return [3 /*break*/, 3];
-            case 2:
-                err_9 = _a.sent();
-                res.status(500).json({ message: 'Error deleting user' });
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
-        }
-    });
-}); });
+app.post('/api/admin/users', async (req, res) => {
+    try {
+        const { email, matricule } = req.body;
+        const existingUser = await User_1.default.findOne({ $or: [{ email }, { matricule }] });
+        if (existingUser)
+            return res.status(400).json({ message: 'Utilisateur existant.' });
+        const newUser = new User_1.default({
+            ...req.body,
+            password: req.body.password ? bcryptjs_1.default.hashSync(req.body.password, 10) : undefined,
+            status: req.body.status || 'active'
+        });
+        const savedUser = await newUser.save();
+        res.status(201).json(savedUser);
+    }
+    catch (err) {
+        res.status(500).json({ message: 'Erreur création utilisateur: ' + err.message });
+    }
+});
+app.get('/api/admin/users', async (req, res) => {
+    try {
+        const users = await User_1.default.find().sort({ createdAt: -1 });
+        res.status(200).json(users);
+    }
+    catch (err) {
+        res.status(500).json({ message: 'Error fetching users' });
+    }
+});
+app.put('/api/admin/users/:id', async (req, res) => {
+    try {
+        const updateData = { ...req.body };
+        if (updateData.password)
+            updateData.password = bcryptjs_1.default.hashSync(updateData.password, 10);
+        const updatedUser = await User_1.default.findByIdAndUpdate(req.params.id, { $set: updateData }, { new: true });
+        res.status(200).json(updatedUser);
+    }
+    catch (err) {
+        res.status(500).json({ message: 'Error updating user' });
+    }
+});
+app.delete('/api/admin/users/:id', async (req, res) => {
+    try {
+        await User_1.default.findByIdAndDelete(req.params.id);
+        res.status(200).json({ message: 'User deleted' });
+    }
+    catch (err) {
+        res.status(500).json({ message: 'Error deleting user' });
+    }
+});
 // Department Management
-app.get('/api/admin/departments', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var departments, err_10;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, Department_1.default.find().populate('headOfDepartment')];
-            case 1:
-                departments = _a.sent();
-                res.status(200).json(departments);
-                return [3 /*break*/, 3];
-            case 2:
-                err_10 = _a.sent();
-                res.status(500).json({ message: 'Error fetching departments' });
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
-        }
-    });
-}); });
-app.post('/api/admin/departments', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var dept, err_11;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 2, , 3]);
-                dept = new Department_1.default(req.body);
-                return [4 /*yield*/, dept.save()];
-            case 1:
-                _a.sent();
-                res.status(201).json(dept);
-                return [3 /*break*/, 3];
-            case 2:
-                err_11 = _a.sent();
-                res.status(500).json({ message: 'Error creating department' });
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
-        }
-    });
-}); });
-app.delete('/api/admin/departments/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var err_12;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, Department_1.default.findByIdAndDelete(req.params.id)];
-            case 1:
-                _a.sent();
-                res.status(200).json({ message: 'Department deleted' });
-                return [3 /*break*/, 3];
-            case 2:
-                err_12 = _a.sent();
-                res.status(500).json({ message: 'Error deleting department' });
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
-        }
-    });
-}); });
-app.put('/api/admin/departments/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var updatedDept, err_13;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, Department_1.default.findByIdAndUpdate(req.params.id, req.body, { new: true })];
-            case 1:
-                updatedDept = _a.sent();
-                res.status(200).json(updatedDept);
-                return [3 /*break*/, 3];
-            case 2:
-                err_13 = _a.sent();
-                res.status(500).json({ message: 'Error updating department' });
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
-        }
-    });
-}); });
+app.get('/api/admin/departments', async (req, res) => {
+    try {
+        const departments = await Department_1.default.find().populate('headOfDepartment');
+        res.status(200).json(departments);
+    }
+    catch (err) {
+        res.status(500).json({ message: 'Error fetching departments' });
+    }
+});
+app.post('/api/admin/departments', async (req, res) => {
+    try {
+        const dept = new Department_1.default(req.body);
+        await dept.save();
+        res.status(201).json(dept);
+    }
+    catch (err) {
+        res.status(500).json({ message: 'Error creating department' });
+    }
+});
+app.delete('/api/admin/departments/:id', async (req, res) => {
+    try {
+        await Department_1.default.findByIdAndDelete(req.params.id);
+        res.status(200).json({ message: 'Department deleted' });
+    }
+    catch (err) {
+        res.status(500).json({ message: 'Error deleting department' });
+    }
+});
+app.put('/api/admin/departments/:id', async (req, res) => {
+    try {
+        const updatedDept = await Department_1.default.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        res.status(200).json(updatedDept);
+    }
+    catch (err) {
+        res.status(500).json({ message: 'Error updating department' });
+    }
+});
 // Class Management
-app.get('/api/admin/classes', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var classes, err_14;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, ClassGroup_1.default.find().populate('department')];
-            case 1:
-                classes = _a.sent();
-                res.status(200).json(classes);
-                return [3 /*break*/, 3];
-            case 2:
-                err_14 = _a.sent();
-                res.status(500).json({ message: 'Error fetching classes' });
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
-        }
-    });
-}); });
-app.post('/api/admin/classes', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var classGroup, err_15;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 2, , 3]);
-                classGroup = new ClassGroup_1.default(req.body);
-                return [4 /*yield*/, classGroup.save()];
-            case 1:
-                _a.sent();
-                res.status(201).json(classGroup);
-                return [3 /*break*/, 3];
-            case 2:
-                err_15 = _a.sent();
-                res.status(500).json({ message: 'Error creating class' });
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
-        }
-    });
-}); });
-app.delete('/api/admin/classes/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var err_16;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, ClassGroup_1.default.findByIdAndDelete(req.params.id)];
-            case 1:
-                _a.sent();
-                res.status(200).json({ message: 'Class deleted' });
-                return [3 /*break*/, 3];
-            case 2:
-                err_16 = _a.sent();
-                res.status(500).json({ message: 'Error deleting class' });
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
-        }
-    });
-}); });
+app.get('/api/admin/classes', async (req, res) => {
+    try {
+        const classes = await ClassGroup_1.default.find().populate('department');
+        res.status(200).json(classes);
+    }
+    catch (err) {
+        res.status(500).json({ message: 'Error fetching classes' });
+    }
+});
+app.post('/api/admin/classes', async (req, res) => {
+    try {
+        const classGroup = new ClassGroup_1.default(req.body);
+        await classGroup.save();
+        res.status(201).json(classGroup);
+    }
+    catch (err) {
+        res.status(500).json({ message: 'Error creating class' });
+    }
+});
+app.delete('/api/admin/classes/:id', async (req, res) => {
+    try {
+        await ClassGroup_1.default.findByIdAndDelete(req.params.id);
+        res.status(200).json({ message: 'Class deleted' });
+    }
+    catch (err) {
+        res.status(500).json({ message: 'Error deleting class' });
+    }
+});
 // Subject Management
-app.get('/api/admin/subjects', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var subjects, err_17;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, subject_model_1.default.find().sort({ name: 1 })];
-            case 1:
-                subjects = _a.sent();
-                res.status(200).json(subjects);
-                return [3 /*break*/, 3];
-            case 2:
-                err_17 = _a.sent();
-                res.status(500).json({ message: 'Error fetching subjects' });
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
-        }
-    });
-}); });
-app.post('/api/admin/subjects', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var subject, err_18;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 2, , 3]);
-                subject = new subject_model_1.default(req.body);
-                return [4 /*yield*/, subject.save()];
-            case 1:
-                _a.sent();
-                res.status(201).json(subject);
-                return [3 /*break*/, 3];
-            case 2:
-                err_18 = _a.sent();
-                res.status(500).json({ message: 'Error creating subject' });
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
-        }
-    });
-}); });
-app.delete('/api/admin/subjects/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var err_19;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, subject_model_1.default.findByIdAndDelete(req.params.id)];
-            case 1:
-                _a.sent();
-                res.status(200).json({ message: 'Subject deleted' });
-                return [3 /*break*/, 3];
-            case 2:
-                err_19 = _a.sent();
-                res.status(500).json({ message: 'Error deleting subject' });
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
-        }
-    });
-}); });
+app.get('/api/admin/subjects', async (req, res) => {
+    try {
+        const subjects = await Subject_1.default.find().sort({ name: 1 });
+        res.status(200).json(subjects);
+    }
+    catch (err) {
+        res.status(500).json({ message: 'Error fetching subjects' });
+    }
+});
+app.post('/api/admin/subjects', async (req, res) => {
+    try {
+        const subject = new Subject_1.default(req.body);
+        await subject.save();
+        res.status(201).json(subject);
+    }
+    catch (err) {
+        res.status(500).json({ message: 'Error creating subject' });
+    }
+});
+app.delete('/api/admin/subjects/:id', async (req, res) => {
+    try {
+        await Subject_1.default.findByIdAndDelete(req.params.id);
+        res.status(200).json({ message: 'Subject deleted' });
+    }
+    catch (err) {
+        res.status(500).json({ message: 'Error deleting subject' });
+    }
+});
 // Module Management
-app.get('/api/admin/modules', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var modules, err_20;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, Module_1.default.find().populate('department')];
-            case 1:
-                modules = _a.sent();
-                res.status(200).json(modules);
-                return [3 /*break*/, 3];
-            case 2:
-                err_20 = _a.sent();
-                res.status(500).json({ message: 'Error fetching modules' });
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
-        }
-    });
-}); });
-app.post('/api/admin/modules', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var module_1, err_21;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 2, , 3]);
-                module_1 = new Module_1.default(req.body);
-                return [4 /*yield*/, module_1.save()];
-            case 1:
-                _a.sent();
-                res.status(201).json(module_1);
-                return [3 /*break*/, 3];
-            case 2:
-                err_21 = _a.sent();
-                res.status(500).json({ message: 'Error creating module' });
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
-        }
-    });
-}); });
+app.get('/api/admin/modules', async (req, res) => {
+    try {
+        const modules = await Module_1.default.find().populate('department');
+        res.status(200).json(modules);
+    }
+    catch (err) {
+        res.status(500).json({ message: 'Error fetching modules' });
+    }
+});
+app.post('/api/admin/modules', async (req, res) => {
+    try {
+        const module = new Module_1.default(req.body);
+        await module.save();
+        res.status(201).json(module);
+    }
+    catch (err) {
+        res.status(500).json({ message: 'Error creating module' });
+    }
+});
 // Grade Management
-app.get('/api/admin/grades', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var grades, err_22;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, Grade_1.default.find().populate('student').populate('module')];
-            case 1:
-                grades = _a.sent();
-                res.status(200).json(grades);
-                return [3 /*break*/, 3];
-            case 2:
-                err_22 = _a.sent();
-                res.status(500).json({ message: 'Error fetching grades' });
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
-        }
-    });
-}); });
+app.get('/api/admin/grades', async (req, res) => {
+    try {
+        const grades = await Grade_1.default.find().populate('student').populate('module');
+        res.status(200).json(grades);
+    }
+    catch (err) {
+        res.status(500).json({ message: 'Error fetching grades' });
+    }
+});
 // Dashboard Stats
-app.get('/api/admin/stats', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var stats, err_23;
-    var _a, _b;
-    return __generator(this, function (_c) {
-        switch (_c.label) {
-            case 0:
-                _c.trys.push([0, 9, , 10]);
-                _a = {};
-                return [4 /*yield*/, User_1.default.countDocuments({ role: 'student' })];
-            case 1:
-                _a.students = _c.sent();
-                return [4 /*yield*/, User_1.default.countDocuments({ role: 'staff' })];
-            case 2:
-                _a.teachers = _c.sent();
-                return [4 /*yield*/, Department_1.default.countDocuments()];
-            case 3:
-                _a.departments = _c.sent();
-                return [4 /*yield*/, Module_1.default.countDocuments()];
-            case 4:
-                _a.modules = _c.sent();
-                _b = {};
-                return [4 /*yield*/, User_1.default.countDocuments({ role: 'student' })];
-            case 5:
-                _b.students = _c.sent();
-                return [4 /*yield*/, User_1.default.countDocuments({ role: 'staff' })];
-            case 6:
-                _b.staff = _c.sent();
-                return [4 /*yield*/, User_1.default.countDocuments({ role: 'admin' })];
-            case 7:
-                _b.admins = _c.sent();
-                return [4 /*yield*/, User_1.default.countDocuments({ role: 'chef' })];
-            case 8:
-                stats = (_a.userDistribution = (_b.chefs = _c.sent(),
-                    _b),
-                    _a);
-                res.status(200).json(stats);
-                return [3 /*break*/, 10];
-            case 9:
-                err_23 = _c.sent();
-                res.status(500).json({ message: 'Error fetching stats' });
-                return [3 /*break*/, 10];
-            case 10: return [2 /*return*/];
-        }
-    });
-}); });
+app.get('/api/admin/stats', async (req, res) => {
+    try {
+        const stats = {
+            students: await User_1.default.countDocuments({ role: 'student' }),
+            teachers: await User_1.default.countDocuments({ role: 'staff' }),
+            departments: await Department_1.default.countDocuments(),
+            modules: await Module_1.default.countDocuments(),
+            userDistribution: {
+                students: await User_1.default.countDocuments({ role: 'student' }),
+                staff: await User_1.default.countDocuments({ role: 'staff' }),
+                admins: await User_1.default.countDocuments({ role: 'admin' }),
+                chefs: await User_1.default.countDocuments({ role: 'chef' })
+            }
+        };
+        res.status(200).json(stats);
+    }
+    catch (err) {
+        res.status(500).json({ message: 'Error fetching stats' });
+    }
+});
 // Announcement Management (Admin)
-app.get('/api/admin/announcements', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var announcements, err_24;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, Announcement_1.default.find().sort({ createdAt: -1 })];
-            case 1:
-                announcements = _a.sent();
-                res.status(200).json(announcements);
-                return [3 /*break*/, 3];
-            case 2:
-                err_24 = _a.sent();
-                res.status(500).json({ message: 'Error fetching announcements' });
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
-        }
-    });
-}); });
-app.post('/api/admin/announcements', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var announcement, err_25;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 2, , 3]);
-                announcement = new Announcement_1.default(req.body);
-                return [4 /*yield*/, announcement.save()];
-            case 1:
-                _a.sent();
-                res.status(201).json(announcement);
-                return [3 /*break*/, 3];
-            case 2:
-                err_25 = _a.sent();
-                res.status(500).json({ message: 'Error creating announcement' });
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
-        }
-    });
-}); });
-app.put('/api/admin/announcements/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var announcement, err_26;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, Announcement_1.default.findByIdAndUpdate(req.params.id, req.body, { new: true })];
-            case 1:
-                announcement = _a.sent();
-                res.status(200).json(announcement);
-                return [3 /*break*/, 3];
-            case 2:
-                err_26 = _a.sent();
-                res.status(500).json({ message: 'Error updating announcement' });
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
-        }
-    });
-}); });
-app.delete('/api/admin/announcements/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var err_27;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, Announcement_1.default.findByIdAndDelete(req.params.id)];
-            case 1:
-                _a.sent();
-                res.status(200).json({ message: 'Announcement deleted' });
-                return [3 /*break*/, 3];
-            case 2:
-                err_27 = _a.sent();
-                res.status(500).json({ message: 'Error deleting announcement' });
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
-        }
-    });
-}); });
+app.get('/api/admin/announcements', async (req, res) => {
+    try {
+        const announcements = await Announcement_1.default.find().sort({ createdAt: -1 });
+        res.status(200).json(announcements);
+    }
+    catch (err) {
+        res.status(500).json({ message: 'Error fetching announcements' });
+    }
+});
+app.post('/api/admin/announcements', async (req, res) => {
+    try {
+        const announcement = new Announcement_1.default(req.body);
+        await announcement.save();
+        res.status(201).json(announcement);
+    }
+    catch (err) {
+        res.status(500).json({ message: 'Error creating announcement' });
+    }
+});
+app.put('/api/admin/announcements/:id', async (req, res) => {
+    try {
+        const announcement = await Announcement_1.default.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        res.status(200).json(announcement);
+    }
+    catch (err) {
+        res.status(500).json({ message: 'Error updating announcement' });
+    }
+});
+app.delete('/api/admin/announcements/:id', async (req, res) => {
+    try {
+        await Announcement_1.default.findByIdAndDelete(req.params.id);
+        res.status(200).json({ message: 'Announcement deleted' });
+    }
+    catch (err) {
+        res.status(500).json({ message: 'Error deleting announcement' });
+    }
+});
 // API Routes
-// Public Stats for Homepage
-app.get('/api/stats', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var stats, err_28;
-    var _a;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
-            case 0:
-                _b.trys.push([0, 5, , 6]);
-                _a = {};
-                return [4 /*yield*/, User_1.default.countDocuments({ role: 'student' })];
-            case 1:
-                _a.students = _b.sent();
-                return [4 /*yield*/, User_1.default.countDocuments({ role: 'staff' })];
-            case 2:
-                _a.teachers = _b.sent();
-                return [4 /*yield*/, Department_1.default.countDocuments()];
-            case 3:
-                _a.departments = _b.sent();
-                return [4 /*yield*/, Module_1.default.countDocuments()];
-            case 4:
-                stats = (_a.modules = _b.sent(),
-                    _a);
-                res.status(200).json(stats);
-                return [3 /*break*/, 6];
-            case 5:
-                err_28 = _b.sent();
-                res.status(500).json({ message: 'Error fetching stats' });
-                return [3 /*break*/, 6];
-            case 6: return [2 /*return*/];
+app.get('/api/announcements', async (req, res) => {
+    try {
+        const announcements = await Announcement_1.default.find({ status: 'published' }).sort({ createdAt: -1 }).lean();
+        res.status(200).json(announcements);
+    }
+    catch (err) {
+        res.status(500).json({ message: 'Error fetching stats' });
+    }
+});
+// Admin Contact Messages Management
+app.get('/api/admin/contacts', async (req, res) => {
+    try {
+        const contacts = await Contact_1.default.find().sort({ createdAt: -1 });
+        res.status(200).json(contacts);
+    }
+    catch (err) {
+        res.status(500).json({ message: 'Error fetching contact messages' });
+    }
+});
+app.put('/api/admin/contacts/:id/read', async (req, res) => {
+    try {
+        await Contact_1.default.findByIdAndUpdate(req.params.id, { status: 'read' });
+        res.status(200).json({ message: 'Message marked as read' });
+    }
+    catch (err) {
+        res.status(500).json({ message: 'Error updating contact status' });
+    }
+});
+app.delete('/api/admin/contacts/:id', async (req, res) => {
+    try {
+        await Contact_1.default.findByIdAndDelete(req.params.id);
+        res.status(200).json({ message: 'Message deleted' });
+    }
+    catch (err) {
+        res.status(500).json({ message: 'Error deleting message' });
+    }
+});
+// Schedule Management (Admin)
+app.get('/api/admin/schedules', async (req, res) => {
+    try {
+        const schedules = await Schedule_1.default.find()
+            .populate('module')
+            .populate('subject')
+            .populate('classGroup')
+            .populate('staff');
+        res.status(200).json(schedules);
+    }
+    catch (err) {
+        res.status(500).json({ message: 'Error fetching schedules' });
+    }
+});
+app.post('/api/admin/schedules', async (req, res) => {
+    console.log('>>> [API] Create Schedule Request:', req.body);
+    try {
+        // Sanitize: Remove empty string fields that should be ObjectIds
+        ['module', 'subject', 'classGroup', 'staff'].forEach(field => {
+            if (req.body[field] === '') {
+                delete req.body[field];
+            }
+        });
+        const { day, startTime, classGroup, room } = req.body;
+        // Validate class conflict
+        const classConflict = await Schedule_1.default.findOne({
+            day,
+            startTime,
+            classGroup
+        });
+        if (classConflict) {
+            return res.status(409).json({
+                error: 'Conflit détecté',
+                message: 'Cette classe a déjà une séance à ce créneau horaire.',
+                conflictType: 'class'
+            });
         }
-    });
-}); });
-app.get('/api/announcements', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var announcements, err_29;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, Announcement_1.default.find({ status: 'published' }).sort({ createdAt: -1 }).lean()];
-            case 1:
-                announcements = _a.sent();
-                res.status(200).json(announcements);
-                return [3 /*break*/, 3];
-            case 2:
-                err_29 = _a.sent();
-                res.status(500).json({ message: 'Error fetching announcements' });
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
+        // Validate room conflict
+        if (room) {
+            const roomStr = room.toString();
+            const roomConflict = await Schedule_1.default.findOne({
+                day,
+                startTime,
+                room: { $regex: new RegExp(`^${roomStr}$`, 'i') }
+            });
+            if (roomConflict) {
+                return res.status(409).json({
+                    error: 'Conflit détecté',
+                    message: `La salle ${room} est déjà occupée à ce créneau horaire.`,
+                    conflictType: 'room'
+                });
+            }
         }
-    });
-}); });
+        const schedule = new Schedule_1.default(req.body);
+        const savedSchedule = await schedule.save();
+        res.status(201).json(savedSchedule);
+    }
+    catch (err) {
+        console.error('>>> [CRITICAL] Schedule creation error:', err);
+        if (err.name === 'ValidationError') {
+            const messages = Object.values(err.errors).map((val) => val.message);
+            return res.status(400).json({ message: 'Erreur de validation: ' + messages.join(', ') });
+        }
+        res.status(500).json({ message: 'Error creating schedule', error: err.message });
+    }
+});
+app.delete('/api/admin/schedules/:id', async (req, res) => {
+    try {
+        await Schedule_1.default.findByIdAndDelete(req.params.id);
+        res.status(200).json({ message: 'Schedule deleted' });
+    }
+    catch (err) {
+        res.status(500).json({ message: 'Error deleting schedule' });
+    }
+});
+// --- Staff API Endpoints ---
+app.get('/api/staff/modules', async (req, res) => {
+    try {
+        const modules = await Module_1.default.find().populate('department');
+        res.status(200).json(modules);
+    }
+    catch (err) {
+        res.status(500).json({ message: 'Error fetching staff modules' });
+    }
+});
+app.get('/api/staff/students', async (req, res) => {
+    try {
+        const { classGroupId } = req.query;
+        const filter = { role: 'student' };
+        if (classGroupId)
+            filter.classGroup = classGroupId;
+        const students = await User_1.default.find(filter).populate('classGroup');
+        res.status(200).json(students);
+    }
+    catch (err) {
+        res.status(500).json({ message: 'Error fetching staff students' });
+    }
+});
+app.get('/api/staff/grades', async (req, res) => {
+    try {
+        const { moduleId, classGroupId } = req.query;
+        const grades = await Grade_1.default.find({ module: moduleId }).populate('student');
+        res.status(200).json(grades);
+    }
+    catch (err) {
+        res.status(500).json({ message: 'Error fetching staff grades' });
+    }
+});
+app.post('/api/staff/grades/bulk', async (req, res) => {
+    try {
+        const { grades } = req.body;
+        for (const g of grades) {
+            await Grade_1.default.findOneAndUpdate({ student: g.student, module: g.module, examType: g.examType }, g, { upsert: true, new: true });
+        }
+        res.status(200).json({ message: 'Grades updated' });
+    }
+    catch (err) {
+        res.status(500).json({ message: 'Error updating grades bulk' });
+    }
+});
+app.get('/api/staff/materials', async (req, res) => {
+    try {
+        const materials = await Material_1.default.find().populate('module');
+        res.status(200).json(materials);
+    }
+    catch (err) {
+        res.status(500).json({ message: 'Error fetching materials' });
+    }
+});
+app.post('/api/staff/materials/upload', upload.single('file'), async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ message: 'Aucun fichier fourni' });
+        }
+        const fileUrl = `/uploads/${req.file.filename}`;
+        const fileSizeKB = (req.file.size / 1024).toFixed(2);
+        const fileSizeMB = (req.file.size / (1024 * 1024)).toFixed(2);
+        const sizeDisplay = req.file.size > 1024 * 1024 ? `${fileSizeMB} MB` : `${fileSizeKB} KB`;
+        const materialData = {
+            ...req.body,
+            fileUrl: fileUrl,
+            size: sizeDisplay
+        };
+        const material = new Material_1.default(materialData);
+        await material.save();
+        res.status(201).json(material);
+    }
+    catch (err) {
+        res.status(500).json({ message: 'Erreur lors de l\'upload: ' + err.message });
+    }
+});
+app.get('/api/staff/claims', async (req, res) => {
+    try {
+        const claims = await Claim_1.default.find().populate('student').populate('module');
+        res.status(200).json(claims);
+    }
+    catch (err) {
+        res.status(500).json({ message: 'Error fetching claims' });
+    }
+});
+app.put('/api/staff/claims/:id', async (req, res) => {
+    try {
+        const claim = await Claim_1.default.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        res.status(200).json(claim);
+    }
+    catch (err) {
+        res.status(500).json({ message: 'Error updating claim' });
+    }
+});
+app.get('/api/staff/schedule', async (req, res) => {
+    try {
+        const schedule = await Schedule_1.default.find({ staff: req.query.staffId })
+            .populate('module')
+            .populate('classGroup');
+        res.status(200).json(schedule);
+    }
+    catch (err) {
+        res.status(500).json({ message: 'Error fetching schedule' });
+    }
+});
+app.get('/api/staff/stats', async (req, res) => {
+    try {
+        const staffId = req.query.staffId;
+        if (!staffId)
+            return res.status(400).json({ message: 'Staff ID required' });
+        const staffUser = await User_1.default.findById(staffId);
+        if (!staffUser)
+            return res.status(404).json({ message: 'Staff not found' });
+        let totalStudents = 0;
+        if (staffUser.assignedClasses && staffUser.assignedClasses.length > 0) {
+            totalStudents = await User_1.default.countDocuments({
+                role: 'student',
+                classGroup: { $in: staffUser.assignedClasses }
+            });
+        }
+        const totalModules = staffUser.subjects ? staffUser.subjects.length : 0;
+        const stats = {
+            totalStudents: totalStudents,
+            totalModules: totalModules,
+            totalMaterials: await Material_1.default.countDocuments({ uploadedBy: staffId }),
+            pendingClaims: await Claim_1.default.countDocuments({ staff: staffId, status: 'pending' })
+        };
+        res.status(200).json(stats);
+    }
+    catch (err) {
+        res.status(500).json({ message: 'Error fetching staff stats' });
+    }
+});
+// --- Student API Endpoints ---
+app.get('/api/student/stats', async (req, res) => {
+    try {
+        const { studentId, classGroupId } = req.query;
+        const stats = {
+            assignments: await Grade_1.default.countDocuments({ student: studentId }),
+            absences: await Attendance_1.default.countDocuments({ student: studentId, status: 'absent' }),
+            materials: await Material_1.default.countDocuments({ classGroup: classGroupId }),
+            notifications: await Notification_1.default.countDocuments({ recipient: studentId, read: false })
+        };
+        res.status(200).json(stats);
+    }
+    catch (err) {
+        res.status(500).json({ message: 'Error fetching student stats' });
+    }
+});
+app.get('/api/student/schedule', async (req, res) => {
+    try {
+        const { classGroupId } = req.query;
+        const schedule = await Schedule_1.default.find({ classGroup: classGroupId })
+            .populate('module')
+            .populate('staff');
+        res.status(200).json(schedule);
+    }
+    catch (err) {
+        res.status(500).json({ message: 'Error fetching student schedule' });
+    }
+});
+app.get('/api/student/grades', async (req, res) => {
+    try {
+        const { studentId } = req.query;
+        const grades = await Grade_1.default.find({ student: studentId }).populate('module');
+        res.status(200).json(grades);
+    }
+    catch (err) {
+        res.status(500).json({ message: 'Error fetching student grades' });
+    }
+});
+app.get('/api/student/materials', async (req, res) => {
+    try {
+        const { classGroupId } = req.query;
+        const materials = await Material_1.default.find({ classGroup: classGroupId }).populate('module');
+        res.status(200).json(materials);
+    }
+    catch (err) {
+        res.status(500).json({ message: 'Error fetching student materials' });
+    }
+});
+// --- General API Endpoints ---
+app.post('/api/public/contact', async (req, res) => {
+    try {
+        const contactMessage = new Contact_1.default(req.body);
+        await contactMessage.save();
+        res.status(201).json({ message: 'Message enregistré avec succès' });
+    }
+    catch (err) {
+        res.status(500).json({ message: 'Erreur lors de l\'enregistrement du message' });
+    }
+});
+app.get('/api/notifications', async (req, res) => {
+    try {
+        const { userId } = req.query;
+        const notifications = await Notification_1.default.find({ recipient: userId }).sort({ createdAt: -1 });
+        res.status(200).json(notifications);
+    }
+    catch (err) {
+        res.status(500).json({ message: 'Error fetching notifications' });
+    }
+});
+app.put('/api/notifications/:id/read', async (req, res) => {
+    try {
+        await Notification_1.default.findByIdAndUpdate(req.params.id, { read: true });
+        res.status(200).json({ message: 'Marked as read' });
+    }
+    catch (err) {
+        res.status(500).json({ message: 'Error updating notification' });
+    }
+});
 // Port
-var port = process.env['PORT'] || 4000;
-app.listen(port, function () {
-    console.log("API Server listening on http://localhost:".concat(port));
+const port = process.env['PORT'] || 4000;
+app.listen(port, () => {
+    console.log(`API Server listening on http://localhost:${port}`);
 });
