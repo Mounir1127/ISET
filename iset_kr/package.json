@@ -9,7 +9,9 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:iset_kr": "node dist/iset_kr/server/server.mjs",
-    "start:backend": "npx ts-node --transpile-only -O \"{\\\"module\\\":\\\"commonjs\\\",\\\"esModuleInterop\\\":true}\" src/server_dev.ts"
+    "start:backend": "npx ts-node --transpile-only -O \"{\\\"module\\\":\\\"commonjs\\\",\\\"esModuleInterop\\\":true}\" src/server_dev.ts",
+    "backend:build": "tsc -p tsconfig.server.json",
+    "backend:start": "node dist-server/server-api.js"
   },
   "prettier": {
     "printWidth": 100,

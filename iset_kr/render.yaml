@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: iset-backend
+    env: node
+    plan: free
+    buildCommand: npm install && npm run backend:build
+    startCommand: npm run backend:start
+    envVars:
+      - key: NODE_VERSION
+        value: 20
+      - key: MONGODB_URI
+        sync: false
