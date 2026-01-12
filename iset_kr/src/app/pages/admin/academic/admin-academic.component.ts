@@ -167,8 +167,15 @@ import { AdminService } from '../../../services/admin.service';
                                         <div class="session-main">
                                             <span class="module-name">{{ session.subject?.name || 'Matière' }}</span>
                                             <div class="session-info">
-                                                <span class="info-item"><i class="fas fa-chalkboard-teacher"></i> {{ session.staff?.name }}</span>
-                                                <span class="info-item"><i class="fas fa-door-open"></i> {{ session.room }}</span>
+                                                <span class="info-item" title="Enseignant">
+                                                    <i class="fas fa-chalkboard-teacher"></i> {{ session.staff?.name || 'Inconnu' }}
+                                                </span>
+                                                <span class="info-item" title="Salle">
+                                                    <i class="fas fa-door-open"></i> Salle: {{ session.room || 'N/A' }}
+                                                </span>
+                                                <span class="info-item" title="Classe">
+                                                    <i class="fas fa-users"></i> {{ session.classGroup?.name || 'N/A' }}
+                                                </span>
                                             </div>
                                         </div>
                                         <button class="btn-delete-mini" (click)="$event.stopPropagation(); deleteSchedule(session._id)">
