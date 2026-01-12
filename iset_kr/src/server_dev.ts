@@ -63,7 +63,7 @@ app.use((req, res, next) => {
 mongoose.set('debug', true);
 
 // MongoDB Connection
-const mongodbUri = process.env['MONGODB_URI'] || 'mongodb://localhost:27017/iset_kr';
+const mongodbUri = process.env['MONGODB_URI'] || process.env['MONGO_URI'] || 'mongodb://localhost:27017/iset_kr';
 console.log('Connecting to MongoDB...');
 
 const connectWithRetry = () => {
@@ -458,7 +458,8 @@ app.delete('/api/admin/classes/:id', async (req: any, res: any) => {
 // Subject Management
 app.get('/api/admin/subjects', async (req: any, res: any) => {
   try {
-    const subjects = await Subject.find().sort({ name: 1 });
+    const subjects = await Subject.find().sort({ name: 1 }).populate('department');
+    console.log(`[API] Fetched ${subjects.length} subjects`);
     res.status(200).json(subjects);
   } catch (err) {
     res.status(500).json({ message: 'Error fetching subjects' });

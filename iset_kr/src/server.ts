@@ -103,7 +103,7 @@ app.use((req, res, next) => {
 mongoose.set('debug', true);
 
 // MongoDB Connection
-const mongodbUri = process.env['MONGODB_URI'] || 'mongodb://localhost:27017/iset_kr';
+const mongodbUri = process.env['MONGODB_URI'] || process.env['MONGO_URI'] || 'mongodb://localhost:27017/iset_kr';
 console.log('Connecting to MongoDB...');
 
 const connectWithRetry = () => {

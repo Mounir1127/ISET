@@ -66,9 +66,9 @@ const upload = multer({
 mongoose.set('debug', true);
 
 // MongoDB Connection
-const mongodbUri = process.env['MONGODB_URI'];
+const mongodbUri = process.env['MONGODB_URI'] || process.env['MONGO_URI'];
 if (!mongodbUri) {
-    console.error('❌ CRITICAL: MONGODB_URI is not defined in environment variables!');
+    console.error('❌ CRITICAL: MONGODB_URI or MONGO_URI is not defined in environment variables!');
 } else {
     console.log('Connecting to MongoDB Atlas...');
     mongoose.connect(mongodbUri)
