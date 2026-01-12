@@ -60,11 +60,23 @@ const upload = multer({
 mongoose.set('debug', true);
 
 // MongoDB Connection
-const mongodbUri = process.env['MONGODB_URI'] || 'mongodb://localhost:27017/iset_kr';
-console.log('Connecting to MongoDB...');
-mongoose.connect(mongodbUri)
-    .then(() => console.log('✅ Connected to MongoDB Successfully'))
-    .catch((err) => console.error('❌ Database connection failed:', err));
+const mongodbUri = process.env['MONGODB_URI'];
+if (!mongodbUri) {
+    console.error('❌ CRITICAL: MONGODB_URI is not defined in environment variables!');
+} else {
+    console.log('Connecting to MongoDB Atlas...');
+    mongoose.connect(mongodbUri)
+        .then(() => console.log('✅ Connected to MongoDB Atlas Successfully'))
+        .catch((err) => {
+            console.error('❌ Database connection failed!');
+            console.error('Error Details:', err.message);
+            if (err.message.includes('User not authorized')) {
+                console.error('TIP: Check if your database user and password are correct in the URI.');
+            } else if (err.message.includes('MongoNetworkError')) {
+                console.error('TIP: Check if you have whitelisted "Allow access from anywhere" (0.0.0.0/0) in MongoDB Atlas.');
+            }
+        });
+}
 
 // Auth & Public API Endpoints
 // Register
@@ -138,8 +150,67 @@ app.post('/api/login', async (req: any, res: any) => {
                 status: user.status
             }
         });
+    } catch (err: any) {
+        console.error('Login Error:', err.message);
+        res.status(500).json({ message: 'Erreur interne au serveur lors de la connexion' });
+    }
+});
+
+// Update User Profile
+app.put('/api/user/profile/:id', async (req: any, res: any) => {
+    try {
+        const { email, matricule, name } = req.body;
+        const user = await User.findById(req.params.id);
+        if (!user) return res.status(404).json({ message: 'Utilisateur non trouvé' });
+
+        user.email = email || user.email;
+        user.matricule = matricule || user.matricule;
+        user.name = name || user.name;
+
+        await user.save();
+
+        res.status(200).json({
+            message: 'Profil mis à jour',
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email,
+                matricule: user.matricule,
+                role: user.role
+            }
+        });
     } catch (err) {
-        res.status(500).json({ message: 'Erreur de connexion' });
+        res.status(500).json({ message: 'Erreur lors de la mise à jour du profil' });
+    }
+});
+
+// Change Password
+app.put('/api/user/password/:id', async (req: any, res: any) => {
+    try {
+        const { currentPassword, newPassword } = req.body;
+        const user = await User.findById(req.params.id);
+        if (!user) return res.status(404).json({ message: 'Utilisateur non trouvé' });
+
+        // Check current password
+        let isMatch = false;
+        if (user.password) {
+            if (user.password.startsWith('$2a$') || user.password.startsWith('$2b$')) {
+                isMatch = bcrypt.compareSync(currentPassword, user.password);
+            } else {
+                isMatch = user.password === currentPassword;
+            }
+        }
+
+        if (!isMatch) {
+            return res.status(401).json({ message: 'Ancien mot de passe incorrect' });
+        }
+
+        user.password = bcrypt.hashSync(newPassword, 10);
+        await user.save();
+
+        res.status(200).json({ message: 'Mot de passe modifié avec succès' });
+    } catch (err) {
+        res.status(500).json({ message: 'Erreur lors du changement de mot de passe' });
     }
 });
 
@@ -413,7 +484,334 @@ app.get('/api/announcements', async (req: any, res: any) => {
         const announcements = await Announcement.find({ status: 'published' }).sort({ createdAt: -1 }).lean();
         res.status(200).json(announcements);
     } catch (err) {
-        res.status(500).json({ message: 'Error fetching announcements' });
+        res.status(500).json({ message: 'Error fetching stats' });
+    }
+});
+
+// Admin Contact Messages Management
+app.get('/api/admin/contacts', async (req: any, res: any) => {
+    try {
+        const contacts = await Contact.find().sort({ createdAt: -1 });
+        res.status(200).json(contacts);
+    } catch (err) {
+        res.status(500).json({ message: 'Error fetching contact messages' });
+    }
+});
+
+app.put('/api/admin/contacts/:id/read', async (req: any, res: any) => {
+    try {
+        await Contact.findByIdAndUpdate(req.params.id, { status: 'read' });
+        res.status(200).json({ message: 'Message marked as read' });
+    } catch (err) {
+        res.status(500).json({ message: 'Error updating contact status' });
+    }
+});
+
+app.delete('/api/admin/contacts/:id', async (req: any, res: any) => {
+    try {
+        await Contact.findByIdAndDelete(req.params.id);
+        res.status(200).json({ message: 'Message deleted' });
+    } catch (err) {
+        res.status(500).json({ message: 'Error deleting message' });
+    }
+});
+
+// Schedule Management (Admin)
+app.get('/api/admin/schedules', async (req: any, res: any) => {
+    try {
+        const schedules = await Schedule.find()
+            .populate('module')
+            .populate('subject')
+            .populate('classGroup')
+            .populate('staff');
+        res.status(200).json(schedules);
+    } catch (err) {
+        res.status(500).json({ message: 'Error fetching schedules' });
+    }
+});
+
+app.post('/api/admin/schedules', async (req: any, res: any) => {
+    console.log('>>> [API] Create Schedule Request:', req.body);
+    try {
+        // Sanitize: Remove empty string fields that should be ObjectIds
+        ['module', 'subject', 'classGroup', 'staff'].forEach(field => {
+            if (req.body[field] === '') {
+                delete req.body[field];
+            }
+        });
+
+        const { day, startTime, classGroup, room } = req.body;
+
+        // Validate class conflict
+        const classConflict = await Schedule.findOne({
+            day,
+            startTime,
+            classGroup
+        });
+
+        if (classConflict) {
+            return res.status(409).json({
+                error: 'Conflit détecté',
+                message: 'Cette classe a déjà une séance à ce créneau horaire.',
+                conflictType: 'class'
+            });
+        }
+
+        // Validate room conflict
+        if (room) {
+            const roomStr = room.toString();
+            const roomConflict = await Schedule.findOne({
+                day,
+                startTime,
+                room: { $regex: new RegExp(`^${roomStr}$`, 'i') }
+            });
+
+            if (roomConflict) {
+                return res.status(409).json({
+                    error: 'Conflit détecté',
+                    message: `La salle ${room} est déjà occupée à ce créneau horaire.`,
+                    conflictType: 'room'
+                });
+            }
+        }
+
+        const schedule = new Schedule(req.body);
+        const savedSchedule = await schedule.save();
+        res.status(201).json(savedSchedule);
+    } catch (err: any) {
+        console.error('>>> [CRITICAL] Schedule creation error:', err);
+        if (err.name === 'ValidationError') {
+            const messages = Object.values(err.errors).map((val: any) => val.message);
+            return res.status(400).json({ message: 'Erreur de validation: ' + messages.join(', ') });
+        }
+        res.status(500).json({ message: 'Error creating schedule', error: err.message });
+    }
+});
+
+app.delete('/api/admin/schedules/:id', async (req: any, res: any) => {
+    try {
+        await Schedule.findByIdAndDelete(req.params.id);
+        res.status(200).json({ message: 'Schedule deleted' });
+    } catch (err) {
+        res.status(500).json({ message: 'Error deleting schedule' });
+    }
+});
+
+// --- Staff API Endpoints ---
+
+app.get('/api/staff/modules', async (req: any, res: any) => {
+    try {
+        const modules = await Module.find().populate('department');
+        res.status(200).json(modules);
+    } catch (err) {
+        res.status(500).json({ message: 'Error fetching staff modules' });
+    }
+});
+
+app.get('/api/staff/students', async (req: any, res: any) => {
+    try {
+        const { classGroupId } = req.query;
+        const filter: any = { role: 'student' };
+        if (classGroupId) filter.classGroup = classGroupId;
+
+        const students = await User.find(filter).populate('classGroup');
+        res.status(200).json(students);
+    } catch (err) {
+        res.status(500).json({ message: 'Error fetching staff students' });
+    }
+});
+
+app.get('/api/staff/grades', async (req: any, res: any) => {
+    try {
+        const { moduleId, classGroupId } = req.query;
+        const grades = await Grade.find({ module: moduleId }).populate('student');
+        res.status(200).json(grades);
+    } catch (err) {
+        res.status(500).json({ message: 'Error fetching staff grades' });
+    }
+});
+
+app.post('/api/staff/grades/bulk', async (req: any, res: any) => {
+    try {
+        const { grades } = req.body;
+        for (const g of grades) {
+            await Grade.findOneAndUpdate(
+                { student: g.student, module: g.module, examType: g.examType },
+                g,
+                { upsert: true, new: true }
+            );
+        }
+        res.status(200).json({ message: 'Grades updated' });
+    } catch (err) {
+        res.status(500).json({ message: 'Error updating grades bulk' });
+    }
+});
+
+app.get('/api/staff/materials', async (req: any, res: any) => {
+    try {
+        const materials = await Material.find().populate('module');
+        res.status(200).json(materials);
+    } catch (err) {
+        res.status(500).json({ message: 'Error fetching materials' });
+    }
+});
+
+app.post('/api/staff/materials/upload', upload.single('file'), async (req: any, res: any) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ message: 'Aucun fichier fourni' });
+        }
+        const fileUrl = `/uploads/${req.file.filename}`;
+        const fileSizeKB = (req.file.size / 1024).toFixed(2);
+        const fileSizeMB = (req.file.size / (1024 * 1024)).toFixed(2);
+        const sizeDisplay = req.file.size > 1024 * 1024 ? `${fileSizeMB} MB` : `${fileSizeKB} KB`;
+
+        const materialData = {
+            ...req.body,
+            fileUrl: fileUrl,
+            size: sizeDisplay
+        };
+        const material = new Material(materialData);
+        await material.save();
+        res.status(201).json(material);
+    } catch (err: any) {
+        res.status(500).json({ message: 'Erreur lors de l\'upload: ' + err.message });
+    }
+});
+
+app.get('/api/staff/claims', async (req: any, res: any) => {
+    try {
+        const claims = await Claim.find().populate('student').populate('module');
+        res.status(200).json(claims);
+    } catch (err) {
+        res.status(500).json({ message: 'Error fetching claims' });
+    }
+});
+
+app.put('/api/staff/claims/:id', async (req: any, res: any) => {
+    try {
+        const claim = await Claim.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        res.status(200).json(claim);
+    } catch (err) {
+        res.status(500).json({ message: 'Error updating claim' });
+    }
+});
+
+app.get('/api/staff/schedule', async (req: any, res: any) => {
+    try {
+        const schedule = await Schedule.find({ staff: req.query.staffId })
+            .populate('module')
+            .populate('classGroup');
+        res.status(200).json(schedule);
+    } catch (err) {
+        res.status(500).json({ message: 'Error fetching schedule' });
+    }
+});
+
+app.get('/api/staff/stats', async (req: any, res: any) => {
+    try {
+        const staffId = req.query.staffId;
+        if (!staffId) return res.status(400).json({ message: 'Staff ID required' });
+        const staffUser = await User.findById(staffId);
+        if (!staffUser) return res.status(404).json({ message: 'Staff not found' });
+
+        let totalStudents = 0;
+        if (staffUser.assignedClasses && staffUser.assignedClasses.length > 0) {
+            totalStudents = await User.countDocuments({
+                role: 'student',
+                classGroup: { $in: staffUser.assignedClasses }
+            });
+        }
+        const totalModules = staffUser.subjects ? staffUser.subjects.length : 0;
+        const stats = {
+            totalStudents: totalStudents,
+            totalModules: totalModules,
+            totalMaterials: await Material.countDocuments({ uploadedBy: staffId }),
+            pendingClaims: await Claim.countDocuments({ staff: staffId, status: 'pending' })
+        };
+        res.status(200).json(stats);
+    } catch (err) {
+        res.status(500).json({ message: 'Error fetching staff stats' });
+    }
+});
+
+// --- Student API Endpoints ---
+
+app.get('/api/student/stats', async (req: any, res: any) => {
+    try {
+        const { studentId, classGroupId } = req.query;
+        const stats = {
+            assignments: await Grade.countDocuments({ student: studentId }),
+            absences: await Attendance.countDocuments({ student: studentId, status: 'absent' }),
+            materials: await Material.countDocuments({ classGroup: classGroupId }),
+            notifications: await Notification.countDocuments({ recipient: studentId, read: false })
+        };
+        res.status(200).json(stats);
+    } catch (err) {
+        res.status(500).json({ message: 'Error fetching student stats' });
+    }
+});
+
+app.get('/api/student/schedule', async (req: any, res: any) => {
+    try {
+        const { classGroupId } = req.query;
+        const schedule = await Schedule.find({ classGroup: classGroupId })
+            .populate('module')
+            .populate('staff');
+        res.status(200).json(schedule);
+    } catch (err) {
+        res.status(500).json({ message: 'Error fetching student schedule' });
+    }
+});
+
+app.get('/api/student/grades', async (req: any, res: any) => {
+    try {
+        const { studentId } = req.query;
+        const grades = await Grade.find({ student: studentId }).populate('module');
+        res.status(200).json(grades);
+    } catch (err) {
+        res.status(500).json({ message: 'Error fetching student grades' });
+    }
+});
+
+app.get('/api/student/materials', async (req: any, res: any) => {
+    try {
+        const { classGroupId } = req.query;
+        const materials = await Material.find({ classGroup: classGroupId }).populate('module');
+        res.status(200).json(materials);
+    } catch (err) {
+        res.status(500).json({ message: 'Error fetching student materials' });
+    }
+});
+
+// --- General API Endpoints ---
+
+app.post('/api/public/contact', async (req: any, res: any) => {
+    try {
+        const contactMessage = new Contact(req.body);
+        await contactMessage.save();
+        res.status(201).json({ message: 'Message enregistré avec succès' });
+    } catch (err) {
+        res.status(500).json({ message: 'Erreur lors de l\'enregistrement du message' });
+    }
+});
+
+app.get('/api/notifications', async (req: any, res: any) => {
+    try {
+        const { userId } = req.query;
+        const notifications = await Notification.find({ recipient: userId }).sort({ createdAt: -1 });
+        res.status(200).json(notifications);
+    } catch (err) {
+        res.status(500).json({ message: 'Error fetching notifications' });
+    }
+});
+
+app.put('/api/notifications/:id/read', async (req: any, res: any) => {
+    try {
+        await Notification.findByIdAndUpdate(req.params.id, { read: true });
+        res.status(200).json({ message: 'Marked as read' });
+    } catch (err) {
+        res.status(500).json({ message: 'Error updating notification' });
     }
 });
 
