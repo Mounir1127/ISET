@@ -2,12 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../../services/auth.service';
+import { environment } from '../../../../environments/environment';
 
 @Component({
-    selector: 'app-student-grades',
-    standalone: true,
-    imports: [CommonModule],
-    template: `
+  selector: 'app-student-grades',
+  standalone: true,
+  imports: [CommonModule],
+  template: `
     <div class="grades-container">
       <header class="page-header animate-fade-in">
         <div class="title-area">
@@ -61,7 +62,7 @@ import { AuthService } from '../../../services/auth.service';
       </div>
     </div>
   `,
-    styles: [`
+  styles: [`
     .grades-container { display: flex; flex-direction: column; gap: 2rem; }
     
     .page-header {
@@ -127,24 +128,24 @@ import { AuthService } from '../../../services/auth.service';
   `]
 })
 export class StudentGradesComponent implements OnInit {
-    grades: any[] = [];
-    currentUser: any;
+  grades: any[] = [];
+  currentUser: any;
 
-    constructor(private http: HttpClient, private authService: AuthService) {
-        this.authService.currentUser.subscribe(user => this.currentUser = user);
-    }
+  constructor(private http: HttpClient, private authService: AuthService) {
+    this.authService.currentUser.subscribe(user => this.currentUser = user);
+  }
 
-    ngOnInit(): void {
-        this.loadGrades();
-    }
+  ngOnInit(): void {
+    this.loadGrades();
+  }
 
-    loadGrades(): void {
-        if (!this.currentUser?._id) return;
-        this.http.get<any[]>('/api/student/grades', {
-            params: { studentId: this.currentUser._id }
-        }).subscribe({
-            next: (data) => this.grades = data,
-            error: (err) => console.error('Error loading grades', err)
-        });
-    }
+  loadGrades(): void {
+    if (!this.currentUser?._id) return;
+    this.http.get<any[]>(`${environment.apiUrl}/student/grades`, {
+      params: { studentId: this.currentUser._id }
+    }).subscribe({
+      next: (data) => this.grades = data,
+      error: (err) => console.error('Error loading grades', err)
+    });
+  }
 }

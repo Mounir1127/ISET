@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { environment } from '../../environments/environment';
 
 interface User {
   id?: string;
@@ -57,7 +58,7 @@ export class AuthService {
   public get currentUserValue(): User | null {
     return this.currentUserSubject.value;
   }
-  private apiUrl = 'api/auth'; // À remplacer par votre API réelle
+  private apiUrl = environment.apiUrl;
 
   constructor(
     private http: HttpClient,
@@ -93,7 +94,7 @@ export class AuthService {
   }
 
   login(credentials: LoginCredentials): Observable<any> {
-    return this.http.post<any>('/api/login', credentials).pipe(
+    return this.http.post<any>(`${this.apiUrl}/login`, credentials).pipe(
       tap(response => {
         const user = response.user;
         if (isPlatformBrowser(this.platformId)) {
@@ -108,7 +109,7 @@ export class AuthService {
   }
 
   register(userData: RegisterData): Observable<any> {
-    return this.http.post<any>('/api/register', userData).pipe(
+    return this.http.post<any>(`${this.apiUrl}/register`, userData).pipe(
       tap(response => {
         const user = response.user;
         if (isPlatformBrowser(this.platformId)) {
@@ -149,7 +150,7 @@ export class AuthService {
   }
 
   updateProfile(id: string, data: any): Observable<any> {
-    return this.http.put<any>(`/api/user/profile/${id}`, data).pipe(
+    return this.http.put<any>(`${this.apiUrl}/user/profile/${id}`, data).pipe(
       tap(response => {
         const updatedUser = response.user;
         if (isPlatformBrowser(this.platformId)) {
@@ -162,7 +163,7 @@ export class AuthService {
   }
 
   changePassword(id: string, data: any): Observable<any> {
-    return this.http.put<any>(`/api/user/password/${id}`, data);
+    return this.http.put<any>(`${this.apiUrl}/user/password/${id}`, data);
   }
 
   isAuthenticated(): boolean {
@@ -171,15 +172,15 @@ export class AuthService {
 
   // Metadata for registration
   getDepartments(): Observable<any[]> {
-    return this.http.get<any[]>('/api/public/departments');
+    return this.http.get<any[]>(`${this.apiUrl}/public/departments`);
   }
 
   getClasses(): Observable<any[]> {
-    return this.http.get<any[]>('/api/public/classes');
+    return this.http.get<any[]>(`${this.apiUrl}/public/classes`);
   }
 
   getModules(): Observable<any[]> {
-    return this.http.get<any[]>('/api/public/modules');
+    return this.http.get<any[]>(`${this.apiUrl}/public/modules`);
   }
 
   // Pour le SSO

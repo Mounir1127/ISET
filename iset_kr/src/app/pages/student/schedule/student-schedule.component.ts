@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../../services/auth.service';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-student-schedule',
@@ -173,7 +174,7 @@ export class StudentScheduleComponent implements OnInit {
     const classGroupId = this.currentUser?.classGroup?._id || this.currentUser?.classGroup;
     if (!classGroupId) return;
 
-    this.http.get<any[]>('/api/student/schedule', {
+    this.http.get<any[]>(`${environment.apiUrl}/student/schedule`, {
       params: { classGroupId }
     }).subscribe({
       next: (data) => this.scheduleItems = data,

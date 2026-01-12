@@ -2,12 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../../services/auth.service';
+import { environment } from '../../../../environments/environment';
 
 @Component({
-    selector: 'app-student-materials',
-    standalone: true,
-    imports: [CommonModule],
-    template: `
+  selector: 'app-student-materials',
+  standalone: true,
+  imports: [CommonModule],
+  template: `
     <div class="materials-container">
       <header class="page-header animate-fade-in">
         <div class="title-area">
@@ -47,7 +48,7 @@ import { AuthService } from '../../../services/auth.service';
       </div>
     </div>
   `,
-    styles: [`
+  styles: [`
     .materials-container { display: flex; flex-direction: column; gap: 2rem; }
     
     .page-header {
@@ -120,33 +121,33 @@ import { AuthService } from '../../../services/auth.service';
   `]
 })
 export class StudentMaterialsComponent implements OnInit {
-    materials: any[] = [];
-    currentUser: any;
+  materials: any[] = [];
+  currentUser: any;
 
-    constructor(private http: HttpClient, private authService: AuthService) {
-        this.authService.currentUser.subscribe(user => this.currentUser = user);
-    }
+  constructor(private http: HttpClient, private authService: AuthService) {
+    this.authService.currentUser.subscribe(user => this.currentUser = user);
+  }
 
-    ngOnInit(): void {
-        this.loadMaterials();
-    }
+  ngOnInit(): void {
+    this.loadMaterials();
+  }
 
-    loadMaterials(): void {
-        if (!this.currentUser?.classGroup?._id) return;
-        this.http.get<any[]>('/api/student/materials', {
-            params: { classGroupId: this.currentUser.classGroup._id }
-        }).subscribe({
-            next: (data) => this.materials = data,
-            error: (err) => console.error('Error loading materials', err)
-        });
-    }
+  loadMaterials(): void {
+    if (!this.currentUser?.classGroup?._id) return;
+    this.http.get<any[]>(`${environment.apiUrl}/student/materials`, {
+      params: { classGroupId: this.currentUser.classGroup._id }
+    }).subscribe({
+      next: (data) => this.materials = data,
+      error: (err) => console.error('Error loading materials', err)
+    });
+  }
 
-    getFileIcon(type: string): string {
-        switch (type) {
-            case 'pdf': return 'far fa-file-pdf';
-            case 'ppt': return 'far fa-file-powerpoint';
-            case 'zip': return 'far fa-file-archive';
-            default: return 'far fa-file-alt';
-        }
+  getFileIcon(type: string): string {
+    switch (type) {
+      case 'pdf': return 'far fa-file-pdf';
+      case 'ppt': return 'far fa-file-powerpoint';
+      case 'zip': return 'far fa-file-archive';
+      default: return 'far fa-file-alt';
     }
+  }
 }

@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of, catchError, Subject } from 'rxjs';
+import { environment } from '../../environments/environment';
 import { delay, timeout } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataService {
-  private apiUrl = '/api';
+  private apiUrl = environment.apiUrl;
   private refreshAnnouncements$ = new Subject<void>();
 
   get refreshAnnouncementsRequested$() {

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-student-dashboard',
@@ -384,7 +385,7 @@ export class StudentDashboardComponent implements OnInit {
       classGroupId: this.currentUser.classGroup?._id || this.currentUser.classGroup || ''
     };
 
-    this.http.get<any>('/api/student/stats', { params }).subscribe({
+    this.http.get<any>(`${environment.apiUrl}/student/stats`, { params }).subscribe({
       next: (data) => {
         this.stats = data;
       },
@@ -396,7 +397,7 @@ export class StudentDashboardComponent implements OnInit {
     const classGroupId = this.currentUser?.classGroup?._id || this.currentUser?.classGroup;
     if (!classGroupId) return;
 
-    this.http.get<any[]>('/api/student/schedule', {
+    this.http.get<any[]>(`${environment.apiUrl}/student/schedule`, {
       params: { classGroupId }
     }).subscribe({
       next: (data) => {
