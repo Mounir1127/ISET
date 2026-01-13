@@ -200,11 +200,15 @@ app.post('/api/login', async (req: any, res: any) => {
     }).populate('department').populate('classGroup');
 
     if (!user) {
+      console.warn(`>>> Login failed: User not found for ${username}`);
       return res.status(401).json({ message: 'Identifiant ou mot de passe incorrect.' });
     }
 
+    console.log(`>>> Login attempt for: ${user.name} (Role: ${user.role}, Status: ${user.status})`);
+
     // Check user status
     if (user.status === 'pending') {
+      console.warn(`>>> Login blocked: Account pending for ${user.email}`);
       return res.status(403).json({
         message: 'Votre compte est en attente de validation par l\'administration.',
         status: 'pending'

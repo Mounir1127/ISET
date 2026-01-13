@@ -335,17 +335,6 @@ export class LoginComponent implements OnInit {
           this.isRegisteredSuccessfully = true;
           this.errorMessage = '';
           this.cdr.detectChanges();
-          setTimeout(() => {
-            if (user && user.role === 'admin') {
-              this.router.navigate(['/admin']);
-            } else if (user && (user.role === 'staff' || user.role === 'chef')) {
-              this.router.navigate(['/staff']);
-            } else if (user && user.role === 'student') {
-              this.router.navigate(['/student']);
-            } else {
-              this.router.navigate(['/']);
-            }
-          }, 2000);
         },
         error: (error) => {
           console.error('Register error:', error);
