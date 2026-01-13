@@ -2,7 +2,7 @@ import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import { tap, catchError } from 'rxjs/operators';
+import { tap, catchError, map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
 
@@ -95,8 +95,8 @@ export class AuthService {
 
   login(credentials: LoginCredentials): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/login`, credentials).pipe(
-      tap(response => {
-        const user = response.user;
+      map(response => response.user),
+      tap(user => {
         if (isPlatformBrowser(this.platformId)) {
           if (credentials.rememberMe) {
             localStorage.setItem('currentUser', JSON.stringify(user));
@@ -110,8 +110,8 @@ export class AuthService {
 
   register(userData: RegisterData): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/register`, userData).pipe(
-      tap(response => {
-        const user = response.user;
+      map(response => response.user),
+      tap(user => {
         if (isPlatformBrowser(this.platformId)) {
           localStorage.setItem('currentUser', JSON.stringify(user));
           sessionStorage.setItem('currentUser', JSON.stringify(user));

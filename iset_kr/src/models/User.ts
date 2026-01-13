@@ -13,8 +13,8 @@ export interface IUser extends Document {
     gender?: string;
     department?: mongoose.Types.ObjectId;
     classGroup?: mongoose.Types.ObjectId;
-    level?: number;
-    group?: number;
+    level?: string;
+    group?: string;
     grade?: string; // For staff e.g. "Maitre assistant"
     speciality?: string;
     office?: string;
@@ -35,8 +35,8 @@ const UserSchema: Schema = new Schema({
     gender: { type: String },
     department: { type: Schema.Types.ObjectId, ref: 'Department' },
     classGroup: { type: Schema.Types.ObjectId, ref: 'ClassGroup' }, // For students
-    level: { type: Number },
-    group: { type: Number },
+    level: { type: String },
+    group: { type: String },
     grade: { type: String },
     speciality: { type: String },
     office: { type: String },

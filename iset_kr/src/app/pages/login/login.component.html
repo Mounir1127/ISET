@@ -147,7 +147,20 @@
       </form>
 
       <!-- Register Form -->
-      <form *ngIf="activeTab === 'register'" [formGroup]="registerForm" (ngSubmit)="onRegister()" class="auth-form">
+      <form *ngIf="activeTab === 'register'" [formGroup]="registerForm" (ngSubmit)="onRegister()" class="auth-form"
+        [class.shake-error]="errorMessage">
+
+        <!-- Alerts -->
+        <div class="form-alert error" *ngIf="errorMessage && activeTab === 'register'" (click)="errorMessage = ''">
+          <div class="alert-icon"><i class="fas fa-exclamation-circle"></i></div>
+          <div class="alert-content">{{ errorMessage }}</div>
+        </div>
+
+        <div class="form-alert success" *ngIf="successMessage && activeTab === 'register'"
+          (click)="successMessage = ''">
+          <div class="alert-icon"><i class="fas fa-check-circle"></i></div>
+          <div class="alert-content">{{ successMessage }}</div>
+        </div>
 
         <!-- Physical Identity -->
         <div class="form-group">
