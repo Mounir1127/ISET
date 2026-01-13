@@ -161,20 +161,25 @@ import { AdminService } from '../../../services/admin.service';
                                 </td>
                                 <td *ngFor="let day of days" class="session-cell" 
                                     [class.empty]="!getSession(day, slot.start)"
-                                    (click)="!getSession(day, slot.start) ? openAddModal(day, slot.start, slot.end) : null">
+                                    (click)="openAddModal(day, slot.start, slot.end)">
                                     
-                                    <div *ngIf="getSession(day, slot.start) as session" class="session-block" [ngClass]="session.type.toLowerCase()">
+                                    <div *ngIf="getSession(day, slot.start) as session" class="session-block" [ngClass]="session.type?.toLowerCase()">
                                         <div class="session-main">
-                                            <span class="module-name">{{ session.subject?.name || 'Matière' }}</span>
+                                            <span class="module-name" [title]="session.subject?.name || session.module?.name">
+                                                {{ session.subject?.name || session.module?.name || 'Matière' }}
+                                            </span>
                                             <div class="session-info">
                                                 <span class="info-item" title="Enseignant">
-                                                    <i class="fas fa-chalkboard-teacher"></i> {{ session.staff?.name || 'Inconnu' }}
+                                                    <i class="fas fa-chalkboard-teacher"></i> 
+                                                    <span>{{ session.staff?.name || 'Inconnu' }}</span>
                                                 </span>
                                                 <span class="info-item" title="Salle">
-                                                    <i class="fas fa-door-open"></i> Salle: {{ session.room || 'N/A' }}
+                                                    <i class="fas fa-door-open"></i> 
+                                                    <span>{{ session.room || 'N/A' }}</span>
                                                 </span>
                                                 <span class="info-item" title="Classe">
-                                                    <i class="fas fa-users"></i> {{ session.classGroup?.name || 'N/A' }}
+                                                    <i class="fas fa-users"></i> 
+                                                    <span>{{ session.classGroup?.name || 'N/A' }}</span>
                                                 </span>
                                             </div>
                                         </div>
@@ -361,169 +366,128 @@ import { AdminService } from '../../../services/admin.service';
       } 
     }
 
+    /* --- Ultra Pro Schedule Grid --- */
     .schedule-grid-container { 
-        overflow-x: auto; 
-        background: white;
-        border-radius: 24px;
-        box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.08);
-        border: 1px solid #e2e8f0;
-        margin-top: 1rem;
-        padding: 1rem;
+        padding: 1.5rem;
+        background: #f8fafc;
+        border-radius: 32px;
+        box-shadow: inset 0 2px 10px rgba(0,0,0,0.02);
     }
     
     .schedule-table { 
       width: 100%; 
       border-collapse: separate; 
-      border-spacing: 12px; 
-      min-width: 1100px; 
+      border-spacing: 16px; 
     }
     
     .schedule-table th { 
-        padding: 1.5rem 1rem; 
-        text-align: center; 
+        padding: 1.5rem;
         font-weight: 900; 
-        color: var(--admin-navy); 
-        background: transparent;
+        color: #64748b;
+        background: white;
+        border-radius: 16px;
         font-size: 0.8rem;
         text-transform: uppercase;
         letter-spacing: 2px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.03);
     }
     
     .schedule-table td { 
         vertical-align: top; 
-        height: 180px; 
-        position: relative;
-        border-radius: var(--session-radius);
-    }
-
-    .time-col { 
-      width: 140px; 
-      background: transparent !important;
+        height: 200px; 
     }
 
     .time-cell { 
-        text-align: center; 
+        background: white !important;
+        border-radius: 20px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.04);
         display: flex; 
         flex-direction: column; 
         align-items: center;
         justify-content: center; 
-        height: 100%;
-        position: relative;
-
-        &::after {
-          content: '';
-          position: absolute;
-          right: -6px;
-          top: 0;
-          height: 100%;
-          width: 2px;
-          background: #e2e8f0;
-        }
-        
-        &::before {
-          content: '';
-          position: absolute;
-          right: -11px;
-          top: 50%;
-          width: 12px;
-          height: 12px;
-          background: white;
-          border: 3px solid var(--admin-blue);
-          border-radius: 50%;
-          z-index: 2;
-          transform: translateY(-50%);
-        }
-
-        .start { font-weight: 900; font-size: 1.2rem; color: var(--admin-navy); margin-bottom: 0.2rem; }
-        .end { font-weight: 600; font-size: 0.85rem; color: #94a3b8; }
+        .start { font-weight: 950; font-size: 1.3rem; color: #0f172a; }
+        .end { font-weight: 700; font-size: 0.9rem; color: #94a3b8; }
     }
     
     .session-cell { 
-        background: #fbfcfe;
-        border: 1px dashed #e2e8f0;
-        transition: all 0.3s;
+        background: #ffffff;
+        border: 2px dashed #e2e8f0;
+        border-radius: 24px;
+        transition: all 0.4s ease;
         
         &.empty:hover { 
-            background: #f1f5f9; 
-            border-style: solid;
-            border-color: var(--admin-blue);
-            cursor: pointer; 
-            .add-placeholder { opacity: 1; transform: translate(-50%, -50%) scale(1.1); } 
+            background: #f0f9ff;
+            border-color: #0ea5e9;
+            transform: scale(1.02);
         } 
-    }
-    
-    .add-placeholder { 
-        opacity: 0; 
-        position: absolute; 
-        top: 50%; left: 50%; 
-        transform: translate(-50%, -50%) scale(0.8);
-        width: 44px; height: 44px; 
-        display: flex; 
-        align-items: center; 
-        justify-content: center; 
-        color: white; 
-        font-size: 1.3rem; 
-        background: var(--admin-blue);
-        border-radius: 50%;
-        box-shadow: 0 10px 20px rgba(14, 165, 233, 0.3);
-        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-        pointer-events: none; 
     }
     
     .session-block { 
         height: 100%; 
-        border-radius: var(--session-radius); 
+        border-radius: 20px; 
         padding: 1.25rem; 
-        color: white; 
-        box-shadow: 0 15px 35px -5px rgba(0,0,0,0.15); 
+        color: #ffffff !important; 
+        background: #334155; /* Neutral slate pro */
+        box-shadow: 0 15px 35px -5px rgba(0,0,0,0.25); 
         display: flex; 
         flex-direction: column; 
-        justify-content: space-between;
-        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        justify-content: flex-start;
+        gap: 0.75rem;
+        transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         cursor: pointer;
         position: relative;
         overflow: hidden;
-        border: 1px solid rgba(255,255,255,0.15);
+        border: 1px solid rgba(255,255,255,0.2);
+        z-index: 5;
 
         &::before {
             content: '';
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
             background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 100%);
-            z-index: 1;
+            z-index: 1; pointer-events: none;
         }
 
         &:hover {
-            transform: translateY(-8px) scale(1.03);
-            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
-            z-index: 5;
-            .btn-delete-mini { opacity: 1; transform: scale(1); }
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 25px 50px -10px rgba(0,0,0,0.4);
+            filter: brightness(1.1);
         }
         
-        &.cours { background: var(--color-cours); } 
-        &.td { background: var(--color-td); } 
-        &.tp { background: var(--color-tp); } 
+        &.cours { background: linear-gradient(135deg, #059669, #10b981) !important; } 
+        &.td { background: linear-gradient(135deg, #0284c7, #0ea5e9) !important; } 
+        &.tp { background: linear-gradient(135deg, #475569, #64748b) !important; } 
 
-        .session-main { position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; }
+        .session-main { 
+            position: relative; 
+            z-index: 10; 
+            height: 100%; 
+            display: flex; 
+            flex-direction: column; 
+            width: 100%; 
+            color: white !important;
+        }
     }
     
     .module-name { 
-        font-weight: 900; 
-        font-size: 1rem; 
-        line-height: 1.3;
-        margin-bottom: 0.75rem;
+        font-weight: 950; 
+        font-size: 1.1rem; 
+        line-height: 1.1;
+        margin-bottom: 0.5rem;
         display: block;
-        letter-spacing: -0.2px;
+        letter-spacing: -0.5px;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        color: white !important;
     }
 
     .session-info { 
         display: flex; 
         flex-direction: column; 
         gap: 0.5rem; 
-        background: rgba(0,0,0,0.12);
-        backdrop-filter: blur(4px);
+        background: rgba(0,0,0,0.2);
+        backdrop-filter: blur(8px);
         padding: 0.75rem;
-        border-radius: 12px;
+        border-radius: 14px;
         margin-top: auto;
         border: 1px solid rgba(255,255,255,0.1);
     }
@@ -532,36 +496,35 @@ import { AdminService } from '../../../services/admin.service';
         display: flex; 
         align-items: center; 
         gap: 0.6rem; 
-        font-size: 0.75rem;
-        font-weight: 700; 
-        color: rgba(255,255,255,0.95);
+        font-size: 0.85rem;
+        font-weight: 800; 
+        color: white !important;
+        white-space: nowrap;
         
-        i { width: 16px; text-align: center; color: #fcd34d; font-size: 0.8rem; }
+        i { width: 18px; text-align: center; color: #fbbf24; font-size: 0.95rem; }
     }
 
     .btn-delete-mini { 
         position: absolute;
-        top: 0.75rem;
-        right: 0.75rem;
+        top: 1rem;
+        right: 1rem;
         background: rgba(255, 255, 255, 0.2); 
-        backdrop-filter: blur(8px);
         border: 1px solid rgba(255,255,255,0.3);
         color: white; 
-        width: 28px; 
-        height: 28px; 
-        border-radius: 10px; 
+        width: 32px; height: 32px; 
+        border-radius: 12px; 
         cursor: pointer; 
         display: flex; 
         align-items: center; 
         justify-content: center; 
-        font-size: 0.8rem; 
-        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        transition: all 0.2s;
+        z-index: 20;
         opacity: 0;
-        transform: scale(0.5);
-        z-index: 10;
         
         &:hover { background: #ef4444; border-color: transparent; } 
     }
+
+    .session-block:hover .btn-delete-mini { opacity: 1; }
 
     .info-message {
       background: white;
@@ -672,17 +635,154 @@ import { AdminService } from '../../../services/admin.service';
       .session-info { padding: 0.4rem; border-radius: 8px; }
       .info-item { font-size: 0.65rem; gap: 0.3rem; i { font-size: 0.7rem; } }
 
-      .modal-card {
-        width: 95%;
-        max-height: 95vh;
-        border-radius: 20px;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      animation: fadeInOverlay 0.3s ease;
+    }
+
+    .modal-card {
+      background: white;
+      width: 550px;
+      max-width: 95%;
+      border-radius: 32px;
+      box-shadow: 0 30px 60px -12px rgba(15, 23, 42, 0.25);
+      overflow: hidden;
+      animation: slideInModal 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes fadeInOverlay { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes slideInModal { from { opacity: 0; transform: translateY(30px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+
+    .modal-header {
+      padding: 2.5rem;
+      background: #f8fafc;
+      border-bottom: 1px solid #f1f5f9;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      h3 { font-size: 1.5rem; font-weight: 900; color: #0f172a; margin: 0; }
+      .btn-close { background: none; border: none; font-size: 1.2rem; color: #94a3b8; cursor: pointer; transition: all 0.2s; &:hover { color: #ef4444; } }
+    }
+
+    .modal-body { padding: 2.5rem; }
+
+    .info-banner {
+      background: #e0f2fe;
+      color: #0369a1;
+      padding: 1rem 1.5rem;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      font-weight: 700;
+      font-size: 0.95rem;
+      border: 1px solid rgba(3, 105, 161, 0.1);
+    }
+
+    .error-banner {
+      background: #fef2f2;
+      color: #dc2626;
+      padding: 1rem 1.5rem;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      font-weight: 700;
+      font-size: 0.9rem;
+      border: 1px solid rgba(220, 38, 38, 0.1);
+    }
+
+    .field-group {
+      margin-bottom: 1.5rem;
+      label { display: block; font-weight: 800; color: #475569; margin-bottom: 0.75rem; font-size: 0.9rem; i { color: #0055a4; margin-right: 0.5rem; } }
+      input, select {
+        width: 100%;
+        padding: 1rem 1.25rem;
+        border: 2px solid #f1f5f9;
+        border-radius: 16px;
+        background: #f8fafc;
+        font-weight: 600;
+        color: #0f172a;
+        transition: all 0.3s;
+        &:focus { outline: none; border-color: #0055a4; background: white; box-shadow: 0 0 0 4px rgba(0, 85, 164, 0.05); }
+      }
+    }
+
+    .type-selector {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+    }
+
+    .type-btn {
+      padding: 1rem;
+      border: 2px solid #f1f5f9;
+      background: white;
+      border-radius: 16px;
+      font-weight: 900;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      color: #94a3b8;
+
+      &.active {
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        &.cours { background: #10b981; border-color: #10b981; }
+        &.td { background: #0369a1; border-color: #0369a1; }
+        &.tp { background: #475569; border-color: #475569; }
+      }
+      &:hover:not(.active) { border-color: #e2e8f0; background: #f8fafc; color: #64748b; }
+    }
+
+    .modal-footer {
+      padding: 2rem 2.5rem;
+      background: #f8fafc;
+      display: flex;
+      gap: 1rem;
+      
+      button {
+        flex: 1;
+        padding: 1.1rem;
+        border-radius: 16px;
+        font-weight: 800;
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        cursor: pointer;
+        transition: all 0.3s;
       }
 
-      .form-fields {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 1rem;
+      .btn-cancel { background: white; border: 2px solid #f1f5f9; color: #64748b; &:hover { border-color: #e2e8f0; color: #475569; } }
+      .btn-save { 
+        background: #0f172a; 
+        border: none; 
+        color: white; 
+        box-shadow: 0 10px 25px rgba(15, 23, 42, 0.2);
+        &:hover:not(:disabled) { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(15, 23, 42, 0.3); filter: brightness(1.1); }
+        &:disabled { opacity: 0.5; cursor: not-allowed; }
       }
+    }
+
+    @media (max-width: 768px) {
+      .modal-card { width: 95%; border-radius: 24px; }
+      .modal-header, .modal-body, .modal-footer { padding: 1.5rem; }
+      .type-selector { grid-template-columns: 1fr; }
+      .btn-save, .btn-cancel { padding: 1rem; font-size: 0.9rem; }
     }
   `]
 })

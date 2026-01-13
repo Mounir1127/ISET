@@ -484,55 +484,215 @@ import { Class } from '../../../models/class.model';
       flex-direction: column;
       width: 100%;
       margin-left: 1rem;
+      gap: 0.5rem;
       
       input, select {
          border: 1px solid #e2e8f0;
-         border-radius: 6px;
-         padding: 4px 8px;
+         border-radius: 8px;
+         padding: 8px 12px;
          width: 100%;
+         font-size: 0.9rem;
+         transition: all 0.2s;
+         &:focus { border-color: #0055a4; outline: none; box-shadow: 0 0 0 3px rgba(0, 85, 164, 0.05); }
       }
       
-      .btn-save-sm { background: #10b981; color: white; border: none; border-radius: 4px; padding: 2px 8px; font-size: 0.7rem; cursor: pointer; }
-      .btn-cancel-sm { background: #ef4444; color: white; border: none; border-radius: 4px; padding: 2px 8px; font-size: 0.7rem; cursor: pointer; }
+      .btn-save-sm { 
+        background: #10b981; 
+        color: white; 
+        border: none; 
+        border-radius: 8px; 
+        padding: 6px 12px; 
+        font-size: 0.8rem; 
+        font-weight: 700;
+        cursor: pointer; 
+        transition: all 0.2s;
+        &:hover { background: #059669; transform: translateY(-1px); }
+      }
+      .btn-cancel-sm { 
+        background: #ef4444; 
+        color: white; 
+        border: none; 
+        border-radius: 8px; 
+        padding: 6px 12px; 
+        font-size: 0.8rem; 
+        font-weight: 700;
+        cursor: pointer; 
+        transition: all 0.2s;
+        &:hover { background: #dc2626; transform: translateY(-1px); }
+      }
+    }
+
     @media (max-width: 768px) {
       .welcome-header-modern {
         flex-direction: column;
         align-items: flex-start;
-        gap: 1.5rem;
+        gap: 1.2rem;
+        margin-bottom: 2rem !important;
+        text-align: left;
       }
 
-      .title-with-icon h3 { font-size: 1.6rem; }
-      .header-text-group p { font-size: 0.95rem; }
+      .title-with-icon {
+        gap: 0.8rem;
+        h3 { font-size: 1.6rem; line-height: 1.2; }
+        .icon-gradient { font-size: 2rem; }
+      }
+
+      .header-text-group p { font-size: 0.95rem; line-height: 1.5; opacity: 0.8; }
 
       .header-stats-badges {
         width: 100%;
-        gap: 1rem;
-        .stat-badge-mini { flex: 1; min-width: 0; padding: 0.6rem; }
-        .stat-badge-mini .value { font-size: 1.1rem; }
+        gap: 0.8rem;
+        .stat-badge-mini { 
+          flex: 1; 
+          min-width: 0; 
+          padding: 0.75rem;
+          border-radius: 16px;
+          background: white;
+          box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+          .label { font-size: 0.65rem; color: #64748b; }
+          .value { font-size: 1.25rem; }
+        }
       }
 
       .structure-grid-pro {
         grid-template-columns: 1fr;
         gap: 1.5rem;
+        padding-bottom: 2rem;
       }
 
       .smart-card-premium {
         height: auto;
-        max-height: 500px;
+        min-height: auto;
         padding: 1.5rem;
         border-radius: 24px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.04);
+        &:hover { transform: none; }
       }
 
-      .card-header-pro { margin-bottom: 1.5rem; }
+      .card-header-pro { 
+        margin-bottom: 1.5rem;
+        .icon-circle { width: 46px; height: 46px; font-size: 1.2rem; border-radius: 14px; }
+        .header-content h4 { font-size: 1.1rem; }
+        .header-content p { font-size: 0.85rem; }
+      }
       
-      .list-container-pro .list-item-pro {
-        padding: 0.8rem;
-        .item-name-group .name { font-size: 0.9rem; }
+      .list-container-pro {
+        margin-bottom: 1.5rem;
+        padding-right: 0;
+        max-height: 350px;
+        overflow-y: auto;
+
+        .list-item-pro {
+          padding: 1.1rem;
+          margin-bottom: 0.8rem;
+          border-radius: 16px;
+          background: #f8fafc;
+          border: 1px solid #f1f5f9;
+          box-shadow: none;
+          flex-direction: row;
+          align-items: center;
+          gap: 1rem;
+          
+          &:hover { transform: translateX(5px); background: white; border-color: #0055a4; }
+          
+          .item-name-group {
+            gap: 0.85rem;
+            flex: 1;
+            min-width: 0;
+            
+            .name { 
+              font-size: 1rem; 
+              font-weight: 700;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+            }
+            .dept-code, .badge-dept, .badge-code { 
+              padding: 0.25rem 0.6rem; 
+              font-size: 0.65rem; 
+              border-radius: 8px;
+            }
+          }
+
+          .actions-group {
+            display: flex;
+            gap: 0.6rem;
+            flex-shrink: 0;
+          }
+
+          .btn-edit-pro, .btn-delete-pro {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            border-radius: 12px;
+            font-size: 1rem;
+            margin: 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+            border: 1px solid #f1f5f9;
+          }
+        }
       }
 
       .add-section-pro {
         flex-direction: column;
-        .btn-submit-pro { width: 100%; }
+        gap: 0.85rem;
+        padding: 1.5rem;
+        background: #f8fafc;
+        border-radius: 20px;
+        border: 1px solid #f1f5f9;
+        margin-top: 0;
+        
+        .input-wrapper {
+          width: 100%;
+          input, select {
+            padding: 0.9rem 1rem 0.9rem 3rem;
+            font-size: 1rem;
+            background: white;
+            border-radius: 14px;
+            border: 2px solid transparent;
+            &:focus { border-color: #0055a4; }
+          }
+          i { font-size: 1.1rem; left: 1.25rem; color: #0055a4; }
+        }
+        
+        .btn-submit-pro { 
+          width: 100%; 
+          padding: 1.1rem;
+          font-size: 1rem;
+          border-radius: 14px;
+          margin-top: 0.5rem;
+          background: #0055a4;
+          box-shadow: 0 6px 20px rgba(0, 85, 164, 0.2);
+        }
+      }
+      
+      .edit-mode-group {
+        margin-left: 0;
+        margin-top: 1rem;
+        padding: 1.25rem;
+        background: white;
+        border-radius: 16px;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+        
+        input, select {
+          padding: 0.9rem;
+          font-size: 1rem;
+          border-radius: 10px;
+          margin-bottom: 0.75rem !important;
+        }
+        
+        .d-flex.gap-2 {
+          gap: 0.75rem !important;
+          button {
+            height: 48px;
+            border-radius: 10px;
+            font-size: 0.95rem;
+          }
+        }
       }
     }
   `]

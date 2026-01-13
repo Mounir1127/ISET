@@ -68,12 +68,6 @@ import { AuthService } from '../../../services/auth.service';
       <main class="admin-main">
         <header class="admin-header">
           <div class="header-left">
-            <button class="toggle-btn hide-on-mobile" (click)="toggleSidebar()">
-              <i class="fas" [class.fa-bars]="!isCollapsed" [class.fa-arrow-right]="isCollapsed"></i>
-            </button>
-            <button class="toggle-btn show-on-mobile" (click)="toggleMobileMenu()">
-              <i class="fas fa-bars"></i>
-            </button>
             <h2 class="page-title">Système d'administration</h2>
           </div>
           
