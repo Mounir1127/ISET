@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 
 @Component({
@@ -8,9 +8,9 @@ import { AuthService } from '../../../services/auth.service';
   standalone: true,
   imports: [CommonModule, RouterModule],
   template: `
-    <div class="student-wrapper" [class.sidebar-hidden]="isCollapsed" [class.mobile-menu-active]="isMobileMenuOpen">
+    <div class="student-wrapper" [class.sidebar-hidden]="isCollapsed || isDashboard" [class.mobile-menu-active]="isMobileMenuOpen">
       <!-- MOBILE HEADER -->
-      <header class="mobile-navbar">
+      <header class="mobile-navbar" *ngIf="!isDashboard">
         <button class="hamburger-btn" (click)="toggleMobileMenu()">
           <i class="fas" [class.fa-bars]="!isMobileMenuOpen" [class.fa-times]="isMobileMenuOpen"></i>
         </button>
@@ -24,7 +24,7 @@ import { AuthService } from '../../../services/auth.service';
       </header>
 
       <!-- SIDEBAR ULTRA PRO -->
-      <aside class="student-sidebar" [class.collapsed]="isCollapsed" [class.mobile-open]="isMobileMenuOpen">
+      <aside class="student-sidebar" *ngIf="!isDashboard" [class.collapsed]="isCollapsed" [class.mobile-open]="isMobileMenuOpen">
         <div class="sidebar-header">
           <div class="logo-wrap">
             <div class="logo-icon">IS</div>
@@ -85,7 +85,7 @@ import { AuthService } from '../../../services/auth.service';
       <div class="sidebar-overlay" *ngIf="isMobileMenuOpen" (click)="isMobileMenuOpen = false"></div>
 
       <!-- MAIN CONTENT -->
-      <main class="student-main">
+      <main class="student-main" [class.full-width]="isDashboard">
         <section class="student-content-area">
           <router-outlet></router-outlet>
         </section>
@@ -301,6 +301,11 @@ import { AuthService } from '../../../services/auth.service';
       min-height: 100vh;
     }
 
+    .student-main.full-width {
+      margin-left: 0 !important;
+      padding-top: 0 !important;
+    }
+
     /* MOBILE NAVIGATION */
     .mobile-navbar {
       display: none;
@@ -372,8 +377,12 @@ export class StudentLayoutComponent {
   isMobileMenuOpen = false;
   currentUser: any;
 
-  constructor(private authService: AuthService) {
+  constructor(private authService: AuthService, private router: Router) {
     this.authService.currentUser.subscribe(user => this.currentUser = user);
+  }
+
+  get isDashboard(): boolean {
+    return this.router.url === '/student/dashboard' || this.router.url === '/student';
   }
 
   toggleSidebar() {
