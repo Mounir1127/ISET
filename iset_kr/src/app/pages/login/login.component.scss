@@ -666,7 +666,52 @@ $input-focus: rgba(0, 85, 164, 0.08);
   }
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 768px) {
+  .login-page {
+    padding: 0;
+    background: white;
+    /* Clean background for mobile */
+    align-items: flex-start;
+    /* Start from top */
+    min-height: 100vh;
+    /* Full viewport height */
+  }
+
+  .login-container {
+    flex-direction: column;
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    border-radius: 0;
+    /* Full screen feel */
+    min-height: 100vh;
+    /* Take full height */
+    box-shadow: none;
+    border: none;
+    background: transparent;
+  }
+
+  .login-left {
+    display: none !important;
+  }
+
+  .login-right {
+    padding: 2rem 1.5rem;
+    padding-top: 5rem;
+    /* Space for back button */
+    min-height: 100vh;
+    border-radius: 0;
+  }
+
+  /* Adjust back button position for this layout */
+  .btn-back-home {
+    top: 1.5rem;
+    left: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
   .login-container {
     flex-direction: column;
     max-width: 600px;
@@ -675,10 +720,6 @@ $input-focus: rgba(0, 85, 164, 0.08);
 
   .login-left {
     display: none;
-  }
-
-  .login-right {
-    padding: 3rem 1.5rem;
   }
 }
 

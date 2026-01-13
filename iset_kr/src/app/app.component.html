@@ -17,17 +17,17 @@
     <div class="header-actions">
       <button class="action-icon search-btn"><i class="fas fa-search"></i></button>
 
-      <a routerLink="/contact" class="nav-link">Contactez-nous</a>
-      <a routerLink="/formations" class="nav-link">Formations</a>
+      <a routerLink="/contact" class="nav-link hide-on-mobile">Contactez-nous</a>
+      <a routerLink="/formations" class="nav-link hide-on-mobile">Formations</a>
 
-      <button class="extranet-btn" (click)="openStudentSpace()">
+      <button class="extranet-btn hide-on-mobile" (click)="openStudentSpace()">
         <i class="fas fa-users-viewfinder"></i>
         <span>Espace Extranet</span>
       </button>
 
       <a routerLink="/login" class="login-btn-compact btn-login-premium" title="Connexion">
         <i class="fas fa-sign-in-alt"></i>
-        <span>Connexion</span>
+        <span class="hide-on-mobile">Connexion</span>
       </a>
 
       <button class="menu-toggle" (click)="toggleMenu()">

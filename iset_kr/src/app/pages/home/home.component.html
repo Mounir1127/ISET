@@ -14,12 +14,13 @@
             <div class="col-lg-8 animate-fade-up">
               <h1 class="display-1 fw-black text-white mb-4 ls-tight" [innerHTML]="slide.title"></h1>
               <p class="h4 text-white-50 mb-5 fw-light max-w-600">{{ slide.subtitle }}</p>
-              <div class="d-flex flex-wrap gap-3 mt-4">
-                <a routerLink="/formations" class="btn btn-primary btn-lg px-5 py-3 rounded-pill fw-bold shadow-gold">
+              <div class="d-flex flex-wrap gap-3 mt-4 flex-col-mobile">
+                <a routerLink="/formations"
+                  class="btn btn-primary btn-lg px-5 py-3 rounded-pill fw-bold shadow-gold w-100-mobile">
                   <i class="fas fa-graduation-cap me-2"></i> EXPLORER NOS FORMATIONS
                 </a>
                 <button (click)="openStudentSpace()"
-                  class="btn btn-outline-light btn-lg px-5 py-3 rounded-pill fw-bold blur-bg">
+                  class="btn btn-outline-light btn-lg px-5 py-3 rounded-pill fw-bold blur-bg w-100-mobile">
                   <i class="fas fa-user-graduate me-2"></i> ESPACE ÉTUDIANT
                 </button>
               </div>

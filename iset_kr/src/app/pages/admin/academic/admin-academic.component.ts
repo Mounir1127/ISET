@@ -573,6 +573,91 @@ import { AdminService } from '../../../services/admin.service';
       i { font-size: 4rem; color: #e2e8f0; margin-bottom: 2rem; }
       p { color: #94a3b8; font-size: 1.2rem; font-weight: 700; margin: 0; }
     }
+
+    /* --- Mobile Responsive Pro Style --- */
+    @media (max-width: 768px) {
+      .academic-management {
+        padding-bottom: 5rem; /* Space for bottom nav if any */
+      }
+
+      .welcome-header {
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        border-radius: 20px;
+        
+        h3 { font-size: 1.5rem; }
+        p { font-size: 0.95rem; }
+      }
+
+      .tabs-container {
+        border-radius: 20px;
+      }
+
+      .tabs {
+        overflow-x: auto;
+        white-space: nowrap;
+        padding: 0 0.5rem;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none; /* Hide scrollbar for cleaner look */
+        
+        &::-webkit-scrollbar { display: none; }
+      }
+
+      .tab {
+        padding: 1.2rem 1rem;
+        font-size: 0.8rem;
+        flex-shrink: 0;
+      }
+
+      .tab-content {
+        padding: 1.5rem;
+      }
+
+      .section-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch;
+        
+        .btn-primary-gradient {
+          width: 100%;
+          justify-content: center;
+        }
+      }
+
+      /* Stack Validation Cards */
+      .validation-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+        
+        .card-actions {
+          width: 100%;
+          justify-content: space-between;
+          
+          .btn-action { flex: 1; justify-content: center; }
+        }
+      }
+
+      /* Filter Bar Stacking */
+      .filter-bar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+        padding: 1.2rem;
+        
+        label { font-size: 0.95rem; }
+        select { width: 100%; min-width: auto; }
+      }
+      
+      /* Grid Container Fix */
+      .schedule-grid-container {
+        margin: 0 -1rem; /* Negative margin to pull to edges */
+        border-radius: 0;
+        border-right: none;
+        border-left: none;
+        box-shadow: none;
+      }
+    }
   `]
 })
 export class AdminAcademicComponent implements OnInit {

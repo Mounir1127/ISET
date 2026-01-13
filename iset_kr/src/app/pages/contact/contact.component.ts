@@ -135,6 +135,31 @@ import { DataService } from '../../services/data.service';
         cursor: not-allowed;
       }
     }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .contact-page {
+        padding: 1rem;
+        align-items: flex-start;
+        padding-top: 5rem; /* Space for back button */
+      }
+
+      .contact-card {
+        padding: 2rem 1.5rem;
+        border-radius: 1.5rem;
+        box-shadow: none; /* Flatter look on mobile */
+        border: none;
+      }
+
+      h1.display-4 {
+        font-size: 2rem;
+      }
+
+      .btn-send-pro {
+        padding: 1rem;
+        font-size: 0.9rem;
+      }
+    }
   `]
 })
 export class ContactComponent {

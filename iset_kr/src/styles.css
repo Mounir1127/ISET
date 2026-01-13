@@ -130,10 +130,33 @@ body {
 
 @media (max-width: 768px) {
   .btn-back-home {
-    top: 20px;
-    left: 20px;
-    width: 45px;
-    height: 45px;
+    top: 15px;
+    left: 15px;
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+
+  /* Mobile Layout Utilities */
+  .hide-on-mobile {
+    display: none !important;
+  }
+
+  .w-100-mobile {
+    width: 100% !important;
+  }
+
+  .flex-col-mobile {
+    flex-direction: column !important;
+  }
+
+  .gap-mobile-sm {
+    gap: 0.5rem !important;
+  }
+
+  .py-mobile-4 {
+    padding-top: 1.5rem !important;
+    padding-bottom: 1.5rem !important;
   }
 }
 
