@@ -146,9 +146,38 @@
 
       </form>
 
+      <!-- Success State View -->
+      <div class="registration-success-view" *ngIf="isRegisteredSuccessfully && activeTab === 'register'">
+        <div class="success-icon-animate">
+          <div class="icon-circle">
+            <i class="fas fa-check"></i>
+          </div>
+          <div class="confetti-placeholder"></div>
+        </div>
+
+        <h2>Félicitations !</h2>
+        <p class="success-desc">Votre demande d'inscription a été soumise avec succès au secrétariat de l'ISET Kairouan.
+        </p>
+
+        <div class="next-steps-card">
+          <h4>Prochaines étapes :</h4>
+          <ul>
+            <li><i class="fas fa-clock"></i> Votre compte est actuellement en attente d'activation.</li>
+            <li><i class="fas fa-user-shield"></i> L'administrateur validera vos informations sous 24-48h.</li>
+            <li><i class="fas fa-envelope-open-text"></i> Vous pourrez ensuite vous connecter avec vos identifiants.
+            </li>
+          </ul>
+        </div>
+
+        <button class="submit-btn" (click)="activeTab = 'login'; isRegisteredSuccessfully = false">
+          RETOUR À LA CONNEXION
+          <i class="fas fa-arrow-right"></i>
+        </button>
+      </div>
+
       <!-- Register Form -->
-      <form *ngIf="activeTab === 'register'" [formGroup]="registerForm" (ngSubmit)="onRegister()" class="auth-form"
-        [class.shake-error]="errorMessage">
+      <form *ngIf="activeTab === 'register' && !isRegisteredSuccessfully" [formGroup]="registerForm"
+        (ngSubmit)="onRegister()" class="auth-form" [class.shake-error]="errorMessage">
 
         <!-- Alerts -->
         <div class="form-alert error" *ngIf="errorMessage && activeTab === 'register'" (click)="errorMessage = ''">

@@ -358,16 +358,22 @@ app.get('/api/admin/users', async (req: any, res: any) => {
 
 // Update user role or status
 app.put('/api/admin/users/:id', async (req: any, res: any) => {
+  console.log(`>>> [ADMIN] Updating user status/data for ID: ${req.params.id}`);
+  console.log('>>> Update Data:', req.body);
   try {
-    const { role, status, department, classGroup, name, email, matricule, phone, cin, birthDate, gender, grade, speciality, office } = req.body;
     const user = await User.findByIdAndUpdate(
       req.params.id,
-      { role, status, department, classGroup, name, email, matricule, phone, cin, birthDate, gender, grade, speciality, office },
-      { new: true }
+      { $set: req.body },
+      { new: true, runValidators: true }
     );
+    if (!user) {
+      return res.status(404).json({ message: 'Utilisateur non trouvé' });
+    }
+    console.log(`>>> User updated successfully. Current Status: ${user.status}`);
     res.status(200).json(user);
-  } catch (err) {
-    res.status(500).json({ message: 'Error updating user' });
+  } catch (err: any) {
+    console.error('>>> Error updating user:', err);
+    res.status(500).json({ message: 'Erreur lors de la mise à jour: ' + err.message });
   }
 });
 

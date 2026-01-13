@@ -22,6 +22,7 @@ export class LoginComponent implements OnInit {
   showConfirmPassword = false;
   errorMessage = '';
   successMessage = '';
+  isRegisteredSuccessfully = false;
   loginSubmitted = false;
   registerSubmitted = false;
 
@@ -330,7 +331,8 @@ export class LoginComponent implements OnInit {
       .subscribe({
         next: (user) => {
           console.log('Register success:', user);
-          this.successMessage = 'Inscription réussie ! Redirection en cours...';
+          this.successMessage = 'Inscription réussie ! Votre compte est en attente d\'activation par l\'administrateur.';
+          this.isRegisteredSuccessfully = true;
           this.errorMessage = '';
           this.cdr.detectChanges();
           setTimeout(() => {

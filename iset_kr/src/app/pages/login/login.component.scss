@@ -754,3 +754,120 @@ $input-focus: rgba(0, 85, 164, 0.08);
     transform: translateY(0);
   }
 }
+
+.registration-success-view {
+  text-align: center;
+  padding: 2rem 1rem;
+  animation: fadeInSuccess 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+
+  h2 {
+    font-size: 2.2rem;
+    font-weight: 900;
+    color: #0f172a;
+    margin-bottom: 1rem;
+    letter-spacing: -1px;
+  }
+
+  .success-desc {
+    color: #64748b;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 2.5rem;
+    max-width: 450px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+.success-icon-animate {
+  margin-bottom: 2.5rem;
+  display: inline-block;
+  position: relative;
+
+  .icon-circle {
+    width: 100px;
+    height: 100px;
+    background: #f0fdf4;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    color: #10b981;
+    border: 4px solid #bbf7d0;
+    box-shadow: 0 15px 35px rgba(16, 185, 129, 0.2);
+    animation: scaleCheck 0.5s cubic-bezier(0.17, 0.89, 0.32, 1.49);
+  }
+}
+
+@keyframes scaleCheck {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+
+  70% {
+    transform: scale(1.1);
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInSuccess {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.next-steps-card {
+  background: #f8fafc;
+  border-radius: 24px;
+  padding: 2rem;
+  text-align: left;
+  margin-bottom: 3rem;
+  border: 1px solid #e2e8f0;
+
+  h4 {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #0055a4;
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1.2rem;
+      color: #334155;
+      font-weight: 600;
+      font-size: 0.95rem;
+
+      i {
+        color: #f59e0b;
+        font-size: 1rem;
+        margin-top: 0.2rem;
+      }
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+}
