@@ -287,7 +287,7 @@ export class LoginComponent implements OnInit {
           this.successMessage = 'Connexion réussie ! Redirection en cours...';
           this.errorMessage = '';
           this.cdr.detectChanges();
-          const user = response.user;
+          const user = response;
           setTimeout(() => {
             if (user && user.role === 'admin') {
               this.router.navigate(['/admin']);
