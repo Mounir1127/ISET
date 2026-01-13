@@ -379,6 +379,65 @@ import Chart from 'chart.js/auto';
     
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+    @media (max-width: 768px) {
+      .dashboard-overview { padding: 0.5rem; }
+      
+      .welcome-banner {
+        padding: 2rem 1.5rem;
+        border-radius: 20px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 2rem;
+        margin-bottom: 1.5rem;
+
+        h1 { font-size: 1.6rem; line-height: 1.2; }
+        p { font-size: 0.95rem; }
+      }
+
+      .banner-glass-stat {
+        width: 100%;
+        padding: 1rem 1.5rem;
+        .time-display { font-size: 1.6rem; }
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 1.2rem;
+        margin-bottom: 2rem;
+      }
+
+      .stat-card-premium {
+        padding: 1.5rem;
+        .stat-main .stat-value-pro { font-size: 1.8rem; }
+      }
+
+      .matrix-card {
+        padding: 1.5rem;
+        border-radius: 24px;
+        
+        .section-header {
+          flex-direction: column;
+          gap: 1rem;
+          margin-bottom: 2rem;
+          .title-group h3 { font-size: 1.2rem; }
+        }
+      }
+
+      .chart-wrapper-pro { height: 280px; }
+      
+      .actions-matrix {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+
+      .action-tile-pro {
+        flex-direction: row;
+        align-items: center;
+        padding: 1.2rem;
+        .tile-icon { width: 40px; height: 40px; flex-shrink: 0; }
+      }
+    }
   `]
 })
 export class AdminDashboardComponent implements OnInit, AfterViewInit {

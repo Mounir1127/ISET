@@ -64,32 +64,32 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let item of filteredAnnouncements">
-                        <td class="img-cell">
+                        <td data-label="Visuel" class="img-cell">
                             <div class="table-img" [class.no-img]="!item.image">
                                 <img *ngIf="item.image" [src]="item.image" [alt]="item.title">
                                 <i *ngIf="!item.image" class="fas fa-image"></i>
                             </div>
                         </td>
-                        <td>
+                        <td data-label="Titre & Aperçu">
                             <div class="title-cell">
                                 <span class="main-title text-truncate">{{ item.title }}</span>
                                 <span class="sub-text text-truncate">{{ item.description || item.summary || 'Pas de
                                     description' }}</span>
                             </div>
                         </td>
-                        <td>
+                        <td data-label="Type">
                             <span class="badge-type" [ngClass]="item.type">
                                 <i class="fas"
                                     [ngClass]="{'fa-calendar': item.type === 'event', 'fa-file-invoice': item.type === 'tender', 'fa-newspaper': item.type === 'news'}"></i>
                                 {{ item.type }}
                             </span>
                         </td>
-                        <td>
+                        <td data-label="Statut">
                             <span class="status-indicator" [ngClass]="item.status">
                                 {{ getStatusLabel(item.status) }}
                             </span>
                         </td>
-                        <td>
+                        <td data-label="Publication">
                             <div class="date-cell">
                                 <span>{{ item.publishDate | date:'dd MMM yyyy' }}</span>
                                 <small *ngIf="item.type === 'event'">Début: {{ item.startDate | date:'dd/MM' }}</small>

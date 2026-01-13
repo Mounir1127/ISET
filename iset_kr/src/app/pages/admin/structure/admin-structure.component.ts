@@ -494,6 +494,46 @@ import { Class } from '../../../models/class.model';
       
       .btn-save-sm { background: #10b981; color: white; border: none; border-radius: 4px; padding: 2px 8px; font-size: 0.7rem; cursor: pointer; }
       .btn-cancel-sm { background: #ef4444; color: white; border: none; border-radius: 4px; padding: 2px 8px; font-size: 0.7rem; cursor: pointer; }
+    @media (max-width: 768px) {
+      .welcome-header-modern {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.5rem;
+      }
+
+      .title-with-icon h3 { font-size: 1.6rem; }
+      .header-text-group p { font-size: 0.95rem; }
+
+      .header-stats-badges {
+        width: 100%;
+        gap: 1rem;
+        .stat-badge-mini { flex: 1; min-width: 0; padding: 0.6rem; }
+        .stat-badge-mini .value { font-size: 1.1rem; }
+      }
+
+      .structure-grid-pro {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+
+      .smart-card-premium {
+        height: auto;
+        max-height: 500px;
+        padding: 1.5rem;
+        border-radius: 24px;
+      }
+
+      .card-header-pro { margin-bottom: 1.5rem; }
+      
+      .list-container-pro .list-item-pro {
+        padding: 0.8rem;
+        .item-name-group .name { font-size: 0.9rem; }
+      }
+
+      .add-section-pro {
+        flex-direction: column;
+        .btn-submit-pro { width: 100%; }
+      }
     }
   `]
 })

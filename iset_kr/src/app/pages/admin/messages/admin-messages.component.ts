@@ -3,10 +3,10 @@ import { CommonModule } from '@angular/common';
 import { DataService } from '../../../services/data.service';
 
 @Component({
-    selector: 'app-admin-messages',
-    standalone: true,
-    imports: [CommonModule],
-    template: `
+  selector: 'app-admin-messages',
+  standalone: true,
+  imports: [CommonModule],
+  template: `
     <div class="messages-container animate-on-scroll slide-up">
       <div class="d-flex justify-content-between align-items-center mb-5">
         <div>
@@ -75,7 +75,7 @@ import { DataService } from '../../../services/data.service';
       </div>
     </div>
   `,
-    styles: [`
+  styles: [`
     .messages-container {
       padding: 1rem;
     }
@@ -154,36 +154,68 @@ import { DataService } from '../../../services/data.service';
       opacity: 0.5;
       i { color: #0055a4; }
     }
+
+    @media (max-width: 768px) {
+      .d-flex.justify-content-between.align-items-center.mb-5 {
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 1.5rem;
+      }
+
+      h1.display-5 { font-size: 1.8rem; }
+      
+      .stats-badge {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .card-body.p-4 { padding: 1.2rem !important; }
+
+      .d-flex.justify-content-between.align-items-start.mb-3 {
+        flex-direction: column;
+        gap: 1rem;
+        
+        .text-end { text-align: left !important; width: 100%; }
+      }
+
+      .message-content { padding: 1rem !important; font-size: 0.9rem; }
+
+      .d-flex.justify-content-end.gap-2 {
+        flex-direction: column;
+        width: 100%;
+        .btn-action { width: 100%; justify-content: center; }
+      }
+    }
   `]
 })
 export class AdminMessagesComponent implements OnInit {
-    messages: any[] = [];
-    unreadCount = 0;
+  messages: any[] = [];
+  unreadCount = 0;
 
-    constructor(private dataService: DataService) { }
+  constructor(private dataService: DataService) { }
 
-    ngOnInit(): void {
+  ngOnInit(): void {
+    this.loadMessages();
+  }
+
+  loadMessages(): void {
+    this.dataService.getAdminContacts().subscribe(data => {
+      this.messages = data;
+      this.unreadCount = data.filter(m => m.status === 'pending').length;
+    });
+  }
+
+  markAsRead(id: string): void {
+    this.dataService.markContactAsRead(id).subscribe(() => {
+      this.loadMessages();
+    });
+  }
+
+  deleteMessage(id: string): void {
+    if (confirm('Voulez-vous vraiment supprimer ce message ?')) {
+      this.dataService.deleteContactMessage(id).subscribe(() => {
         this.loadMessages();
+      });
     }
-
-    loadMessages(): void {
-        this.dataService.getAdminContacts().subscribe(data => {
-            this.messages = data;
-            this.unreadCount = data.filter(m => m.status === 'pending').length;
-        });
-    }
-
-    markAsRead(id: string): void {
-        this.dataService.markContactAsRead(id).subscribe(() => {
-            this.loadMessages();
-        });
-    }
-
-    deleteMessage(id: string): void {
-        if (confirm('Voulez-vous vraiment supprimer ce message ?')) {
-            this.dataService.deleteContactMessage(id).subscribe(() => {
-                this.loadMessages();
-            });
-        }
-    }
+  }
 }

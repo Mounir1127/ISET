@@ -58,7 +58,7 @@ import { UserStatusPipe } from '../../../shared/pipes/user-status.pipe';
             </thead>
             <tbody>
               <tr *ngFor="let user of filteredUsers$ | async; let i = index; trackBy: trackByUserId" [style.animation-delay]="i * 0.05 + 's'" class="animate-row">
-                <td>
+                <td data-label="Membre">
                   <div class="user-profile-cell">
                     <div class="avatar-circle" [ngClass]="user.role">
                        {{ user.name?.charAt(0) || 'U' }}
@@ -69,19 +69,19 @@ import { UserStatusPipe } from '../../../shared/pipes/user-status.pipe';
                     </div>
                   </div>
                 </td>
-                <td><span class="matricule-tag">{{ user.matricule }}</span></td>
-                <td>
+                <td data-label="Matricule"><span class="matricule-tag">{{ user.matricule }}</span></td>
+                <td data-label="Accès">
                   <span class="role-badge-modern" [ngClass]="user.role">
                     {{ (user.role | userRole) | uppercase }}
                   </span>
                 </td>
-                <td>
+                <td data-label="État">
                   <div class="status-chip-pro" [ngClass]="user.status">
                     <span class="dot-indicator"></span>
                     <span class="status-label">{{ user.status | userStatus }}</span>
                   </div>
                 </td>
-                <td class="date-pro-cell">
+                <td data-label="Arrivée" class="date-pro-cell">
                   <span class="date-main">{{ user.createdAt | date:'dd MMM yyyy' }}</span>
                 </td>
                 <td class="text-right">
@@ -826,6 +826,101 @@ import { UserStatusPipe } from '../../../shared/pipes/user-status.pipe';
       display: flex;
       justify-content: flex-end;
       gap: 1rem;
+    }
+
+    @media (max-width: 1024px) {
+      .welcome-header-modern { gap: 1.5rem; }
+      .search-box-ultra input { width: 300px; }
+      .search-box-ultra input:focus { width: 320px; }
+    }
+
+    @media (max-width: 768px) {
+      .welcome-header-modern {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+      }
+
+      .title-with-icon h3 { font-size: 1.6rem; }
+      .title-with-icon .icon-gradient { font-size: 1.8rem; }
+      .header-text-group p { font-size: 0.95rem; }
+
+      .header-actions-modern {
+        width: 100%;
+        flex-wrap: wrap;
+        gap: 0.8rem;
+      }
+
+      .search-box-ultra { width: 100%; order: 3; }
+      .search-box-ultra input { width: 100%; }
+      .search-box-ultra input:focus { width: 100%; }
+
+      .btn {
+        flex: 1;
+        padding: 0.8rem 1rem;
+        justify-content: center;
+        span { font-size: 0.8rem; }
+      }
+
+      .iset-modern-table {
+        display: block;
+        
+        thead { display: none; }
+        
+        tbody, tr { display: block; width: 100%; }
+        
+        tr {
+          background: white;
+          border-radius: 20px;
+          margin-bottom: 1.5rem;
+          padding: 1.5rem;
+          border: 1px solid #f1f5f9;
+          box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+          position: relative;
+        }
+
+        td {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 0.8rem 0 !important;
+          border-bottom: 1px dashed #f1f5f9;
+          text-align: left;
+
+          &::before {
+            content: attr(data-label);
+            font-weight: 800;
+            color: #64748b;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+          }
+
+          &:last-child {
+            border-bottom: none;
+            padding-top: 1.2rem !important;
+          }
+        }
+
+        .user-profile-cell { gap: 1rem; }
+        .user-profile-cell .avatar-circle { width: 40px; height: 40px; font-size: 1rem; }
+        .user-profile-cell .user-meta .full-name { font-size: 0.95rem; }
+        .user-profile-cell .user-meta .user-email-text { font-size: 0.75rem; }
+
+        .action-buttons-group { width: 100%; justify-content: space-between; }
+        .action-buttons-group .action-btn-mini { flex: 1; }
+      }
+
+      .main-card-glass { padding: 0.8rem; background: transparent; border: none; box-shadow: none; }
+      .table-scroll-container { overflow: visible; }
+
+      .modal-content {
+        width: 95%;
+        padding: 1.5rem;
+        border-radius: 20px;
+      }
+
+      .form-row { flex-direction: column; gap: 0; }
     }
   `]
 })

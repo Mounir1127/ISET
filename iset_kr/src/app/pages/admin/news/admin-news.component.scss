@@ -512,3 +512,128 @@ $admin-blue: #0055a4;
         }
     }
 }
+
+@media (max-width: 768px) {
+    .stats-overview {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .toolbar {
+        flex-direction: column;
+        gap: 1.5rem;
+        padding: 1.5rem;
+
+        .filter-group {
+            width: 100%;
+            overflow-x: auto;
+            white-space: nowrap;
+            scrollbar-width: none;
+
+            &::-webkit-scrollbar {
+                display: none;
+            }
+
+            button {
+                flex: 1;
+                text-align: center;
+            }
+        }
+
+        .actions {
+            width: 100%;
+
+            .btn-add-modern {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    }
+
+    .table-wrapper {
+        table {
+            display: block;
+
+            thead {
+                display: none;
+            }
+
+            tbody,
+            tr {
+                display: block;
+                width: 100%;
+            }
+
+            tr {
+                border-bottom: 2px solid #f1f5f9;
+                padding: 1.5rem;
+                position: relative;
+                background: white;
+                margin-bottom: 1rem;
+                border: 1px solid #f1f5f9;
+                border-radius: 20px;
+            }
+
+            td {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 0.8rem 0 !important;
+                border: none;
+                border-bottom: 1px dashed #f1f5f9;
+
+                &::before {
+                    content: attr(data-label);
+                    font-weight: 800;
+                    color: #94a3b8;
+                    font-size: 0.7rem;
+                    text-transform: uppercase;
+                }
+
+                &:last-child {
+                    border-bottom: none;
+                    margin-top: 0.5rem;
+                }
+            }
+        }
+    }
+
+    .action-buttons {
+        width: 100%;
+        justify-content: space-between;
+
+        button {
+            flex: 1;
+            height: 44px;
+        }
+    }
+
+    .modal-backdrop {
+        padding: 1rem;
+    }
+
+    .modal-card {
+        border-radius: 20px;
+        max-height: 95vh;
+    }
+
+    .modal-header {
+        padding: 1.5rem;
+
+        .header-info h4 {
+            font-size: 1.1rem;
+        }
+    }
+
+    .modal-body {
+        padding: 1.5rem;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+
+        .form-field.full {
+            grid-column: span 1;
+        }
+    }
+}

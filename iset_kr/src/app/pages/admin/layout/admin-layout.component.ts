@@ -8,40 +8,44 @@ import { AuthService } from '../../../services/auth.service';
   standalone: true,
   imports: [CommonModule, RouterModule],
   template: `
-    <div class="admin-wrapper" [class.sidebar-hidden]="isCollapsed">
-      <aside class="admin-sidebar" [class.collapsed]="isCollapsed">
+    <div class="admin-wrapper" [class.sidebar-hidden]="isCollapsed" [class.mobile-menu-active]="isMobileOpen">
+      <!-- Overlay for mobile -->
+      <div class="sidebar-overlay" *ngIf="isMobileOpen" (click)="closeMobileMenu()"></div>
+
+      <aside class="admin-sidebar" [class.collapsed]="isCollapsed" [class.mobile-open]="isMobileOpen">
         <div class="sidebar-header">
           <div class="logo-icon">IK</div>
           <div class="logo-text">ADMIN Pro</div>
+          <button class="mobile-close-btn" (click)="closeMobileMenu()"><i class="fas fa-times"></i></button>
         </div>
         
         <nav class="sidebar-nav">
           <span class="menu-label">Principal</span>
-          <a routerLink="/admin/dashboard" routerLinkActive="active" class="nav-item">
+          <a routerLink="/admin/dashboard" routerLinkActive="active" class="nav-item" (click)="closeMobileMenu()">
             <i class="fas fa-th-large"></i>
             <span>Tableau de bord</span>
           </a>
           
           <span class="menu-label">Gestion</span>
-          <a routerLink="/admin/users" routerLinkActive="active" class="nav-item">
+          <a routerLink="/admin/users" routerLinkActive="active" class="nav-item" (click)="closeMobileMenu()">
             <i class="fas fa-users-cog"></i>
             <span>Utilisateurs</span>
           </a>
-          <a routerLink="/admin/structure" routerLinkActive="active" class="nav-item">
+          <a routerLink="/admin/structure" routerLinkActive="active" class="nav-item" (click)="closeMobileMenu()">
             <i class="fas fa-sitemap"></i>
             <span>Structure</span>
           </a>
-          <a routerLink="/admin/academic" routerLinkActive="active" class="nav-item">
+          <a routerLink="/admin/academic" routerLinkActive="active" class="nav-item" (click)="closeMobileMenu()">
             <i class="fas fa-graduation-cap"></i>
             <span>Académique</span>
           </a>
           
           <span class="menu-label">Communication</span>
-          <a routerLink="/admin/news" routerLinkActive="active" class="nav-item">
+          <a routerLink="/admin/news" routerLinkActive="active" class="nav-item" (click)="closeMobileMenu()">
             <i class="fas fa-newspaper"></i>
             <span>Actualités</span>
           </a>
-          <a routerLink="/admin/messages" routerLinkActive="active" class="nav-item">
+          <a routerLink="/admin/messages" routerLinkActive="active" class="nav-item" (click)="closeMobileMenu()">
             <i class="fas fa-envelope-open-text"></i>
             <span>Messages</span>
           </a>
@@ -64,8 +68,11 @@ import { AuthService } from '../../../services/auth.service';
       <main class="admin-main">
         <header class="admin-header">
           <div class="header-left">
-            <button class="toggle-btn" (click)="toggleSidebar()">
+            <button class="toggle-btn hide-on-mobile" (click)="toggleSidebar()">
               <i class="fas" [class.fa-bars]="!isCollapsed" [class.fa-arrow-right]="isCollapsed"></i>
+            </button>
+            <button class="toggle-btn show-on-mobile" (click)="toggleMobileMenu()">
+              <i class="fas fa-bars"></i>
             </button>
             <h2 class="page-title">Système d'administration</h2>
           </div>
@@ -76,7 +83,7 @@ import { AuthService } from '../../../services/auth.service';
               <span>Publier</span>
             </button>
             <div class="user-info">
-              <div class="user-details">
+              <div class="user-details hide-on-mobile">
                 <span class="username">{{ currentUser?.name || 'Administrateur' }}</span>
                 <span class="role-badge">{{ currentUser?.role || 'Admin' }}</span>
               </div>
@@ -97,6 +104,7 @@ import { AuthService } from '../../../services/auth.service';
 })
 export class AdminLayoutComponent {
   isCollapsed = false;
+  isMobileOpen = false;
   currentUser: any;
 
   constructor(private authService: AuthService) {
@@ -107,7 +115,22 @@ export class AdminLayoutComponent {
     this.isCollapsed = !this.isCollapsed;
   }
 
+  toggleMobileMenu() {
+    this.isMobileOpen = !this.isMobileOpen;
+    if (this.isMobileOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+  }
+
+  closeMobileMenu() {
+    this.isMobileOpen = false;
+    document.body.style.overflow = '';
+  }
+
   logout() {
+    this.closeMobileMenu();
     this.authService.logout();
   }
 }

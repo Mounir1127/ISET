@@ -651,11 +651,37 @@ import { AdminService } from '../../../services/admin.service';
       
       /* Grid Container Fix */
       .schedule-grid-container {
-        margin: 0 -1rem; /* Negative margin to pull to edges */
+        margin: 0 -1rem;
         border-radius: 0;
         border-right: none;
         border-left: none;
         box-shadow: none;
+        padding: 0.5rem;
+      }
+
+      .schedule-table {
+        border-spacing: 6px;
+        min-width: 800px; /* Slightly more compact for mobile scroll */
+      }
+
+      .session-cell {
+        height: 120px; /* More compact on mobile */
+      }
+
+      .module-name { font-size: 0.8rem; margin-bottom: 0.3rem; }
+      .session-info { padding: 0.4rem; border-radius: 8px; }
+      .info-item { font-size: 0.65rem; gap: 0.3rem; i { font-size: 0.7rem; } }
+
+      .modal-card {
+        width: 95%;
+        max-height: 95vh;
+        border-radius: 20px;
+      }
+
+      .form-fields {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1rem;
       }
     }
   `]
