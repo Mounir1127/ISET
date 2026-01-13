@@ -42,8 +42,7 @@ export const routes: Routes = [
     },
     {
         path: 'certifications',
-        component: CertificationsComponent,
-        canActivate: [AuthGuard]
+        component: CertificationsComponent
     },
 
     { path: 'contact', component: ContactComponent },

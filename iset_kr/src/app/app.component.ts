@@ -20,6 +20,7 @@ export class AppComponent implements OnInit {
   isLoginPage = false;
   isContactPage = false;
   isFormationsPage = false;
+  isCertificationsPage = false;
 
   constructor(public authService: AuthService, private router: Router) {
     this.router.events.pipe(
@@ -29,6 +30,7 @@ export class AppComponent implements OnInit {
       this.isLoginPage = event.url.includes('/login');
       this.isContactPage = event.url.includes('/contact');
       this.isFormationsPage = event.url.includes('/formations');
+      this.isCertificationsPage = event.url.includes('/certifications');
       this.isMenuOpen = false; // Close menu on navigation
     });
   }
