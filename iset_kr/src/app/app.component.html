@@ -1,6 +1,6 @@
 <!-- Modern Header -->
 <header class="main-header transparent-header"
-  *ngIf="!isAdminRoute && !isLoginPage && !isContactPage && !isFormationsPage && !isCertificationsPage">
+  *ngIf="!isAdminRoute && !isLoginPage && !isContactPage && !isFormationsPage && !isCertificationsPage && !isFourCPage">
   <div class="header-container">
     <!-- Logo & Title -->
     <div class="logo-section" routerLink="/">
@@ -78,6 +78,14 @@
         <span class="nav-icon"><i class="fas fa-users"></i></span>
         <span class="nav-text">VIE ÉTUDIANTE</span>
       </a>
+      <a routerLink="/4c" (click)="closeMenu()" routerLinkActive="active">
+        <span class="nav-icon"><i class="fas fa-briefcase"></i></span>
+        <span class="nav-text">ESPACE 4C</span>
+      </a>
+      <a routerLink="/certifications" (click)="closeMenu()" routerLinkActive="active">
+        <span class="nav-icon"><i class="fas fa-certificate"></i></span>
+        <span class="nav-text">CERTIFICATIONS</span>
+      </a>
       <a routerLink="/contact" (click)="closeMenu()" routerLinkActive="active">
         <span class="nav-icon"><i class="fas fa-envelope"></i></span>
         <span class="nav-text">CONTACT</span>
@@ -123,7 +131,7 @@
 
 <!-- Footer -->
 <footer class="main-footer"
-  *ngIf="!isAdminRoute && !isLoginPage && !isContactPage && !isFormationsPage && !isCertificationsPage">
+  *ngIf="!isAdminRoute && !isLoginPage && !isContactPage && !isFormationsPage && !isCertificationsPage && !isFourCPage">
   <div class="footer-content">
     <div class="footer-column">
       <h4>ISET Kairouan</h4>

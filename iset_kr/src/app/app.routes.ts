@@ -4,6 +4,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { FormationsComponent } from './pages/formations/formations.component';
 import { ServicesComponent } from './pages/services/services.component';
 import { CertificationsComponent } from './pages/certifications/certifications.component';
+import { FourCComponent } from './pages/4c/4c.component';
 import { ContactComponent } from './pages/contact/contact.component';
 import { AuthGuard } from './guards/auth.guard';
 import { AdminGuard } from './guards/admin.guard';
@@ -43,6 +44,10 @@ export const routes: Routes = [
     {
         path: 'certifications',
         component: CertificationsComponent
+    },
+    {
+        path: '4c',
+        component: FourCComponent
     },
 
     { path: 'contact', component: ContactComponent },

@@ -21,6 +21,7 @@ export class AppComponent implements OnInit {
   isContactPage = false;
   isFormationsPage = false;
   isCertificationsPage = false;
+  isFourCPage = false;
 
   constructor(public authService: AuthService, private router: Router) {
     this.router.events.pipe(
@@ -31,6 +32,7 @@ export class AppComponent implements OnInit {
       this.isContactPage = event.url.includes('/contact');
       this.isFormationsPage = event.url.includes('/formations');
       this.isCertificationsPage = event.url.includes('/certifications');
+      this.isFourCPage = event.url.includes('/4c');
       this.isMenuOpen = false; // Close menu on navigation
     });
   }
