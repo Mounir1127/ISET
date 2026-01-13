@@ -125,6 +125,45 @@ import { StaffService } from '../../../services/staff.service';
     .table-actions { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; .count-tag { background: #eff6ff; color: #0055a4; padding: 0.5rem 1.2rem; border-radius: 10px; font-weight: 800; font-size: 0.85rem; display: flex; align-items: center; gap: 0.6rem; } .search-mini { position: relative; i { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #94a3b8; } input { background: #f8fafc; border: 1px solid #e2e8f0; padding: 0.6rem 1rem 0.6rem 2.8rem; border-radius: 12px; font-family: inherit; font-size: 0.9rem; &:focus { outline: none; border-color: #0055a4; background: white; } } } }
     .notes-table { width: 100%; border-collapse: collapse; th { padding: 1.2rem 1.5rem; text-align: left; font-size: 0.8rem; font-weight: 850; color: #94a3b8; border-bottom: 2px solid #f1f5f9; text-transform: uppercase; letter-spacing: 1px; } td { padding: 1.2rem 1.5rem; border-bottom: 1px solid #f1f5f9; vertical-align: middle; } .student-info .name { font-weight: 800; color: #0f172a; font-size: 0.95rem; } .mat-badge { font-family: monospace; font-weight: 700; color: #64748b; background: #f1f5f9; padding: 0.3rem 0.6rem; border-radius: 6px; font-size: 0.8rem; } .note-input { width: 80px; padding: 0.8rem; border-radius: 12px; border: 2px solid #e2e8f0; background: #f8fafc; font-weight: 900; text-align: center; font-size: 1.1rem; color: #0f172a; transition: all 0.3s; &::-webkit-inner-spin-button { opacity: 1; } &:focus { outline: none; border-color: #0055a4; background: white; } &.low { color: #ef4444; border-color: #fee2e2; } &.high { color: #10b981; border-color: #d1fae5; } } .glass-textarea { width: 100%; min-height: 40px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 0.6rem; font-family: inherit; resize: none; font-size: 0.85rem; &:focus { outline: none; border-color: #0055a4; } } .status-tag { font-size: 0.75rem; font-weight: 800; padding: 0.4rem 0.8rem; border-radius: 50px; background: #f1f5f9; color: #64748b; &.validated { background: #dcfce7; color: #15803d; } } tr:hover td { background: rgba(0, 85, 164, 0.02); } }
     .loading-state, .empty-table { padding: 4rem; text-align: center; color: #64748b; i { font-size: 2.5rem; margin-bottom: 1rem; color: #cbd5e1; } }
+
+    @media (max-width: 768px) {
+      .glass-card {
+        padding: 1.5rem;
+        border-radius: 20px;
+      }
+
+      .header-main {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1.5rem;
+        h2 { font-size: 1.5rem; }
+        .btn-primary { width: 100%; justify-content: center; }
+      }
+
+      .selection-grid {
+        grid-template-columns: 1fr;
+        gap: 1.2rem;
+      }
+
+      .table-actions {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+        .search-mini input { width: 100%; }
+      }
+
+      .notes-table {
+        th, td { padding: 1rem 0.8rem; font-size: 0.8rem; }
+        .student-info .name { font-size: 0.85rem; }
+        .note-input { width: 65px; padding: 0.6rem; font-size: 1rem; }
+        .glass-textarea { min-width: 120px; }
+      }
+      
+      .table-scroll {
+        overflow-x: auto;
+        margin: 0 -1.5rem;
+      }
+    }
   `]
 })
 export class StaffNotesComponent implements OnInit {

@@ -154,6 +154,44 @@ import { environment } from '../../../../environments/environment';
     .animate-fade-up { animation: fadeUp 0.6s ease-out both; }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+    @media (max-width: 768px) {
+      .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.5rem;
+        h1 { font-size: 1.6rem; }
+        .actions { width: 100%; button { width: 100%; justify-content: center; } }
+      }
+
+      .glass-card {
+        padding: 1rem;
+        border-radius: 20px;
+      }
+
+      .schedule-grid-wrapper {
+        margin: 0 -1.5rem;
+      }
+
+      .table-responsive {
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+      }
+
+      .schedule-table {
+        border-spacing: 5px;
+        th { padding: 0.5rem; font-size: 0.7rem; }
+        .time-slot { width: 80px; font-size: 0.8rem; padding: 0.8rem 0.5rem; }
+      }
+
+      .session-box {
+        padding: 0.8rem;
+        min-height: 80px;
+        .subject { font-size: 0.8rem; }
+        .info-row { flex-direction: column; gap: 0.3rem; }
+      }
+    }
   `]
 })
 export class StudentScheduleComponent implements OnInit {

@@ -200,7 +200,71 @@ import { AuthService } from '../../../services/auth.service';
     }
 
     @media (max-width: 1200px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } .content-row { grid-template-columns: 1fr; } }
-    @media (max-width: 640px) { .stats-grid { grid-template-columns: 1fr; } .welcome-banner { padding: 2rem; } .next-class .class-info-wrap { flex-direction: column; text-align: center; } }
+    
+    @media (max-width: 768px) {
+      .welcome-banner {
+        padding: 2rem 1.5rem;
+        border-radius: 20px;
+        .banner-content {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 2rem;
+          h1 { font-size: 1.8rem; }
+        }
+        .quick-status {
+          width: 100%;
+          justify-content: space-between;
+          gap: 1rem;
+          .v-divider { display: none; }
+        }
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+
+      .stat-card {
+        padding: 1.2rem;
+      }
+
+      .content-row {
+        gap: 1rem;
+      }
+      
+      .main-card, .quick-actions-card {
+        padding: 1.5rem;
+        border-radius: 20px;
+      }
+
+      .next-class .class-info-wrap {
+        flex-direction: column;
+        text-align: center;
+        padding: 1.5rem;
+        gap: 1.5rem;
+      }
+
+      .next-class .class-actions {
+        flex-direction: row;
+        width: 100%;
+        button { flex: 1; justify-content: center; }
+      }
+
+      .chart-section {
+        padding: 1.5rem;
+        .chart-header {
+          flex-direction: column;
+          gap: 1.5rem;
+          margin-bottom: 2rem;
+        }
+      }
+    }
+
+    @media (max-width: 480px) {
+      .next-class .class-actions {
+        flex-direction: column;
+      }
+    }
   `]
 })
 export class StaffDashboardComponent implements OnInit {

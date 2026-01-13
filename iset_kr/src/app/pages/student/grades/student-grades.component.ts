@@ -121,10 +121,20 @@ import { environment } from '../../../../environments/environment';
       p { font-weight: 600; margin: 0; }
     }
 
-    .animate-fade-in { animation: fadeIn 0.6s ease-out; }
-    .animate-fade-up { animation: fadeUp 0.6s ease-out both; }
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-    @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @media (max-width: 768px) {
+      .page-header {
+        h1 { font-size: 1.6rem; }
+      }
+      .glass-card {
+        padding: 1rem;
+        border-radius: 20px;
+      }
+      .grades-table {
+        th, td { padding: 1rem 0.5rem; font-size: 0.8rem; }
+        .module-cell { min-width: 140px; }
+        .exam-type { padding: 0.2rem 0.5rem; font-size: 0.75rem; }
+      }
+    }
   `]
 })
 export class StudentGradesComponent implements OnInit {

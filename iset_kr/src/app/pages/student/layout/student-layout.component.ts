@@ -4,24 +4,41 @@ import { RouterModule } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 
 @Component({
-    selector: 'app-student-layout',
-    standalone: true,
-    imports: [CommonModule, RouterModule],
-    template: `
-    <div class="student-wrapper" [class.sidebar-hidden]="isCollapsed">
+  selector: 'app-student-layout',
+  standalone: true,
+  imports: [CommonModule, RouterModule],
+  template: `
+    <div class="student-wrapper" [class.sidebar-hidden]="isCollapsed" [class.mobile-menu-active]="isMobileMenuOpen">
+      <!-- MOBILE HEADER -->
+      <header class="mobile-navbar">
+        <button class="hamburger-btn" (click)="toggleMobileMenu()">
+          <i class="fas" [class.fa-bars]="!isMobileMenuOpen" [class.fa-times]="isMobileMenuOpen"></i>
+        </button>
+        <div class="mobile-logo">
+          <span>IS</span> STUDENT
+        </div>
+        <div class="mobile-page-title">Mon Espace</div>
+        <div class="mobile-user-link">
+           <div class="mini-avatar">{{ (currentUser?.name || 'S').charAt(0) }}</div>
+        </div>
+      </header>
+
       <!-- SIDEBAR ULTRA PRO -->
-      <aside class="student-sidebar" [class.collapsed]="isCollapsed">
+      <aside class="student-sidebar" [class.collapsed]="isCollapsed" [class.mobile-open]="isMobileMenuOpen">
         <div class="sidebar-header">
           <div class="logo-wrap">
             <div class="logo-icon">IS</div>
             <div class="logo-text">STUDENT<span>PRO</span></div>
           </div>
+          <button class="mobile-close-btn" (click)="isMobileMenuOpen = false">
+            <i class="fas fa-times"></i>
+          </button>
         </div>
         
         <nav class="sidebar-nav">
           <div class="nav-section">
             <span class="section-label">Principal</span>
-            <a routerLink="/student/dashboard" routerLinkActive="active" class="nav-item">
+            <a routerLink="/student/dashboard" routerLinkActive="active" class="nav-item" (click)="isMobileMenuOpen = false">
               <i class="fas fa-home"></i>
               <span>Mon Espace</span>
             </a>
@@ -29,15 +46,15 @@ import { AuthService } from '../../../services/auth.service';
 
           <div class="nav-section">
             <span class="section-label">Académique</span>
-            <a routerLink="/student/schedule" routerLinkActive="active" class="nav-item">
+            <a routerLink="/student/schedule" routerLinkActive="active" class="nav-item" (click)="isMobileMenuOpen = false">
               <i class="fas fa-calendar-alt"></i>
               <span>Emploi du Temps</span>
             </a>
-            <a routerLink="/student/grades" routerLinkActive="active" class="nav-item">
+            <a routerLink="/student/grades" routerLinkActive="active" class="nav-item" (click)="isMobileMenuOpen = false">
               <i class="fas fa-star"></i>
               <span>Mes Notes</span>
             </a>
-            <a routerLink="/student/materials" routerLinkActive="active" class="nav-item">
+            <a routerLink="/student/materials" routerLinkActive="active" class="nav-item" (click)="isMobileMenuOpen = false">
               <i class="fas fa-folder-open"></i>
               <span>Cours & Supports</span>
             </a>
@@ -64,6 +81,9 @@ import { AuthService } from '../../../services/auth.service';
         </div>
       </aside>
 
+      <!-- OVERLAY -->
+      <div class="sidebar-overlay" *ngIf="isMobileMenuOpen" (click)="isMobileMenuOpen = false"></div>
+
       <!-- MAIN CONTENT -->
       <main class="student-main">
         <section class="student-content-area">
@@ -72,7 +92,7 @@ import { AuthService } from '../../../services/auth.service';
       </main>
     </div>
   `,
-    styles: [`
+  styles: [`
     @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
     
     :host {
@@ -281,24 +301,90 @@ import { AuthService } from '../../../services/auth.service';
       min-height: 100vh;
     }
 
+    /* MOBILE NAVIGATION */
+    .mobile-navbar {
+      display: none;
+      height: var(--header-height);
+      background: white;
+      padding: 0 1.5rem;
+      align-items: center;
+      justify-content: space-between;
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 90;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      
+      .hamburger-btn {
+        background: none; border: none; font-size: 1.4rem; color: var(--navy); cursor: pointer;
+      }
+      .mobile-logo {
+        font-weight: 800; font-size: 1.1rem; color: var(--navy); span { color: var(--primary); }
+      }
+      .mobile-page-title {
+        font-weight: 700; font-size: 0.9rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px;
+        display: none;
+      }
+      .mini-avatar {
+        width: 35px; height: 35px; background: var(--secondary); border-radius: 8px;
+        display: flex; align-items: center; justify-content: center; color: white; font-weight: 800;
+      }
+    }
+
+    .mobile-close-btn { display: none; background: none; border: none; color: white; font-size: 1.2rem; opacity: 0.5; }
+
+    .sidebar-overlay {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px);
+      z-index: 95; animation: fadeIn 0.3s ease;
+    }
+
     @media (max-width: 1024px) {
+      .mobile-navbar { display: flex; }
+      .mobile-page-title { display: block; }
+
+      .student-sidebar {
+        left: -100%; /* Hide off-screen */
+        &.mobile-open { left: 0; }
+        .mobile-close-btn { display: block; }
+      }
+
+      .sidebar-header {
+        display: flex; justify-content: space-between; align-items: center;
+      }
+
+      .student-main {
+        margin-left: 0 !important;
+        padding-top: var(--header-height);
+      }
+
       .student-content-area { padding: 1.5rem; }
     }
+
+    @media (max-width: 480px) {
+       .mobile-page-title { display: none; }
+    }
+
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
   `]
 })
 export class StudentLayoutComponent {
-    isCollapsed = false;
-    currentUser: any;
+  isCollapsed = false;
+  isMobileMenuOpen = false;
+  currentUser: any;
 
-    constructor(private authService: AuthService) {
-        this.authService.currentUser.subscribe(user => this.currentUser = user);
-    }
+  constructor(private authService: AuthService) {
+    this.authService.currentUser.subscribe(user => this.currentUser = user);
+  }
 
-    toggleSidebar() {
-        this.isCollapsed = !this.isCollapsed;
-    }
+  toggleSidebar() {
+    this.isCollapsed = !this.isCollapsed;
+  }
 
-    logout() {
-        this.authService.logout();
-    }
+  toggleMobileMenu() {
+    this.isMobileMenuOpen = !this.isMobileMenuOpen;
+  }
+
+  logout() {
+    this.authService.logout();
+  }
 }

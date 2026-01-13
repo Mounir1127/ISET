@@ -8,20 +8,37 @@ import { AuthService } from '../../../services/auth.service';
   standalone: true,
   imports: [CommonModule, RouterModule],
   template: `
-    <div class="staff-wrapper" [class.sidebar-hidden]="isCollapsed">
+    <div class="staff-wrapper" [class.sidebar-hidden]="isCollapsed" [class.mobile-menu-active]="isMobileMenuOpen">
+      <!-- MOBILE HEADER -->
+      <header class="mobile-navbar">
+        <button class="hamburger-btn" (click)="toggleMobileMenu()">
+          <i class="fas" [class.fa-bars]="!isMobileMenuOpen" [class.fa-times]="isMobileMenuOpen"></i>
+        </button>
+        <div class="mobile-logo">
+          <span>IS</span> STAFF
+        </div>
+        <div class="mobile-page-title">{{ getPageTitle() }}</div>
+        <div class="mobile-user-link">
+           <div class="mini-avatar">{{ (currentUser?.name || 'P').charAt(0) }}</div>
+        </div>
+      </header>
+
       <!-- SIDEBAR ULTRA PRO -->
-      <aside class="staff-sidebar" [class.collapsed]="isCollapsed">
+      <aside class="staff-sidebar" [class.collapsed]="isCollapsed" [class.mobile-open]="isMobileMenuOpen">
         <div class="sidebar-header">
           <div class="logo-wrap">
             <div class="logo-icon">IS</div>
             <div class="logo-text">STAFF<span>PRO</span></div>
           </div>
+          <button class="mobile-close-btn" (click)="isMobileMenuOpen = false">
+            <i class="fas fa-times"></i>
+          </button>
         </div>
         
         <nav class="sidebar-nav">
           <div class="nav-section">
             <span class="section-label">Principal</span>
-            <a routerLink="/staff/dashboard" routerLinkActive="active" class="nav-item">
+            <a routerLink="/staff/dashboard" routerLinkActive="active" class="nav-item" (click)="isMobileMenuOpen = false">
               <i class="fas fa-chart-line"></i>
               <span>Tableau de bord</span>
             </a>
@@ -29,15 +46,15 @@ import { AuthService } from '../../../services/auth.service';
 
           <div class="nav-section">
             <span class="section-label">Académique</span>
-            <a routerLink="/staff/students" routerLinkActive="active" class="nav-item">
+            <a routerLink="/staff/students" routerLinkActive="active" class="nav-item" (click)="isMobileMenuOpen = false">
               <i class="fas fa-user-graduate"></i>
               <span>Mes Étudiants</span>
             </a>
-            <a routerLink="/staff/schedule" routerLinkActive="active" class="nav-item">
+            <a routerLink="/staff/schedule" routerLinkActive="active" class="nav-item" (click)="isMobileMenuOpen = false">
               <i class="fas fa-calendar-alt"></i>
               <span>Emploi du Temps</span>
             </a>
-            <a routerLink="/staff/materials" routerLinkActive="active" class="nav-item">
+            <a routerLink="/staff/materials" routerLinkActive="active" class="nav-item" (click)="isMobileMenuOpen = false">
               <i class="fas fa-folder-open"></i>
               <span>Supports Cours</span>
             </a>
@@ -45,11 +62,11 @@ import { AuthService } from '../../../services/auth.service';
 
           <div class="nav-section">
             <span class="section-label">Gestion</span>
-            <a routerLink="/staff/notes" routerLinkActive="active" class="nav-item">
+            <a routerLink="/staff/notes" routerLinkActive="active" class="nav-item" (click)="isMobileMenuOpen = false">
               <i class="fas fa-star"></i>
               <span>Notes & Évals</span>
             </a>
-            <a routerLink="/staff/announcements" routerLinkActive="active" class="nav-item">
+            <a routerLink="/staff/announcements" routerLinkActive="active" class="nav-item" (click)="isMobileMenuOpen = false">
               <i class="fas fa-bullhorn"></i>
               <span>Annonces</span>
             </a>
@@ -57,7 +74,7 @@ import { AuthService } from '../../../services/auth.service';
 
           <div class="nav-section">
             <span class="section-label">Aide & Contact</span>
-            <a routerLink="/staff/claims" routerLinkActive="active" class="nav-item">
+            <a routerLink="/staff/claims" routerLinkActive="active" class="nav-item" (click)="isMobileMenuOpen = false">
               <i class="fas fa-clipboard-list"></i>
               <span>Réclamations</span>
             </a>
@@ -83,6 +100,9 @@ import { AuthService } from '../../../services/auth.service';
           </div>
         </div>
       </aside>
+
+      <!-- OVERLAY -->
+      <div class="sidebar-overlay" *ngIf="isMobileMenuOpen" (click)="isMobileMenuOpen = false"></div>
 
       <!-- MAIN CONTENT -->
       <main class="staff-main">
@@ -311,13 +331,73 @@ import { AuthService } from '../../../services/auth.service';
       min-height: 100vh;
     }
 
+    /* MOBILE NAVIGATION */
+    .mobile-navbar {
+      display: none;
+      height: var(--header-height);
+      background: white;
+      padding: 0 1.5rem;
+      align-items: center;
+      justify-content: space-between;
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 90;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      
+      .hamburger-btn {
+        background: none; border: none; font-size: 1.4rem; color: var(--navy); cursor: pointer;
+      }
+      .mobile-logo {
+        font-weight: 800; font-size: 1.1rem; color: var(--navy); span { color: var(--primary); }
+      }
+      .mobile-page-title {
+        font-weight: 700; font-size: 0.9rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px;
+        display: none; /* Show only on slightly bigger mobile */
+      }
+      .mini-avatar {
+        width: 35px; height: 35px; background: var(--secondary); border-radius: 8px;
+        display: flex; align-items: center; justify-content: center; color: white; font-weight: 800;
+      }
+    }
+
+    .mobile-close-btn { display: none; background: none; border: none; color: white; font-size: 1.2rem; opacity: 0.5; }
+
+    .sidebar-overlay {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px);
+      z-index: 95; animation: fadeIn 0.3s ease;
+    }
+
     @media (max-width: 1024px) {
+      .mobile-navbar { display: flex; }
+      .mobile-page-title { display: block; }
+      
+      .staff-sidebar {
+        left: -100%; /* Hide off-screen */
+        &.mobile-open { left: 0; }
+        .mobile-close-btn { display: block; }
+      }
+
+      .sidebar-header {
+        display: flex; justify-content: space-between; align-items: center;
+      }
+
+      .staff-main {
+        margin-left: 0 !important;
+        padding-top: var(--header-height);
+      }
+
       .staff-content-area { padding: 1.5rem; }
+    }
+
+    @media (max-width: 480px) {
+      .mobile-page-title { display: none; }
     }
   `]
 })
 export class StaffLayoutComponent {
   isCollapsed = false;
+  isMobileMenuOpen = false;
   currentUser: any;
   today = new Date();
 
@@ -327,6 +407,10 @@ export class StaffLayoutComponent {
 
   toggleSidebar() {
     this.isCollapsed = !this.isCollapsed;
+  }
+
+  toggleMobileMenu() {
+    this.isMobileMenuOpen = !this.isMobileMenuOpen;
   }
 
   logout() {

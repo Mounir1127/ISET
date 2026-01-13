@@ -229,7 +229,39 @@ import { AuthService } from '../../../services/auth.service';
     }
 
     @media (max-width: 1024px) {
-      .schedule-grid-container { overflow-x: auto; }
+      .schedule-grid-container { 
+        overflow-x: auto; 
+        margin: 0 -1.5rem; 
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .glass-card {
+        padding: 1.5rem;
+        border-radius: 20px;
+      }
+
+      .header-wrap {
+        .header-main {
+          flex-direction: column;
+          gap: 1.5rem;
+          h2 { font-size: 1.5rem; }
+        }
+        .semester-info {
+          flex-direction: column;
+          gap: 0.8rem;
+          .info-tag { width: 100%; }
+        }
+      }
+
+      .schedule-legend {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1.5rem;
+      }
     }
 
     @media print {
@@ -237,7 +269,6 @@ import { AuthService } from '../../../services/auth.service';
       .glass-card { box-shadow: none !important; border: 1px solid #eee !important; backdrop-filter: none !important; padding: 0 !important; }
       .schedule-page { gap: 1rem; }
       .schedule-grid-container { overflow: visible !important; }
-      .schedule-table { min-width: auto !important; width: 100% !important; }
       
       /* Ensure colors are printed */
       * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }

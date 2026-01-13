@@ -353,6 +353,36 @@ import { environment } from '../../../../environments/environment';
     @media (max-width: 1024px) {
       .content-grid { grid-template-columns: 1fr; }
     }
+
+    @media (max-width: 768px) {
+      .dashboard-header {
+        flex-direction: column;
+        gap: 1.5rem;
+        h1 { font-size: 1.8rem; }
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+
+      .glass-card {
+        padding: 1.5rem;
+      }
+
+      .session-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.8rem;
+        
+        .time { min-width: auto; }
+        .type-badge { position: absolute; top: 1.2rem; right: 1.2rem; }
+      }
+
+      .shortcuts-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
   `]
 })
 export class StudentDashboardComponent implements OnInit {
