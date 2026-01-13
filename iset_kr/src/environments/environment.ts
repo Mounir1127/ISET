@@ -1,6 +1,6 @@
 export const environment = {
     production: false,
-    apiUrl: 'https://iset-15b8.onrender.com/api',
+    apiUrl: 'http://localhost:5000/api',
     firebase: {
         apiKey: "AIzaSyANJ5t03u4KCY1KfcfVDgGmy_IsPYp87zs",
         authDomain: "iset-kr.firebaseapp.com",
