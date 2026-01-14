@@ -1,102 +1,128 @@
-<div class="department-page" *ngIf="department; else notFound">
-    <!-- Hero Section -->
-    <section class="hero-section"
-        [style.backgroundImage]="'linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.9)), url(' + department.heroImage + ')'">
-        <div class="container hero-content animate-fade-up">
-            <div class="dept-badge">
-                <i class="fas" [class]="department.icon"></i>
-                <span>Département</span>
-            </div>
-            <h1 class="dept-title">{{ department.name }}</h1>
-            <p class="dept-lead">{{ department.description }}</p>
+<main class="dept-detail-page" *ngIf="department; else notFound">
+    <!-- 1. Hero Banner -->
+    <section class="dept-hero">
+        <div class="light-streak streak-1"></div>
+        <div class="light-streak streak-2"></div>
+        <div class="hero-canvas"
+            [style.backgroundImage]="'linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(' + department.heroImage + ')'">
+        </div>
+        <div class="hero-overlay"></div>
+        <div class="container position-relative z-index-10 text-center">
+            <div class="badge-premium animate-fade-down mb-4">Pôle Académique</div>
+            <h1 class="display-2 fw-black text-white mb-4 animate-reveal">
+                Département <span class="text-gold-gradient title-glow">{{ department.name }}</span>
+            </h1>
+            <p class="h4 text-white-50 fw-light animate-fade-up delay-1 max-w-700 mx-auto ls-1">
+                {{ department.description }}
+            </p>
 
-            <div class="hero-stats">
-                <div class="stat-item" *ngFor="let stat of department.stats">
-                    <span class="stat-val">{{ stat.value }}</span>
-                    <span class="stat-lbl">{{ stat.label }}</span>
+            <div class="hero-stats-pro mt-5 animate-fade-up delay-2">
+                <div class="stat-pro-bubble" *ngFor="let stat of department.stats">
+                    <span class="stat-val-pro">{{ stat.value }}</span>
+                    <span class="stat-lbl-pro">{{ stat.label }}</span>
                 </div>
+            </div>
+
+            <div class="scroll-indicator animate-bounce mt-5">
+                <div class="mouse"></div>
             </div>
         </div>
     </section>
 
-    <!-- Specialties Grid -->
-    <section class="specialties-section">
+    <!-- 2. Vision & Specialties -->
+    <section class="py-12 bg-white position-relative overflow-hidden animate-on-scroll">
+        <div class="decor-circle decor-1"></div>
+        <div class="decor-blob-subtle"></div>
         <div class="container">
-            <div class="section-header">
-                <h2>Nos Spécialités</h2>
-                <div class="line"></div>
+            <div class="text-center mb-10">
+                <div class="section-label-pro">EXPERTISE & SAVOIR-FAIRE</div>
+                <h2 class="display-4 fw-black text-navy mt-2">Nos Spécialités</h2>
+                <div class="title-line-gold mx-auto mt-3"></div>
             </div>
 
-            <div class="specialties-grid">
-                <div class="specialty-card" *ngFor="let spec of department.specialties">
-                    <div class="spec-icon">
-                        <i class="fas" [class]="spec.icon"></i>
-                    </div>
-                    <div class="spec-content">
-                        <h3>{{ spec.name }}</h3>
-                        <p>{{ spec.description }}</p>
+            <div class="row g-4">
+                <div class="col-lg-6" *ngFor="let spec of department.specialties">
+                    <div class="pro-feature-card h-100">
+                        <div class="card-glow"></div>
+                        <div class="card-icon-main"><i class="fas" [class]="spec.icon"></i></div>
+                        <h3 class="fw-black text-navy mb-3 fs-3">{{ spec.name }}</h3>
+                        <p class="text-secondary fs-5">{{ spec.description }}</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Head of Dept & Labs Mixed Section -->
-    <section class="info-mixed-section">
-        <div class="container mixed-grid">
-            <!-- Head of Dept -->
-            <div class="hod-card">
-                <div class="hod-header">
-                    <h3>Mot du Chef de Département</h3>
-                </div>
-                <div class="hod-body">
-                    <div class="hod-avatar">
-                        <i class="fas fa-user-tie" style="font-size: 3rem; color: #cbd5e1;"></i>
-                        <!-- <img [src]="department.headOfDepartment.image" alt="Chef de département"> -->
-                    </div>
-                    <div class="hod-text">
-                        <h4>{{ department.headOfDepartment.name }}</h4>
-                        <span class="role">{{ department.headOfDepartment.role }}</span>
-                        <p class="quote">
-                            <i class="fas fa-quote-left"></i>
-                            {{ department.headOfDepartment.message }}
-                            <i class="fas fa-quote-right"></i>
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Labs List -->
-            <div class="labs-card">
-                <h3><i class="fas fa-flask"></i> Laboratoires & Clubs</h3>
-                <ul class="labs-list">
-                    <li *ngFor="let lab of department.labs">
-                        <i class="fas fa-check-circle"></i>
-                        <span>{{ lab }}</span>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </section>
-
-    <!-- CTA -->
-    <section class="dept-cta">
+    <!-- 3. Leadership & Infrastructure -->
+    <section class="py-12 bg-light-gradient animate-on-scroll">
         <div class="container">
-            <h2>Prêt à intégrer le département {{ department.name }} ?</h2>
-            <div class="cta-actions">
-                <!-- routerLink needs to be valid, using relative or absolute path -->
-                <a routerLink="/formations" class="btn btn-primary">Voir le plan d'études</a>
-                <a routerLink="/contact" class="btn btn-outline">Nous contacter</a>
+            <div class="row g-5 align-items-center">
+                <!-- Head of Dept -->
+                <div class="col-lg-7 animate-slide-right">
+                    <div class="premium-summary-card shadow-3d p-0 overflow-hidden">
+                        <div class="bg-navy-pro p-5 text-white">
+                            <div class="d-flex align-items-center gap-4">
+                                <div class="hod-avatar-box">
+                                    <i class="fas fa-user-tie text-gold-pro"></i>
+                                </div>
+                                <div>
+                                    <h4 class="h3 fw-black mb-1 text-gold-pro">{{ department.headOfDepartment.name }}
+                                    </h4>
+                                    <span class="small uppercase tracking-widest opacity-70">{{
+                                        department.headOfDepartment.role }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-5 p-lg-6 bg-white">
+                            <div class="quote-container-pro">
+                                <p class="h4 fw-light text-secondary lh-lg mb-0">
+                                    <i class="fas fa-quote-left text-gold-pro me-3"></i>
+                                    {{ department.headOfDepartment.message }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Labs -->
+                <div class="col-lg-5 animate-slide-left">
+                    <div class="labs-showcase">
+                        <div class="section-label-pro mb-4">INFRASTRUCTURE</div>
+                        <h2 class="h1 fw-black text-navy mb-5">Laboratoires & Clubs</h2>
+
+                        <div class="iso-award-card mb-3" *ngFor="let lab of department.labs">
+                            <div class="award-icon-box small">
+                                <i class="fas fa-flask text-white"></i>
+                            </div>
+                            <div class="award-text">
+                                <h5 class="fw-bold text-navy mb-0">{{ lab }}</h5>
+                                <div class="small text-gold uppercase fw-black ls-1">Elite Standard</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
-</div>
+
+    <!-- 4. CTA -->
+    <section class="py-12 bg-white text-center animate-on-scroll">
+        <div class="container">
+            <h2 class="display-5 fw-black text-navy mb-5">Prêt à intégrer le département {{ department.name }} ?</h2>
+            <div class="d-flex justify-content-center gap-4 flex-wrap">
+                <a routerLink="/formations" class="btn-pro btn-gold-fill">Explorer les Formations</a>
+                <a routerLink="/contact" class="btn-pro btn-navy-outline">Nous Contacter</a>
+            </div>
+        </div>
+    </section>
+</main>
 
 <ng-template #notFound>
-    <div class="not-found-container">
-        <i class="fas fa-search"></i>
-        <h2>Département non trouvé</h2>
-        <p>Le département demandé n'existe pas ou la page est en cours de construction.</p>
-        <a routerLink="/" class="btn btn-primary">Retour à l'accueil</a>
+    <div class="not-found-modern text-center py-12">
+        <i class="fas fa-search display-1 text-gold-pro mb-4"></i>
+        <h2 class="display-4 fw-black text-navy">Département non trouvé</h2>
+        <p class="text-secondary fs-5 mt-3 mb-5">Le département demandé n'existe pas ou la page est en cours de
+            construction.</p>
+        <a routerLink="/" class="btn-pro btn-gold-fill">Retour à l'accueil</a>
     </div>
 </ng-template>

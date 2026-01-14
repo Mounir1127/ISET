@@ -1,0 +1,251 @@
+/* Director Page Styling */
+.director-page {
+    padding-top: 0;
+}
+
+.director-hero {
+    height: 60vh;
+    min-height: 400px;
+    background: linear-gradient(135deg, #001b44 0%, #004482 100%);
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('https://www.transparenttextures.com/patterns/cubes.png');
+    opacity: 0.1;
+}
+
+.title-glow {
+    text-shadow: 0 0 30px rgba(197, 160, 33, 0.4);
+}
+
+/* Light Streaks */
+.light-streak {
+    position: absolute;
+    width: 200%;
+    height: 100px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+    transform: rotate(-45deg);
+    z-index: 2;
+    pointer-events: none;
+}
+
+.streak-1 {
+    top: -20%;
+    left: -50%;
+    animation: moveStreak 8s linear infinite;
+}
+
+.streak-2 {
+    top: 20%;
+    left: -50%;
+    animation: moveStreak 12s linear infinite reverse;
+}
+
+@keyframes moveStreak {
+    from {
+        transform: rotate(-45deg) translate(-100%, -100%);
+    }
+
+    to {
+        transform: rotate(-45deg) translate(200%, 200%);
+    }
+}
+
+.quote-box {
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+    padding: 2rem;
+}
+
+.quote-icon-main {
+    position: absolute;
+    top: -20px;
+    left: -10px;
+    font-size: 3rem;
+    opacity: 0.2;
+    color: var(--secondary);
+}
+
+/* Image Styling */
+.director-img-container {
+    position: relative;
+    padding: 20px;
+}
+
+.img-frame-gold {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 150px;
+    height: 150px;
+    border-top: 5px solid #c5a021;
+    border-left: 5px solid #c5a021;
+}
+
+.director-badge {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: #001b44;
+    color: white;
+    padding: 1.5rem 2rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+}
+
+.director-badge .name {
+    font-weight: 950;
+    font-size: 1.3rem;
+    letter-spacing: 1px;
+    color: #000000;
+}
+
+.director-badge .title {
+    font-size: 0.85rem;
+    color: #c5a021;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+/* Feature Items */
+.feature-item {
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+}
+
+.feature-icon {
+    width: 50px;
+    height: 50px;
+    min-width: 50px;
+    background: rgba(197, 160, 33, 0.1);
+    color: #c5a021;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+
+/* Glass Cards */
+.glass-card-pro {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.5) !important;
+    transition: transform 0.3s ease;
+}
+
+.glass-card-pro:hover {
+    transform: translateY(-10px);
+}
+
+.custom-list li {
+    margin-bottom: 1rem;
+    font-weight: 500;
+    color: #475569;
+}
+
+/* Animations */
+.animate-fade-up {
+    animation: fadeUp 1s ease-out forwards;
+}
+
+.animate-slide-right {
+    animation: slideRight 1s ease-out forwards;
+}
+
+.animate-slide-left {
+    animation: slideLeft 1s ease-out forwards;
+}
+
+.animate-scale-up {
+    animation: scaleUp 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.animate-in {
+    opacity: 1 !important;
+    transform: translate(0) scale(1) !important;
+}
+
+.animate-on-scroll {
+    opacity: 0;
+    transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.delay-1 {
+    animation-delay: 0.3s;
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideRight {
+    from {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideLeft {
+    from {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes scaleUp {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@media (max-width: 991px) {
+    .director-hero {
+        height: 40vh;
+    }
+
+    .director-img-container {
+        margin-bottom: 4rem;
+    }
+
+    .display-3 {
+        font-size: 2.5rem;
+    }
+}

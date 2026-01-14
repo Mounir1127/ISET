@@ -17,7 +17,8 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
+  galleryScrollInterval: any;
   // Services
   services: Service[] = [];
 
@@ -160,6 +161,11 @@ export class HomeComponent implements OnInit {
     'assets/images/images_iset/atelie2.jpg'
   ];
 
+  certificationImages = [
+    { src: 'assets/images/certificates/certif9001.png', label: 'ISO 9001' },
+    { src: 'assets/images/certificates/certif21001.jpg', label: 'ISO 21001' }
+  ];
+
   // Map Configuration
   mapUrl: SafeResourceUrl;
   weatherData = {
@@ -215,11 +221,21 @@ export class HomeComponent implements OnInit {
 
   scrollGallery(direction: 'left' | 'right'): void {
     const container = this.galleryScrollContainer.nativeElement;
-    const scrollAmount = 500;
+    const scrollAmount = 400;
+    const maxScroll = container.scrollWidth - container.clientWidth;
+
     if (direction === 'left') {
-      container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+      if (container.scrollLeft <= 0) {
+        container.scrollTo({ left: maxScroll, behavior: 'smooth' });
+      } else {
+        container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+      }
     } else {
-      container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+      if (container.scrollLeft >= maxScroll - 10) {
+        container.scrollTo({ left: 0, behavior: 'smooth' });
+      } else {
+        container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+      }
     }
   }
 
@@ -272,12 +288,33 @@ export class HomeComponent implements OnInit {
     this.loadAllData();
     this.startHeroCarousel();
     this.initScrollAnimations();
+    this.startGalleryAutoScroll();
 
     // Auto-refresh when notified
     this.dataService.refreshAnnouncementsRequested$.subscribe(() => {
       this.loadAnnouncements();
       this.loadStats(); // Stats might change too
     });
+  }
+
+  ngOnDestroy(): void {
+    if (this.galleryScrollInterval) {
+      clearInterval(this.galleryScrollInterval);
+    }
+  }
+
+  startGalleryAutoScroll(): void {
+    if (typeof window !== 'undefined') {
+      this.galleryScrollInterval = setInterval(() => {
+        this.scrollGallery('right');
+      }, 3000);
+    }
+  }
+
+  stopGalleryAutoScroll(): void {
+    if (this.galleryScrollInterval) {
+      clearInterval(this.galleryScrollInterval);
+    }
   }
 
   startHeroCarousel(): void {

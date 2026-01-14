@@ -1,0 +1,111 @@
+<main class="vie-page">
+    <!-- 1. Hero Banner -->
+    <section class="vie-hero">
+        <div class="light-streak streak-1"></div>
+        <div class="light-streak streak-2"></div>
+        <div class="hero-canvas"></div>
+        <div class="hero-overlay"></div>
+        <div class="container hero-content position-relative z-index-10 text-center">
+            <div class="badge-premium animate-fade-down mb-4">Épanouissement & Communauté</div>
+            <h1 class="display-1 fw-black text-white mb-2 animate-reveal">
+                Vie <span class="text-gold-gradient title-glow">Universitaire</span>
+            </h1>
+            <div class="title-divider mb-3"></div>
+            <p class="h4 text-white-50 fw-light animate-fade-up delay-1 max-w-700 mx-auto ls-1">
+                Plus qu'une formation, une expérience de vie unique au cœur de Kairouan.
+            </p>
+            <div class="scroll-indicator animate-bounce mt-5">
+                <div class="mouse"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. Strategic Vision -->
+    <section class="py-12 bg-white position-relative overflow-hidden animate-on-scroll">
+        <div class="decor-circle decor-1"></div>
+        <div class="container">
+            <div class="row align-items-center g-5">
+                <div class="col-lg-6">
+                    <div class="vision-content">
+                        <div class="section-label-pro">BIENVENUE CHEZ VOUS</div>
+                        <h2 class="display-5 fw-black text-navy mb-4 mt-2">Un Campus <span
+                                class="text-gold">Vibrant</span> et Dynamique</h2>
+                        <p class="lead text-secondary mb-4 italic ps-4 border-start-gold-thick">
+                            "La réussite d'un étudiant ne se limite pas aux amphithéâtres, elle se cultive aussi dans le
+                            partage et l'engagement."
+                        </p>
+                        <p class="text-secondary mb-5 fs-5">
+                            L'ISET Kairouan favorise une vie estudiantine riche et diversifiée, encourageant
+                            l'initiative, la créativité et le sens des responsabilités à travers une multitude de clubs
+                            et d'activités culturelles.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="image-showcase">
+                        <div class="main-img-container shadow-3d animate-float" *ngIf="galleryImages.length > 0">
+                            <img [src]="getImageUrl(galleryImages[0].url)" alt="Student Life"
+                                class="img-fluid rounded-6">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. Clubs Section -->
+    <section class="py-12 bg-navy-pro animate-on-scroll">
+        <div class="container">
+            <div class="text-center mb-10">
+                <div class="badge-gold mb-3">VIE ASSOCIATIVE</div>
+                <h2 class="display-4 fw-black text-white">Nos Clubs & Associations</h2>
+                <p class="text-white-50 max-w-700 mx-auto fs-5 mt-3">Exprimez vos talents et rejoignez des communautés
+                    passionnées.</p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-lg-3 col-md-6" *ngFor="let club of clubs">
+                    <div class="club-card">
+                        <div class="card-glow"></div>
+                        <div class="club-icon"><i [class]="club.icon"></i></div>
+                        <h4 class="fw-bold text-white mb-3">{{club.name}}</h4>
+                        <p class="text-white-50 small">{{club.description}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. Campus Gallery -->
+    <section class="py-12 bg-light-gradient animate-on-scroll">
+        <div class="container">
+            <div class="text-center mb-10">
+                <div class="badge-gold mb-3">MOMENTS FORTS</div>
+                <h2 class="display-4 fw-black text-navy">Galerie Étudiante</h2>
+            </div>
+
+            <div class="masonry-gallery">
+                <div class="gallery-item" *ngFor="let img of galleryImages" (click)="openImage(img)">
+                    <img [src]="getImageUrl(img.url)" [alt]="img.caption || 'Campus Gallery'"
+                        class="img-fluid rounded-4 shadow-pro">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Lightbox Modal -->
+    <div class="lightbox-overlay" *ngIf="selectedImage" (click)="closeImage()">
+        <div class="lightbox-container">
+            <div class="lightbox-header">
+                <h3 class="lightbox-title">Vie Universitaire</h3>
+            </div>
+            <button class="lightbox-close" (click)="closeImage()">
+                <i class="fas fa-times"></i>
+            </button>
+            <img [src]="getImageUrl(selectedImage.url)" [alt]="selectedImage.caption || 'Image'" class="lightbox-image">
+            <div class="lightbox-caption" *ngIf="selectedImage.caption">
+                {{ selectedImage.caption }}
+            </div>
+        </div>
+    </div>
+</main>

@@ -20,6 +20,8 @@ import Subject from './models/Subject';
 import Notification from './models/Notification';
 import Message from './models/Message';
 import Contact from './models/Contact';
+import GalleryImage from './models/GalleryImage';
+import { readdirSync } from 'node:fs';
 
 const envPath = join(process.cwd(), '.env');
 dotenv.config({ path: envPath });
@@ -939,6 +941,62 @@ app.get('/api/student/stats', async (req: any, res: any) => {
     res.status(500).json({ message: 'Error fetching student stats' });
   }
 });
+
+// --- Gallery API ---
+app.get('/api/public/gallery/:category', async (req: any, res: any) => {
+  try {
+    const images = await GalleryImage.find({ category: req.params.category }).sort({ createdAt: -1 });
+    res.status(200).json(images);
+  } catch (err) {
+    res.status(500).json({ message: 'Error fetching gallery images' });
+  }
+});
+
+app.post('/api/admin/gallery/upload', upload.single('image'), async (req: any, res: any) => {
+  try {
+    const file = req.file;
+    if (!file) return res.status(400).json({ message: 'No file uploaded' });
+
+    const newImage = new GalleryImage({
+      url: `/uploads/${file.filename}`,
+      caption: req.body.caption,
+      category: req.body.category || 'student_life'
+    });
+    await newImage.save();
+    res.status(201).json(newImage);
+  } catch (err: any) {
+    res.status(500).json({ message: 'Error uploading gallery image: ' + err.message });
+  }
+});
+
+app.delete('/api/admin/gallery/:id', async (req: any, res: any) => {
+  try {
+    await GalleryImage.findByIdAndDelete(req.params.id);
+    res.status(200).json({ message: 'Image deleted' });
+  } catch (err) {
+    res.status(500).json({ message: 'Error deleting gallery image' });
+  }
+});
+
+// Seed Gallery Function
+const seedGallery = async () => {
+  const count = await GalleryImage.countDocuments({ category: 'student_life' });
+  if (count === 0) {
+    console.log('Seeding student life gallery...');
+    const dir = join(process.cwd(), 'src/assets/images/vie_etudiants');
+    if (existsSync(dir)) {
+      const files = readdirSync(dir).filter(f => f.endsWith('.jpg') || f.endsWith('.png'));
+      const docs = files.map(f => ({
+        url: `assets/images/vie_etudiants/${f}`,
+        category: 'student_life',
+        caption: 'Vie Étudiante'
+      }));
+      await GalleryImage.insertMany(docs);
+      console.log(`Seeded ${docs.length} images.`);
+    }
+  }
+};
+seedGallery();
 
 // Removed static file serving and Angular rendering for dev server
 

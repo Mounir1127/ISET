@@ -16,6 +16,7 @@ import { AdminStructureComponent } from './pages/admin/structure/admin-structure
 import { AdminNewsComponent } from './pages/admin/news/admin-news.component';
 import { AdminMessagesComponent } from './pages/admin/messages/admin-messages.component';
 import { AdminSettingsComponent } from './pages/admin/settings/admin-settings.component';
+import { AdminGalleryComponent } from './pages/admin/gallery/gallery.component';
 import { StaffGuard } from './guards/staff.guard';
 import { StaffLayoutComponent } from './pages/staff/layout/staff-layout.component';
 import { NewsListingComponent } from './pages/news-listing/news-listing.component';
@@ -50,6 +51,26 @@ export const routes: Routes = [
         component: FourCComponent
     },
 
+    {
+        path: 'institut/mot-du-directeur',
+        loadComponent: () => import('./pages/institut/mot-du-directeur/mot-du-directeur.component').then(c => c.MotDuDirecteurComponent)
+    },
+    {
+        path: 'institut/presentation',
+        loadComponent: () => import('./pages/institut/presentation/presentation.component').then(c => c.PresentationComponent)
+    },
+    {
+        path: 'projets',
+        loadComponent: () => import('./pages/projets/projets.component').then(c => c.ProjetsComponent)
+    },
+    {
+        path: 'qualite',
+        loadComponent: () => import('./pages/qualite/qualite.component').then(c => c.QualiteComponent)
+    },
+    {
+        path: 'vie-universitaire',
+        loadComponent: () => import('./pages/vie-estudiants/vie-estudiants.component').then(c => c.VieEstudiantsComponent)
+    },
     { path: 'contact', component: ContactComponent },
 
     // Student Routes
@@ -91,6 +112,7 @@ export const routes: Routes = [
             { path: 'structure', component: AdminStructureComponent },
             { path: 'news', component: AdminNewsComponent },
             { path: 'messages', component: AdminMessagesComponent },
+            { path: 'gallery', component: AdminGalleryComponent },
             { path: 'settings', component: AdminSettingsComponent }
         ]
     },

@@ -1,0 +1,112 @@
+﻿[33mÔØ»[39m Building...
+[32mÔ£ö[39m Building...
+Application bundle generation failed. [6.919 seconds]
+
+node.exe : 
+[1m[33m[33mÔû▓ [43
+;33m[[43;30mWARNING[
+43;33m][0m 
+[1mTypeScript 
+compiler option 
+'isolatedModules' may 
+prevent the 'emitDecor
+atorMetadata' option 
+from emitting all 
+metadata.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+Au caractère C:\Users\
+mouni\AppData\Roaming\
+npm\ng.ps1:24 : 5
++     & "node$exe"  "$
+basedir/node_modules/@
+angular/cli/bin/ng.js"
+ $arg ...
++     ~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
+~~~~~
+    + CategoryInfo    
+          : NotSpeci  
+  fied: ([1m[33m   
+ [33mÔ...r-compile    
+r][0m:String) []    
+, RemoteException
+    + FullyQualifiedE 
+   rrorId : NativeCo  
+  mmandError
+ 
+
+  The 'emitDecoratorMe
+tadata' option is not 
+required by 
+Angularand can be 
+removed if not 
+explictly required by 
+the project.
+
+
+[33mÔû▓ [43;33m[[43
+;30mWARNING[43;33m][
+0m [1mTS-998113: Cert
+ificateCardComponent 
+is not used within 
+the template of Certif
+icationsComponent[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/pages/cert
+ifications/certificati
+ons.component.ts:9:40:
+[37m      9 Ôöé   
+imports: 
+[CommonModule, 
+RouterModule, [32mCer
+tificateCardComponent
+[37m],
+        ÔòÁ           
+                      
+        [32m~~~~~~~~~
+~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;3
+1m[[41;97mERROR[41;3
+1m][0m [1mNG5002: 
+Incomplete block 
+"isetkr". If you 
+meant to write the @ 
+character, you should 
+use the "&#64;" HTML 
+entity instead.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/pages/cont
+act/contact.component.
+html:89:34:
+[37m      89 Ôöé     
+                    <p
+>contact[32m@isetkr[
+37m.rnu.tn</p>
+         ÔòÁ          
+                      
+   [32m~~~~~~~[0m
+
+  Error occurs in the 
+template of component 
+ContactComponent.
+
+    src/app/pages/cont
+act/contact.component.
+ts:11:17:
+[37m      11 Ôöé     
+templateUrl: [32m'./c
+ontact.component.html'
+[37m,
+         ÔòÁ          
+        [32m~~~~~~~~~
+~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m

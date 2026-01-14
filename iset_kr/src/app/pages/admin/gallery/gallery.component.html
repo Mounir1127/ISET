@@ -1,0 +1,55 @@
+<div class="admin-gallery-container container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h1 class="h3 fw-black text-navy mb-1">Gestion de la Galerie</h1>
+            <p class="text-muted">Gérez les images de la vie universitaire et des événements.</p>
+        </div>
+    </div>
+
+    <!-- Upload Section -->
+    <div class="card border-0 shadow-sm mb-5 p-4 rounded-4">
+        <h5 class="fw-bold mb-4">Ajouter une nouvelle image</h5>
+        <div class="row g-3">
+            <div class="col-md-4">
+                <label class="form-label small fw-bold">Image</label>
+                <input type="file" (change)="onFileSelected($event)" id="fileInput" class="form-control"
+                    accept="image/*">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label small fw-bold">Légende (Optionnel)</label>
+                <input type="text" [(ngModel)]="caption" class="form-control" placeholder="Titre de l'image">
+            </div>
+            <div class="col-md-2">
+                <label class="form-label small fw-bold">Catégorie</label>
+                <select [(ngModel)]="category" class="form-select" (change)="loadImages()">
+                    <option value="student_life">Vie Étudiante</option>
+                    <option value="campus">Campus</option>
+                    <option value="events">Événements</option>
+                </select>
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+                <button (click)='uploadImage()' [disabled]='!selectedFile || isUploading'
+                    class="btn btn-navy w-100 py-2">
+                    <i class="fas fa-upload me-2"></i>
+                    {{ isUploading ? 'Chargement...' : 'Publier' }}
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gallery Grid -->
+    <div class="row g-4">
+        <div class="col-md-3" *ngFor="let img of images">
+            <div class="image-card">
+                <img [src]="getImageUrl(img.url)" [alt]="img.caption" class="img-fluid rounded-3 mb-2 shadow-sm">
+                <div class="d-flex justify-content-between align-items-center px-1">
+                    <span class="small text-truncate" style="max-width: 150px;">{{ img.caption || 'Sans légende'
+                        }}</span>
+                    <button (click)='deleteImage(img._id!)' class="btn btn-outline-danger btn-sm border-0">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

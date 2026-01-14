@@ -45,6 +45,10 @@ import { AuthService } from '../../../services/auth.service';
             <i class="fas fa-newspaper"></i>
             <span>Actualités</span>
           </a>
+          <a routerLink="/admin/gallery" routerLinkActive="active" class="nav-item" (click)="closeMobileMenu()">
+            <i class="fas fa-images"></i>
+            <span>Galerie</span>
+          </a>
           <a routerLink="/admin/messages" routerLinkActive="active" class="nav-item" (click)="closeMobileMenu()">
             <i class="fas fa-envelope-open-text"></i>
             <span>Messages</span>

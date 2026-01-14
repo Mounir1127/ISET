@@ -1,6 +1,5 @@
-<!-- Modern Header -->
 <header class="main-header transparent-header"
-  *ngIf="!isAdminRoute && !isLoginPage && !isContactPage && !isFormationsPage && !isCertificationsPage && !isFourCPage">
+  *ngIf="!isAdminRoute && !isLoginPage && !isContactPage && !isFormationsPage && !isCertificationsPage && !isFourCPage && !isMotDirecteurPage && !isPresentationPage && !isDepartmentPage && !isProjetsPage && !isVieEtudiantePage && !isQualitePage">
   <div class="header-container">
     <!-- Logo & Title -->
     <div class="logo-section" routerLink="/">
@@ -57,58 +56,64 @@
     </div>
 
     <nav class="overlay-nav">
-      <a routerLink="/" (click)="closeMenu()" routerLinkActive="active">
-        <span class="nav-icon"><i class="fas fa-home"></i></span>
-        <span class="nav-text">ACCUEIL</span>
-      </a>
-      <a routerLink="/institut" (click)="closeMenu()" routerLinkActive="active">
-        <span class="nav-icon"><i class="fas fa-university"></i></span>
-        <span class="nav-text">L'INSTITUT</span>
-      </a>
-      <a routerLink="/formations" (click)="closeMenu()" routerLinkActive="active">
-        <span class="nav-icon"><i class="fas fa-graduation-cap"></i></span>
-        <span class="nav-text">FORMATIONS</span>
-      </a>
+      <div class="nav-main-list">
+        <a routerLink="/" (click)="closeMenu()" routerLinkActive="active">
+          <span class="nav-text">Actualités</span>
+        </a>
+        <a (click)="selectSubMenu('institut')" [class.active-link]="activeSubMenu === 'institut'" class="has-submenu">
+          <span class="nav-text">Institut</span>
+        </a>
+        <a routerLink="/vie-universitaire" (click)="closeMenu()" routerLinkActive="active">
+          <span class="nav-text">Vie Universitaire</span>
+        </a>
+        <a routerLink="/formations" (click)="closeMenu()" routerLinkActive="active">
+          <span class="nav-text">Formation</span>
+        </a>
+        <a routerLink="/qualite" (click)="closeMenu()" routerLinkActive="active">
+          <span class="nav-text">Management Qualité</span>
+        </a>
+        <a routerLink="/projets" (click)="closeMenu()" routerLinkActive="active">
+          <span class="nav-text">Projets et partenariats</span>
+        </a>
+        <a routerLink="/vie-universitaire" (click)="closeMenu()" routerLinkActive="active">
+          <span class="nav-text">Vie Universitaire</span>
+        </a>
+        <a routerLink="/4c" (click)="closeMenu()" routerLinkActive="active">
+          <span class="nav-text">Centre 4C</span>
+        </a>
+        <a routerLink="/contact" (click)="closeMenu()" routerLinkActive="active">
+          <span class="nav-text">Contact</span>
+        </a>
+      </div>
 
-      <a routerLink="/projets" (click)="closeMenu()" routerLinkActive="active">
-        <span class="nav-icon"><i class="fas fa-project-diagram"></i></span>
-        <span class="nav-text">PROJETS</span>
-      </a>
-      <a routerLink="/vie-universitaire" (click)="closeMenu()" routerLinkActive="active">
-        <span class="nav-icon"><i class="fas fa-users"></i></span>
-        <span class="nav-text">VIE ÉTUDIANTE</span>
-      </a>
-      <a routerLink="/4c" (click)="closeMenu()" routerLinkActive="active">
-        <span class="nav-icon"><i class="fas fa-briefcase"></i></span>
-        <span class="nav-text">ESPACE 4C</span>
-      </a>
-      <a routerLink="/certifications" (click)="closeMenu()" routerLinkActive="active">
-        <span class="nav-icon"><i class="fas fa-certificate"></i></span>
-        <span class="nav-text">CERTIFICATIONS</span>
-      </a>
-      <a routerLink="/contact" (click)="closeMenu()" routerLinkActive="active">
-        <span class="nav-icon"><i class="fas fa-envelope"></i></span>
-        <span class="nav-text">CONTACT</span>
-      </a>
+      <!-- Submenu Content -->
+      <div class="submenu-container" [class.visible]="activeSubMenu === 'institut'">
+        <div class="submenu-inner">
+          <div class="submenu-item">
+            <a routerLink="/institut/mot-du-directeur" (click)="closeMenu()">Message du Directeur</a>
+          </div>
+          <div class="submenu-item">
+            <a routerLink="/institut/presentation" (click)="closeMenu()">Présentation</a>
+          </div>
+          <div class="submenu-item has-arrow" [class.active-sub]="activeSubSubMenu === 'departements'">
+            <a (click)="selectSubSubMenu('departements')">Départements <i class="fas fa-chevron-right"></i></a>
 
-      <div class="nav-divider"></div>
-
-      <a routerLink="/login" (click)="closeMenu()" class="login-link">
-        <span class="nav-icon"><i class="fas fa-sign-in-alt"></i></span>
-        <span class="nav-text">CONNEXION</span>
-      </a>
-
-      <a *ngIf="currentUser?.role === 'admin'" routerLink="/admin" (click)="closeMenu()" class="admin-link">
-        <span class="nav-icon"><i class="fas fa-shield-alt"></i></span>
-        <span class="nav-text">ADMIN DASHBOARD</span>
-      </a>
+            <div class="sub-submenu-list" *ngIf="activeSubSubMenu === 'departements'">
+              <a routerLink="/departement/genie-electrique" (click)="closeMenu()">- Génie Électrique (GE)</a>
+              <a routerLink="/departement/genie-mecanique" (click)="closeMenu()">- Génie Mécanique (GM)</a>
+              <a routerLink="/departement/informatique" (click)="closeMenu()">- Technologies de l'Informatique (TI)</a>
+              <a routerLink="/departement/gestion" (click)="closeMenu()">- Economie et Gestion (AA)</a>
+            </div>
+          </div>
+        </div>
+      </div>
     </nav>
 
     <div class="menu-footer-pro">
       <div class="contact-info">
         <div class="info-item">
           <i class="fas fa-phone-alt"></i>
-          <span>+216 77 270 514</span>
+          <span>77 323 350 – 77 323 300</span>
         </div>
         <div class="info-item">
           <i class="fas fa-envelope"></i>
@@ -129,9 +134,16 @@
 <!-- Router Outlet -->
 <router-outlet></router-outlet>
 
+<!-- Back to Home Button (Specific pages) -->
+<a routerLink="/" class="btn-back-home shadow-lg"
+  *ngIf="isCertificationsPage || isMotDirecteurPage || isPresentationPage || isFourCPage || isFormationsPage || isDepartmentPage || isProjetsPage || isVieEtudiantePage || isQualitePage"
+  title="Retour à l'accueil">
+  <i class="fas fa-home"></i>
+</a>
+
 <!-- Footer -->
 <footer class="main-footer"
-  *ngIf="!isAdminRoute && !isLoginPage && !isContactPage && !isFormationsPage && !isCertificationsPage && !isFourCPage">
+  *ngIf="!isAdminRoute && !isLoginPage && !isContactPage && !isFormationsPage && !isCertificationsPage && !isFourCPage && !isMotDirecteurPage && !isPresentationPage && !isDepartmentPage && !isProjetsPage && !isVieEtudiantePage && !isQualitePage">
   <div class="footer-content">
     <div class="footer-column">
       <h4>ISET Kairouan</h4>
@@ -156,8 +168,10 @@
     <div class="footer-column">
       <h4>CONTACT</h4>
       <ul class="contact-info">
-        <li><i class="fas fa-map-marker-alt"></i> <span>Avenue de l'Environnement, 3100 Kairouan, Tunisie</span></li>
-        <li><i class="fas fa-phone"></i> <span>(+216) 77 123 456</span></li>
+        <li><i class="fas fa-map-marker-alt"></i> <span>ISET de Kairouan – Campus Universitaire 3 199 Raccada –
+            Kairouan</span></li>
+        <li><i class="fas fa-phone"></i> <span>77 323 350 – 77 323 300</span></li>
+        <li><i class="fas fa-fax"></i> <span>77 323 320</span></li>
         <li><i class="fas fa-envelope"></i> <span>contact&#64;isetk.rnu.tn</span></li>
         <li><i class="fas fa-clock"></i> <span>Lundi - Vendredi: 8h00 - 17h00</span></li>
       </ul>

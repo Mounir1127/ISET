@@ -1,0 +1,483 @@
+:host {
+    --gold: #c5a021;
+    --navy: #001b44;
+    --navy-light: #004482;
+    --white: #ffffff;
+    --secondary: #475569;
+}
+
+.vie-page {
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+    background: #fff;
+}
+
+/* 1. Hero Section */
+.vie-hero {
+    height: 70vh;
+    min-height: 500px;
+    background: #000;
+    position: relative;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
+
+.hero-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+        url('https://www.transparenttextures.com/patterns/dark-matter.png'),
+        url('../../../assets/images/vie_etudiants/492301693_1037298658500510_5341928028091895822_n.jpg');
+    background-size: cover;
+    background-position: center;
+    z-index: 1;
+}
+
+.hero-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 300px;
+    background: linear-gradient(to top, #fff, transparent);
+    z-index: 2;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 10;
+}
+
+.z-index-10 {
+    z-index: 10 !important;
+}
+
+.badge-premium {
+    display: inline-block;
+    padding: 0.6rem 1.8rem;
+    background: rgba(197, 160, 33, 0.2);
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    font-weight: 800;
+    font-size: 0.8rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    border-radius: 50px;
+    backdrop-filter: blur(5px);
+}
+
+.text-gold-gradient {
+    background: linear-gradient(45deg, #c5a021, #f5d17a);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.title-glow {
+    text-shadow: 0 0 40px rgba(197, 160, 33, 0.8);
+}
+
+.title-divider {
+    width: 100px;
+    height: 4px;
+    background: var(--gold);
+    margin: 0 auto;
+    border-radius: 2px;
+}
+
+/* 2. Visual Effects */
+.light-streak {
+    position: absolute;
+    width: 200%;
+    height: 100px;
+    background: linear-gradient(90deg, transparent, rgba(197, 160, 33, 0.1), transparent);
+    transform: rotate(-45deg);
+    z-index: 2;
+    pointer-events: none;
+}
+
+.streak-1 {
+    top: -20%;
+    left: -50%;
+    animation: moveStreak 8s linear infinite;
+}
+
+.streak-2 {
+    top: 20%;
+    left: -50%;
+    animation: moveStreak 12s linear infinite reverse;
+}
+
+@keyframes moveStreak {
+    from {
+        transform: rotate(-45deg) translate(-100%, -100%);
+    }
+
+    to {
+        transform: rotate(-45deg) translate(200%, 200%);
+    }
+}
+
+.decor-circle {
+    position: absolute;
+    background: radial-gradient(circle, rgba(197, 160, 33, 0.1) 0%, transparent 70%);
+    border-radius: 50%;
+    z-index: 1;
+}
+
+.decor-1 {
+    width: 600px;
+    height: 600px;
+    top: -200px;
+    right: -200px;
+}
+
+.section-label-pro {
+    font-size: 0.85rem;
+    font-weight: 900;
+    color: var(--gold);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+}
+
+.border-start-gold-thick {
+    border-left: 8px solid var(--gold);
+}
+
+/* 3. Clubs Styling */
+.bg-navy-pro {
+    background: #001b44;
+}
+
+.club-card {
+    position: relative;
+    padding: 3rem 2rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 30px;
+    text-align: center;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    height: 100%;
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.07);
+        transform: translateY(-10px);
+        border-color: var(--gold);
+
+        .card-glow {
+            opacity: 1;
+        }
+    }
+}
+
+.card-glow {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(197, 160, 33, 0.1) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+}
+
+.club-icon {
+    font-size: 2.5rem;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+}
+
+/* 4. Gallery Styling */
+.bg-light-gradient {
+    background: linear-gradient(to bottom, #f8fafc, #edf2f7);
+}
+
+.masonry-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.gallery-item {
+    overflow: hidden;
+    border-radius: 20px;
+    transition: transform 0.4s ease;
+    cursor: pointer;
+
+    img {
+        transition: transform 0.6s ease;
+        object-fit: cover;
+        width: 100%;
+        height: 250px;
+    }
+
+    &:hover {
+        transform: translateY(-5px);
+
+        img {
+            transform: scale(1.05);
+        }
+    }
+}
+
+/* 5. Lightbox Modal */
+.lightbox-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.3s ease;
+}
+
+.lightbox-container {
+    position: relative;
+    max-width: 95%;
+    max-height: 95vh;
+    animation: zoomIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.lightbox-image {
+    max-width: 100%;
+    max-height: 95vh;
+    border-radius: 12px;
+    box-shadow: 0 25px 100px rgba(0, 0, 0, 0.5);
+}
+
+.lightbox-close {
+    position: absolute;
+    top: -50px;
+    right: 0;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+
+    &:hover {
+        background: var(--gold);
+        border-color: var(--gold);
+        transform: rotate(90deg);
+    }
+}
+
+.lightbox-caption {
+    position: absolute;
+    bottom: -60px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 500;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+    backdrop-filter: blur(10px);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes zoomIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.shadow-pro {
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+}
+
+.shadow-3d {
+    box-shadow: 0 50px 100px rgba(0, 0, 0, 0.2);
+}
+
+.rounded-6 {
+    border-radius: 48px;
+}
+
+/* 5. Animations & Utilities */
+.py-12 {
+    padding: 8rem 0;
+}
+
+.ls-1 {
+    letter-spacing: 1px;
+}
+
+.animate-on-scroll {
+    opacity: 0;
+    transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.animate-in {
+    opacity: 1 !important;
+    transform: translate(0) scale(1) !important;
+}
+
+@keyframes reveal {
+    0% {
+        opacity: 0;
+        letter-spacing: 10px;
+        transform: translateY(20px);
+        filter: blur(10px);
+    }
+
+    100% {
+        opacity: 1;
+        letter-spacing: normal;
+        transform: translateY(0);
+        filter: blur(0);
+    }
+}
+
+.animate-reveal {
+    animation: reveal 1.5s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+}
+
+.animate-float {
+    animation: float 4s ease-in-out infinite;
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+.animate-bounce {
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+
+    0%,
+    20%,
+    50%,
+    80%,
+    100% {
+        transform: translateY(0);
+    }
+
+    40% {
+        transform: translateY(-10px);
+    }
+
+    60% {
+        transform: translateY(-5px);
+    }
+}
+
+.mouse {
+    width: 26px;
+    height: 44px;
+    border: 2px solid white;
+    border-radius: 20px;
+    display: inline-block;
+    position: relative;
+
+    &:before {
+        content: '';
+        width: 4px;
+        height: 8px;
+        background: white;
+        position: absolute;
+        left: 50%;
+        margin-left: -2px;
+        top: 8px;
+        border-radius: 4px;
+        animation: mouseScroll 2s infinite;
+    }
+}
+
+@keyframes mouseScroll {
+    0% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(15px);
+        opacity: 0;
+    }
+}
+
+@media (max-width: 991px) {
+    .vie-hero {
+        height: auto;
+        min-height: 100vh;
+        padding: 6rem 0;
+    }
+
+    .py-12 {
+        padding: 4rem 0;
+    }
+
+    .display-1 {
+        font-size: 3rem;
+    }
+
+    .masonry-gallery {
+        grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
+        gap: 1rem;
+    }
+
+    .gallery-item img {
+        height: 300px;
+    }
+}
+
+@media (max-width: 768px) {
+    .masonry-gallery {
+        grid-template-columns: 1fr;
+    }
+
+    .club-card {
+        padding: 2rem 1.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .hero-content {
+        padding: 0 1rem;
+    }
+
+    .badge-premium {
+        font-size: 0.7rem;
+        padding: 0.5rem 1.2rem;
+    }
+}

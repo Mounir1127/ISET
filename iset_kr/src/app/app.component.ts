@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Renderer2 } from '@angular/core';
 import { RouterOutlet, RouterModule, Router, NavigationEnd } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { filter } from 'rxjs';
@@ -22,18 +22,52 @@ export class AppComponent implements OnInit {
   isFormationsPage = false;
   isCertificationsPage = false;
   isFourCPage = false;
+  isMotDirecteurPage = false;
+  isPresentationPage = false;
+  isDepartmentPage = false;
+  isProjetsPage: boolean = false;
+  isVieEtudiantePage: boolean = false;
+  isQualitePage = false; // Added isQualitePage
+  activeSubMenu: string | null = null;
+  activeSubSubMenu: string | null = null;
 
-  constructor(public authService: AuthService, private router: Router) {
-    this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd)
-    ).subscribe((event: any) => {
-      this.isAdminRoute = event.url.startsWith('/admin') || event.url.startsWith('/staff');
-      this.isLoginPage = event.url.includes('/login');
-      this.isContactPage = event.url.includes('/contact');
-      this.isFormationsPage = event.url.includes('/formations');
-      this.isCertificationsPage = event.url.includes('/certifications');
-      this.isFourCPage = event.url.includes('/4c');
-      this.isMenuOpen = false; // Close menu on navigation
+  // Added properties for user roles, assuming they are needed based on the provided constructor snippet
+  isAdmin: boolean = false;
+  isStaff: boolean = false;
+  isStudent: boolean = false;
+
+  constructor(
+    private router: Router,
+    public authService: AuthService, // Changed to public as it was public in original
+    private renderer: Renderer2 // Added Renderer2
+  ) {
+    // Moved and modified authService subscription
+    this.authService.currentUser.subscribe(user => {
+      this.currentUser = user;
+      this.isAdmin = user?.role === 'admin';
+      this.isStaff = user?.role === 'staff';
+      this.isStudent = user?.role === 'student';
+    });
+
+    // Modified router events subscription
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        this.isAdminRoute = this.router.url.startsWith('/admin') || this.router.url.startsWith('/staff'); // Kept original logic for staff
+        this.isLoginPage = this.router.url === '/login';
+        this.isContactPage = this.router.url === '/contact';
+        this.isFormationsPage = this.router.url === '/formations';
+        this.isCertificationsPage = this.router.url === '/certifications';
+        this.isFourCPage = this.router.url === '/4c';
+        this.isMotDirecteurPage = this.router.url.includes('/mot-du-directeur');
+        this.isPresentationPage = this.router.url.includes('/presentation');
+        this.isDepartmentPage = this.router.url.includes('/department/'); // Kept original logic for department
+        this.isProjetsPage = this.router.url.includes('/projets');
+        this.isVieEtudiantePage = this.router.url.includes('/vie-universitaire');
+        this.isQualitePage = this.router.url.includes('/qualite'); // Added isQualitePage logic
+        this.isMenuOpen = false;
+        this.closeMenu(); // Added closeMenu()
+        window.scrollTo(0, 0); // Added window.scrollTo(0, 0)
+      }
     });
   }
 
@@ -43,6 +77,26 @@ export class AppComponent implements OnInit {
 
   closeMenu() {
     this.isMenuOpen = false;
+    this.activeSubMenu = null;
+    this.activeSubSubMenu = null;
+  }
+
+  selectSubMenu(menu: string) {
+    if (this.activeSubMenu === menu) {
+      this.activeSubMenu = null;
+      this.activeSubSubMenu = null;
+    } else {
+      this.activeSubMenu = menu;
+      this.activeSubSubMenu = null;
+    }
+  }
+
+  selectSubSubMenu(menu: string) {
+    if (this.activeSubSubMenu === menu) {
+      this.activeSubSubMenu = null;
+    } else {
+      this.activeSubSubMenu = menu;
+    }
   }
 
   ngOnInit() {

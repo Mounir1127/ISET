@@ -106,7 +106,7 @@
       <div class="row g-4">
         <!-- Limiter à 6 éléments sur la home page -->
         <div class="col-md-6 col-lg-4 d-flex" *ngFor="let item of filteredItems.slice(0, 6)">
-          <app-announcement-card [announcement]="item" class="w-100 animate-on-scroll slide-up"></app-announcement-card>
+          <app-announcement-card [announcement]="item" class="w-100"></app-announcement-card>
         </div>
       </div>
 
@@ -118,6 +118,37 @@
       <div class="text-center mt-5" *ngIf="filteredItems.length > 6">
         <a routerLink="/actualites" class="btn btn-link text-navy fw-bold text-decoration-none ls-1">VOIR TOUTES les
           actualités <i class="fas fa-arrow-right ms-2 text-gold"></i></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- New: Certifications Excellence Section (Ultra Pro) -->
+  <section class="certifications-home-section py-12 bg-white position-relative overflow-hidden">
+    <div class="cert-mesh-bg position-absolute w-100 h-100 top-0"></div>
+    <div class="container text-center position-relative z-2">
+      <div class="section-header mb-8 animate-on-scroll slide-up">
+        <div class="badge-premium-sm mx-auto mb-3">NORME INTERNATIONALE</div>
+        <h2 class="display-4 fw-black text-navy mt-2">Pôle d'Excellence <span class="text-gold">Certifié</span></h2>
+        <div class="divider-gold mx-auto mt-4"></div>
+      </div>
+
+      <div class="row justify-content-center g-5 align-items-center">
+        <div class="col-6 col-md-5 col-lg-3" *ngFor="let cert of certificationImages; let i = index">
+          <div class="cert-pro-card p-5 animate-on-scroll scale-up" [class]="'delay-' + (i + 1)">
+            <div class="cert-icon-wrapper mb-4">
+              <img [src]="cert.src" [alt]="cert.label" class="img-fluid cert-logo-pro">
+              <div class="cert-glow"></div>
+            </div>
+            <div class="cert-info">
+              <span class="text-gold fw-black ls-2 small mb-2 d-block text-uppercase">Management Qualité</span>
+              <h4 class="fw-black text-navy ls-1 mb-3">{{ cert.label }}</h4>
+              <p class="small text-secondary mb-0 opacity-75">Vérifié par l'organisme accrédité RNU</p>
+            </div>
+            <div class="link-verify-pro mt-4 pt-3 border-top border-light">
+              <span class="small fw-black text-success ls-1">VÉRIFIÉ <i class="fas fa-check-double ms-1"></i></span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -311,8 +342,119 @@
     </div>
   </section>
 
-  <!-- 8. Partners Section -->
-  <section class="partners-section py-10">
+
+
+  <!-- 9. Campus Experience -->
+  <section class="gallery-section py-10 bg-white">
+    <div class="container">
+      <div class="section-header mb-5">
+        <h2 class="display-4 fw-black text-navy mb-0">Immersion Campus</h2>
+        <div class="divider-gold mx-auto"></div>
+      </div>
+
+      <div class="gallery-carousel position-relative" (mouseenter)="stopGalleryAutoScroll()"
+        (mouseleave)="startGalleryAutoScroll()">
+        <div class="d-flex gap-4 p-2 gallery-inner overflow-hidden" #galleryScrollContainer>
+          <div *ngFor="let img of campusImages"
+            class="gallery-card flex-shrink-0 shadow-lg rounded-4 overflow-hidden position-relative group shadow-hover-xl cursor-pointer"
+            (click)="openImagePreview(img)">
+            <img [src]="img" class="img-fluid transition scale-110 group-hover-scale-100"
+              style="height: 350px; width: 450px; object-fit: cover;">
+            <div
+              class="gallery-overlay-pro group-hover-opacity-100 bg-navy-70 d-flex align-items-center justify-content-center">
+              <i class="fas fa-expand-arrows-alt text-white display-4"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Gallery Nav -->
+        <button
+          class="btn btn-navy shadow-lg rounded-circle position-absolute top-50 start-0 translate-middle-y ms-neg-20 d-none d-lg-flex"
+          (click)="scrollGallery('left')">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        <button
+          class="btn btn-navy shadow-lg rounded-circle position-absolute top-50 end-0 translate-middle-y me-neg-20 d-none d-lg-flex"
+          (click)="scrollGallery('right')">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. Location & Contact Map -->
+  <section class="map-section py-10 bg-light">
+    <div class="container">
+      <div class="section-header text-center mb-8 animate-on-scroll slide-up">
+        <span class="text-gold fw-black ls-3 uppercase">Nous Trouver</span>
+        <h2 class="display-4 fw-black text-navy mt-2">Localisation & Contact</h2>
+        <div class="divider-gold mx-auto"></div>
+      </div>
+
+      <div class="row g-5 align-items-stretch">
+        <!-- Contact Info -->
+        <div class="col-lg-4 animate-on-scroll slide-right">
+          <div class="card border-0 rounded-4 shadow-lg h-100 p-5">
+            <div class="mb-4">
+              <div class="icon-box-pro bg-navy text-white mb-3">
+                <i class="fas fa-map-marker-alt"></i>
+              </div>
+              <h4 class="fw-bold text-navy mb-3">Adresse</h4>
+              <p class="text-secondary mb-0">
+                ISET de Kairouan – Campus Universitaire<br>
+                3199 Raccada – Kairouan
+              </p>
+            </div>
+
+            <div class="mb-4">
+              <div class="icon-box-pro bg-navy text-white mb-3">
+                <i class="fas fa-phone-alt"></i>
+              </div>
+              <h4 class="fw-bold text-navy mb-3">Téléphone</h4>
+              <p class="text-secondary mb-0">
+                <a href="tel:+21677234400" class="text-decoration-none text-secondary hover-gold">
+                  +216 77 234 400
+                </a>
+              </p>
+            </div>
+
+            <div class="mb-4">
+              <div class="icon-box-pro bg-navy text-white mb-3">
+                <i class="fas fa-envelope"></i>
+              </div>
+              <h4 class="fw-bold text-navy mb-3">Email</h4>
+              <p class="text-secondary mb-0">
+                <a href="mailto:contact&#64;isetkr.rnu.tn">contact&#64;isetkr.rnu.tn</a>
+              </p>
+            </div>
+
+            <div>
+              <div class="icon-box-pro bg-navy text-white mb-3">
+                <i class="fas fa-clock"></i>
+              </div>
+              <h4 class="fw-bold text-navy mb-3">Horaires</h4>
+              <p class="text-secondary mb-2">
+                <strong>Lundi - Vendredi:</strong> 8h00 - 17h00<br>
+                <strong>Samedi:</strong> 8h00 - 13h00
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Google Map -->
+        <div class="col-lg-8 animate-on-scroll slide-left">
+          <div class="map-container rounded-4 overflow-hidden shadow-2xl" style="height: 100%; min-height: 500px;">
+            <iframe [src]="mapUrl" width="100%" height="100%" style="border:0; display: block;" allowfullscreen=""
+              loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Localisation ISET Kairouan">
+            </iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Moved: 8. Partners Section -->
+  <section class="partners-section py-10 bg-white">
     <div class="container">
       <div class="section-header text-center mb-8 animate-on-scroll slide-up">
         <span class="text-gold fw-black ls-3 uppercase">Collaboration & Écosystème</span>
@@ -377,114 +519,6 @@
               class="partner-card-pro">
               <img [src]="partner.logo" [alt]="partner.name" [title]="partner.name">
             </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 9. Campus Experience -->
-  <section class="gallery-section py-10 bg-white">
-    <div class="container">
-      <div class="section-header mb-5">
-        <h2 class="display-4 fw-black text-navy mb-0">Immersion Campus</h2>
-        <div class="divider-gold mx-auto"></div>
-      </div>
-
-      <div class="gallery-carousel position-relative">
-        <div class="d-flex gap-4 p-2 gallery-inner overflow-hidden" #galleryScrollContainer>
-          <div *ngFor="let img of campusImages"
-            class="gallery-card flex-shrink-0 shadow-lg rounded-4 overflow-hidden position-relative group shadow-hover-xl cursor-pointer"
-            (click)="openImagePreview(img)">
-            <img [src]="img" class="img-fluid transition scale-110 group-hover-scale-100"
-              style="height: 350px; width: 450px; object-fit: cover;">
-            <div
-              class="gallery-overlay-pro group-hover-opacity-100 bg-navy-70 d-flex align-items-center justify-content-center">
-              <i class="fas fa-expand-arrows-alt text-white display-4"></i>
-            </div>
-          </div>
-        </div>
-
-        <!-- Gallery Nav -->
-        <button
-          class="btn btn-navy shadow-lg rounded-circle position-absolute top-50 start-0 translate-middle-y ms-neg-20 d-none d-lg-flex"
-          (click)="scrollGallery('left')">
-          <i class="fas fa-chevron-left"></i>
-        </button>
-        <button
-          class="btn btn-navy shadow-lg rounded-circle position-absolute top-50 end-0 translate-middle-y me-neg-20 d-none d-lg-flex"
-          (click)="scrollGallery('right')">
-          <i class="fas fa-chevron-right"></i>
-        </button>
-      </div>
-    </div>
-  </section>
-
-  <!-- 10. Location & Contact Map -->
-  <section class="map-section py-10 bg-light">
-    <div class="container">
-      <div class="section-header text-center mb-8 animate-on-scroll slide-up">
-        <span class="text-gold fw-black ls-3 uppercase">Nous Trouver</span>
-        <h2 class="display-4 fw-black text-navy mt-2">Localisation & Contact</h2>
-        <div class="divider-gold mx-auto"></div>
-      </div>
-
-      <div class="row g-5 align-items-stretch">
-        <!-- Contact Info -->
-        <div class="col-lg-4 animate-on-scroll slide-right">
-          <div class="card border-0 rounded-4 shadow-lg h-100 p-5">
-            <div class="mb-4">
-              <div class="icon-box-pro bg-navy text-white mb-3">
-                <i class="fas fa-map-marker-alt"></i>
-              </div>
-              <h4 class="fw-bold text-navy mb-3">Adresse</h4>
-              <p class="text-secondary mb-0">
-                Route de Sousse Km 5<br>
-                3100 Kairouan, Tunisie
-              </p>
-            </div>
-
-            <div class="mb-4">
-              <div class="icon-box-pro bg-navy text-white mb-3">
-                <i class="fas fa-phone-alt"></i>
-              </div>
-              <h4 class="fw-bold text-navy mb-3">Téléphone</h4>
-              <p class="text-secondary mb-0">
-                <a href="tel:+21677234400" class="text-decoration-none text-secondary hover-gold">
-                  +216 77 234 400
-                </a>
-              </p>
-            </div>
-
-            <div class="mb-4">
-              <div class="icon-box-pro bg-navy text-white mb-3">
-                <i class="fas fa-envelope"></i>
-              </div>
-              <h4 class="fw-bold text-navy mb-3">Email</h4>
-              <p class="text-secondary mb-0">
-                <a href="mailto:contact&#64;isetkr.rnu.tn">contact&#64;isetkr.rnu.tn</a>
-              </p>
-            </div>
-
-            <div>
-              <div class="icon-box-pro bg-navy text-white mb-3">
-                <i class="fas fa-clock"></i>
-              </div>
-              <h4 class="fw-bold text-navy mb-3">Horaires</h4>
-              <p class="text-secondary mb-2">
-                <strong>Lundi - Vendredi:</strong> 8h00 - 17h00<br>
-                <strong>Samedi:</strong> 8h00 - 13h00
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Google Map -->
-        <div class="col-lg-8 animate-on-scroll slide-left">
-          <div class="map-container rounded-4 overflow-hidden shadow-2xl" style="height: 100%; min-height: 500px;">
-            <iframe [src]="mapUrl" width="100%" height="100%" style="border:0; display: block;" allowfullscreen=""
-              loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Localisation ISET Kairouan">
-            </iframe>
           </div>
         </div>
       </div>

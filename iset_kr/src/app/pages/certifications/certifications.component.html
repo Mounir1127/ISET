@@ -1,0 +1,100 @@
+<main class="certifications-page">
+    <!-- 1. Hero Banner -->
+    <section class="certifications-hero">
+        <div class="light-streak streak-1"></div>
+        <div class="light-streak streak-2"></div>
+        <div class="hero-canvas"></div>
+        <div class="hero-overlay"></div>
+        <div class="container position-relative z-index-10 text-center">
+            <div class="badge-premium animate-fade-down mb-4">Qualité & Excellence</div>
+            <h1 class="display-2 fw-black text-white mb-4 animate-reveal">
+                Nos <span class="text-gold-gradient title-glow">Certifications</span>
+            </h1>
+            <p class="h4 text-white-50 fw-light animate-fade-up delay-1 max-w-700 mx-auto ls-1">
+                L'ISET Kairouan s'engage dans une démarche d'amélioration continue certifiée par les normes
+                internationales.
+            </p>
+
+            <div class="scroll-indicator animate-bounce mt-5">
+                <div class="mouse"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. Quality Commitment -->
+    <section class="py-12 bg-white position-relative overflow-hidden animate-on-scroll">
+        <div class="decor-circle decor-1"></div>
+        <div class="decor-blob-subtle"></div>
+        <div class="container">
+            <div class="row align-items-center g-5">
+                <div class="col-lg-6 animate-slide-right">
+                    <div class="vision-content">
+                        <div class="section-label-pro">ENGAGEMENT QUALITÉ</div>
+                        <h2 class="display-5 fw-black text-navy mb-4 mt-2">Vers une culture de <span
+                                class="text-gold">l'Excellence</span></h2>
+                        <p class="lead text-secondary mb-4 italic ps-4 border-start-gold-thick">
+                            "La qualité est la pierre angulaire de notre vision pédagogique."
+                        </p>
+                        <p class="text-secondary mb-5 fs-5">
+                            Notre démarche s'appuie sur une double certification ISO, garantissant la conformité de nos
+                            processus de gestion et la qualité de notre enseignement technique.
+                        </p>
+
+                        <div class="iso-award-card shadow-2xl animate-fade-up">
+                            <div class="award-icon-box">
+                                <i class="fas fa-check-double text-white"></i>
+                            </div>
+                            <div class="award-text">
+                                <h4 class="fw-bold text-navy mb-0">Double Certification</h4>
+                                <p class="text-muted small mb-0">Conformité ISO 9001 et ISO 21001.</p>
+                                <div class="bureau-veritas text-gold uppercase fw-black ls-1">Standard Mondial</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 animate-slide-left">
+                    <div class="image-showcase">
+                        <div class="main-img-container">
+                            <img src="assets/images/images_iset/Image9.jpg" alt="Certification ISET"
+                                class="img-fluid rounded-6 shadow-3d">
+                            <div class="floating-badge bg-gold animate-float">
+                                <span class="h2 fw-black mb-0">ISO</span>
+                                <span class="small uppercase fw-bold">Management</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. Certificates List -->
+    <section class="py-12 bg-light-gradient animate-on-scroll">
+        <div class="container">
+            <div class="text-center mb-10">
+                <div class="badge-gold mb-3">CONFORMITÉ INTERNATIONALE</div>
+                <h2 class="display-4 fw-black text-navy">Normes Appliquées</h2>
+                <p class="text-secondary max-w-700 mx-auto fs-5 mt-3">Découvrez les standards internationaux qui
+                    régissent notre institution.</p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-lg-6" *ngFor="let cert of certificates; let i = index">
+                    <div class="pro-feature-card h-100" [class.featured]="i === 1">
+                        <div class="card-glow"></div>
+                        <div class="card-icon-main"><i class="fas fa-certificate"></i></div>
+                        <h3 class="fw-black mb-4" [class.text-white]="i === 1" [class.text-navy]="i !== 1">{{ cert.title
+                            }}</h3>
+                        <p [class.text-white-50]="i === 1" [class.text-secondary]="i !== 1">{{ cert.description }}</p>
+                        <ul class="card-check-list" [class.white]="i === 1">
+                            <li><i class="fas fa-check"></i> Standard : {{ cert.standard }}</li>
+                            <li><i class="fas fa-check"></i> Issued : {{ cert.issuedDate | date }}</li>
+                            <li><i class="fas fa-check"></i> Badge : {{ cert.badge }}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>

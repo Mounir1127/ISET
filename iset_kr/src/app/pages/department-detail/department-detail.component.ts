@@ -52,7 +52,7 @@ export class DepartmentDetailComponent implements OnInit {
             headOfDepartment: {
                 name: 'M. Ahmed Ben Ali',
                 role: 'Chef de Département',
-                image: 'assets/images/staff/generic-avatar.png', // Placeholder
+                image: 'assets/images/staff/generic-avatar.png',
                 message: 'Notre mission est de doter nos étudiants des compétences techniques et humaines nécessaires pour exceller dans un secteur en perpétuelle évolution.'
             },
             specialties: [
@@ -78,7 +78,7 @@ export class DepartmentDetailComponent implements OnInit {
             id: 'genie-electrique',
             name: 'Génie Électrique',
             icon: 'fa-bolt',
-            heroImage: 'assets/images/elec.jpg',
+            heroImage: 'assets/images/images_iset/1629_1.JPG',
             description: 'Le département Génie Électrique est un pôle d\'excellence formant des techniciens supérieurs en électricité, électronique et automatisme. Nous préparons nos étudiants aux défis de l\'industrie 4.0.',
             stats: [
                 { label: 'Étudiants', value: '380+' },
@@ -110,7 +110,7 @@ export class DepartmentDetailComponent implements OnInit {
             id: 'genie-mecanique',
             name: 'Génie Mécanique',
             icon: 'fa-cogs',
-            heroImage: 'assets/images/meca.jpg', // Industrial machine
+            heroImage: 'assets/images/images_iset/BD34_1.JPG',
             description: 'Le département Génie Mécanique offre une formation solide en conception, fabrication et maintenance des systèmes mécaniques. Nos étudiants maîtrisent la CAO/DAO et les procédés de fabrication modernes.',
             stats: [
                 { label: 'Étudiants', value: '320+' },
@@ -137,43 +137,6 @@ export class DepartmentDetailComponent implements OnInit {
                 }
             ],
             labs: ['Atelier Usinage', 'Labo Métrologie', 'Bureau d\'études CAO', 'Soudage & Chaudronnerie']
-        },
-        'sciences-economiques': {
-            id: 'sciences-economiques',
-            name: 'Sciences Économiques & Gestion',
-            icon: 'fa-chart-line',
-            heroImage: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1920&q=80', // Financial/Office
-            description: 'Ce département forme les futurs cadres gestionnaires. Nos programmes allient théorie économique et pratiques managériales pour une insertion rapide dans le monde des affaires.',
-            stats: [
-                { label: 'Étudiants', value: '500+' },
-                { label: 'Enseignants', value: '40' },
-                { label: 'Clubs', value: '5' },
-                { label: 'Partenaires', value: '20' }
-            ],
-            headOfDepartment: {
-                name: 'Mme. Leïla Triki',
-                role: 'Chef de Département',
-                image: 'assets/images/staff/generic-avatar.png',
-                message: 'Comprendre l\'économie pour mieux gérer l\'entreprise de demain est notre devise.'
-            },
-            specialties: [
-                {
-                    name: 'Comptabilité et Finances',
-                    description: 'Gestion financière, audit et contrôle de gestion.',
-                    icon: 'fa-file-invoice-dollar'
-                },
-                {
-                    name: 'Marketing et Commerce International',
-                    description: 'Stratégies commerciales et échanges mondiaux.',
-                    icon: 'fa-globe-africa'
-                },
-                {
-                    name: 'Administration des Affaires',
-                    description: 'Gestion des ressources humaines et management stratégique.',
-                    icon: 'fa-user-tie'
-                }
-            ],
-            labs: ['Club Entrepreneuriat', 'Salle des Marchés (Simulateur)', 'Incubateur Junior']
         },
         'gestion': {
             id: 'gestion',
@@ -223,40 +186,59 @@ export class DepartmentDetailComponent implements OnInit {
             if (this.departmentId && this.departmentsData[this.departmentId]) {
                 this.department = this.departmentsData[this.departmentId];
 
-                // Fetch real data to update Head of Department
-                // Fetch real data to update Head of Department
+                // Attempt to update with real data from backend
                 this.dataService.getDepartments().subscribe(realDepts => {
-                    // Normalize helper
-                    const clean = (str: string) => this.normalize(str).replace(/-/g, ' ');
-                    const currentId = clean(this.departmentId || '');
-                    const currentName = clean(this.department!.name);
+                    if (this.departmentId) {
+                        const clean = (str: string) => this.normalize(str).replace(/-/g, ' ');
+                        const currentId = clean(this.departmentId || '');
 
-                    const matchingRealDept = realDepts.find(d => {
-                        const dbName = clean(d.name || '');
-                        const dbCode = clean(d.code || '');
+                        const matchingRealDept = realDepts.find(d => {
+                            const dbName = clean(d.name || '');
+                            const dbCode = clean(d.code || '');
+                            return dbName.includes(currentId) || (dbCode && currentId.includes(dbCode));
+                        });
 
-                        // Match by Name (contains), ID (slug), or Code
-                        return dbName.includes(currentName) ||
-                            currentName.includes(dbName) ||
-                            dbName.includes(currentId) ||
-                            (dbCode && currentName.includes(dbCode));
-                    });
-
-                    if (matchingRealDept && matchingRealDept.headOfDepartment) {
-                        this.department = {
-                            ...this.department!,
-                            headOfDepartment: {
-                                name: matchingRealDept.headOfDepartment.name,
-                                role: matchingRealDept.headOfDepartment.grade || 'Chef de Département',
-                                image: matchingRealDept.headOfDepartment.image || 'assets/images/staff/generic-avatar.png',
-                                message: this.department!.headOfDepartment.message
-                            }
-                        };
-                        this.cdr.markForCheck();
+                        if (matchingRealDept && matchingRealDept.headOfDepartment) {
+                            this.department = {
+                                ...this.department!,
+                                headOfDepartment: {
+                                    name: matchingRealDept.headOfDepartment.name,
+                                    role: matchingRealDept.headOfDepartment.grade || 'Chef de Département',
+                                    image: matchingRealDept.headOfDepartment.image || 'assets/images/staff/generic-avatar.png',
+                                    message: this.department!.headOfDepartment.message
+                                }
+                            };
+                            this.cdr.markForCheck();
+                        }
                     }
-                }, err => console.error('Error fetching depts:', err));
+                });
+
+                this.initScrollAnimations();
             }
         });
+    }
+
+    initScrollAnimations(): void {
+        if (typeof window !== 'undefined') {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -100px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate-in');
+                    }
+                });
+            }, observerOptions);
+
+            setTimeout(() => {
+                document.querySelectorAll('.animate-on-scroll').forEach(el => {
+                    observer.observe(el);
+                });
+            }, 300);
+        }
     }
 
     private normalize(str: string): string {
