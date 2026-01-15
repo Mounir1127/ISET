@@ -334,6 +334,16 @@ export class LoginComponent implements OnInit {
           this.successMessage = 'Inscription réussie ! Votre compte est en attente d\'activation par l\'administrateur.';
           this.isRegisteredSuccessfully = true;
           this.errorMessage = '';
+
+          // Clear form and reset to default state
+          this.registerForm.reset({
+            role: 'student',
+            acceptTerms: false,
+            assignedClasses: [],
+            subjects: []
+          });
+          this.registerSubmitted = false;
+
           this.cdr.detectChanges();
         },
         error: (error) => {
@@ -364,11 +374,34 @@ export class LoginComponent implements OnInit {
 
   forgotPassword() {
     const email = prompt('Entrez votre email académique pour réinitialiser votre mot de passe:');
-    if (email && email.includes('@isetk.rnu.tn')) {
-      this.successMessage = 'Un lien de réinitialisation a été envoyé à votre email.';
-    } else if (email) {
+    if (!email) return;
+
+    if (!email.includes('@isetk.rnu.tn')) {
       this.errorMessage = 'Veuillez utiliser votre email académique @isetk.rnu.tn';
+      this.cdr.detectChanges();
+      return;
     }
+
+    this.isLoading = true;
+    this.errorMessage = '';
+    this.successMessage = '';
+
+    this.authService.forgotPassword(email)
+      .pipe(finalize(() => {
+        this.isLoading = false;
+        this.cdr.detectChanges();
+      }))
+      .subscribe({
+        next: (response) => {
+          this.successMessage = response.message;
+          this.errorMessage = '';
+          this.cdr.detectChanges();
+        },
+        error: (error) => {
+          this.errorMessage = error.error?.message || 'Erreur lors de la demande de réinitialisation.';
+          this.cdr.detectChanges();
+        }
+      });
   }
 
   togglePasswordVisibility() {

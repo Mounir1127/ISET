@@ -20,6 +20,8 @@ export interface IUser extends Document {
     office?: string;
     assignedClasses?: mongoose.Types.ObjectId[];
     subjects?: mongoose.Types.ObjectId[];
+    resetPasswordToken?: string;
+    resetPasswordExpires?: Date;
 }
 
 const UserSchema: Schema = new Schema({
@@ -41,7 +43,9 @@ const UserSchema: Schema = new Schema({
     speciality: { type: String },
     office: { type: String },
     assignedClasses: [{ type: Schema.Types.ObjectId, ref: 'ClassGroup' }],
-    subjects: [{ type: Schema.Types.ObjectId, ref: 'Subject' }]
+    subjects: [{ type: Schema.Types.ObjectId, ref: 'Subject' }],
+    resetPasswordToken: { type: String },
+    resetPasswordExpires: { type: Date }
 }, { timestamps: true });
 
 export default mongoose.models['User'] || mongoose.model<IUser>('User', UserSchema);

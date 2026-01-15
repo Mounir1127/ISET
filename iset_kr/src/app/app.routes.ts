@@ -27,6 +27,10 @@ import { StudentLayoutComponent } from './pages/student/layout/student-layout.co
 export const routes: Routes = [
     { path: '', component: HomeComponent, pathMatch: 'full' },
     { path: 'login', component: LoginComponent },
+    {
+        path: 'forgot-password',
+        loadComponent: () => import('./pages/login/forgot-password/forgot-password.component').then(c => c.ForgotPasswordComponent)
+    },
     { path: 'actualites', component: NewsListingComponent },
     {
         path: 'departement/:id',

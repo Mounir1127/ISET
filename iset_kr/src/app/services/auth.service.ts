@@ -166,6 +166,10 @@ export class AuthService {
     return this.http.put<any>(`${this.apiUrl}/user/password/${id}`, data);
   }
 
+  forgotPassword(email: string): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/forgot-password`, { email });
+  }
+
   isAuthenticated(): boolean {
     return !!this.getCurrentUser();
   }

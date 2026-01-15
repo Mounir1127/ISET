@@ -132,9 +132,9 @@
             <input type="checkbox" formControlName="rememberMe">
             <span>Se souvenir de moi</span>
           </label>
-          <button type="button" class="forgot-password" (click)="forgotPassword()">
+          <a routerLink="/forgot-password" class="forgot-password">
             Mot de passe oublié ?
-          </button>
+          </a>
         </div>
 
         <button type="submit" class="submit-btn" [disabled]="isLoading">

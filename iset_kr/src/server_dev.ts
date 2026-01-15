@@ -81,9 +81,80 @@ const connectWithRetry = () => {
 
 connectWithRetry();
 
+import nodemailer from 'nodemailer';
+import crypto from 'crypto';
+
+// --- Email Transporter Configuration ---
+const smtpPort = parseInt(process.env.SMTP_PORT || '587');
+const transporter = nodemailer.createTransport({
+  host: process.env.SMTP_HOST || 'smtp.ethereal.email',
+  port: smtpPort,
+  secure: smtpPort === 465, // True for 465, false for 587
+  auth: {
+    user: process.env.SMTP_USER || 'ethereal_user',
+    pass: process.env.SMTP_PASS || 'ethereal_pass'
+  }
+});
+
 /**
- * Example Express Rest API endpoints can be defined here.
+ * Forgot Password Endpoint
  */
+app.post('/api/forgot-password', async (req: any, res: any) => {
+  console.log('>>> [API] Forgot Password Request');
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      // Security: Don't reveal if user exists
+      return res.status(200).json({ message: 'Si un compte existe avec cet email, un lien de réinitialisation a été envoyé.' });
+    }
+
+    // Generate Token
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    const resetTokenHash = crypto.createHash('sha256').update(resetToken).digest('hex');
+
+    // Save hashed token to DB
+    user.resetPasswordToken = resetTokenHash;
+    user.resetPasswordExpires = new Date(Date.now() + 3600000); // 1 hour
+    await user.save();
+
+    // Construct Reset URL (Frontend route)
+    const resetUrl = `${req.protocol}://${req.get('host')}/reset-password/${resetToken}`;
+
+    // Email Layout
+    const message = `
+      <h1>Réinitialisation de mot de passe</h1>
+      <p>Vous avez demandé la réinitialisation de votre mot de passe pour le portail ISET Kairouan.</p>
+      <p>Veuillez cliquer sur le lien ci-dessous pour définir un nouveau mot de passe :</p>
+      <a href="${resetUrl}" style="padding: 10px 20px; background-color: #001b44; color: white; text-decoration: none; border-radius: 5px;">Réinitialiser mon mot de passe</a>
+      <p>Ce lien est valide pour 1 heure.</p>
+      <p>Si vous n'êtes pas à l'origine de cette demande, veuillez ignorer cet email.</p>
+    `;
+
+    try {
+      await transporter.sendMail({
+        from: '"ISET Kairouan" <no-reply@isetkr.rnu.tn>',
+        to: user.email,
+        subject: 'Réinitialisation de mot de passe',
+        html: message
+      });
+      console.log(`>>> [MAIL SENT] Reset link for ${user.email}: ${resetUrl}`);
+    } catch (emailError: any) {
+      console.error('>>> [MAIL ERROR] Could not send email:', emailError.message);
+      // For dev purposes, we log the link so the user can still test
+      console.log(`>>> [DEV FALLBACK] Reset link: ${resetUrl}`);
+    }
+
+    res.status(200).json({ message: 'Si un compte existe avec cet email, un lien de réinitialisation a été envoyé.' });
+
+  } catch (err: any) {
+    console.error('Forgot password error:', err);
+    res.status(500).json({ message: 'Erreur serveur.' });
+  }
+});
+
+// --- Existing Endpoints ... ---
 
 app.post('/api/register', async (req: any, res: any) => {
   console.log('>>> [API] Register Request Received');

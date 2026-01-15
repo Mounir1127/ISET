@@ -91,6 +91,16 @@ async function seedStaff() {
             department: tiDept._id,
             speciality: 'Informatique',
             grade: 'Enseignant'
+        },
+        {
+            name: 'Chokri ouertani',
+            email: 'chokri.ouertani@iset.tn',
+            matricule: 'STAFF_CHOKRI',
+            role: 'chef',
+            status: 'active',
+            department: gestionDept._id,
+            speciality: 'Economie et Gestion',
+            grade: 'Chef de Département'
         }
     ];
 
@@ -105,8 +115,9 @@ async function seedStaff() {
         }
     }
 
-    // Update Head of Department for TI
+    // Update Head of Department for TI and Gestion
     await Department.findByIdAndUpdate(tiDept._id, { headOfDepartment: (await User.findOne({ email: 'kawthar.mtawaa@iset.tn' }))?._id });
+    await Department.findByIdAndUpdate(gestionDept._id, { headOfDepartment: (await User.findOne({ email: 'chokri.ouertani@iset.tn' }))?._id });
 
     console.log('Staff seeding completed successfully.');
     await mongoose.disconnect();

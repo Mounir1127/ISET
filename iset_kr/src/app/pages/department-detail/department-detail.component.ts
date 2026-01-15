@@ -151,7 +151,7 @@ export class DepartmentDetailComponent implements OnInit {
                 { label: 'Partenaires', value: '20' }
             ],
             headOfDepartment: {
-                name: 'Mme. Leïla Triki',
+                name: 'M. Chokri ouertani',
                 role: 'Chef de Département',
                 image: 'assets/images/staff/generic-avatar.png',
                 message: 'Comprendre l\'économie pour mieux gérer l\'entreprise de demain est notre devise.'
