@@ -34,6 +34,12 @@ interface DepartmentData {
 export class DepartmentDetailComponent implements OnInit {
     departmentId: string | null = null;
     department: DepartmentData | undefined;
+    private deptCodeMap: { [key: string]: string } = {
+        'informatique': 'TI',
+        'genie-electrique': 'GE',
+        'genie-mecanique': 'GM',
+        'gestion': 'GESTION'
+    };
 
     // Mock data for departments
     departmentsData: { [key: string]: DepartmentData } = {
@@ -44,16 +50,16 @@ export class DepartmentDetailComponent implements OnInit {
             heroImage: 'https://images.unsplash.com/photo-1571171637578-41bc2dd41cd2?w=1920&q=80',
             description: 'Le département Informatique forme des experts en technologies numériques, capables de concevoir, développer et sécuriser des systèmes d\'information complexes. Nos programmes couvrent le développement logiciel, les systèmes embarqués, et l\'administration des systèmes.',
             stats: [
-                { label: 'Étudiants', value: '450+' },
+                { label: 'Étudiants', value: '254' },
                 { label: 'Enseignants', value: '35' },
                 { label: 'Laboratoires', value: '8' },
                 { label: 'Partenaires', value: '12' }
             ],
             headOfDepartment: {
-                name: 'M. Ahmed Ben Ali',
+                name: 'Chargement...',
                 role: 'Chef de Département',
                 image: 'assets/images/staff/generic-avatar.png',
-                message: 'Notre mission est de doter nos étudiants des compétences techniques et humaines nécessaires pour exceller dans un secteur en perpétuelle évolution.'
+                message: ''
             },
             specialties: [
                 {
@@ -81,16 +87,16 @@ export class DepartmentDetailComponent implements OnInit {
             heroImage: 'assets/images/images_iset/1629_1.JPG',
             description: 'Le département Génie Électrique est un pôle d\'excellence formant des techniciens supérieurs en électricité, électronique et automatisme. Nous préparons nos étudiants aux défis de l\'industrie 4.0.',
             stats: [
-                { label: 'Étudiants', value: '380+' },
+                { label: 'Étudiants', value: '203' },
                 { label: 'Enseignants', value: '30' },
                 { label: 'Laboratoires', value: '10' },
                 { label: 'Projets Ind.', value: '25+' }
             ],
             headOfDepartment: {
-                name: 'Mme. Sarah Jlassi',
+                name: 'Chargement...',
                 role: 'Chef de Département',
                 image: 'assets/images/staff/generic-avatar.png',
-                message: 'L\'innovation et la pratique sont au cœur de notre pédagogie pour former les ingénieurs de demain.'
+                message: ''
             },
             specialties: [
                 {
@@ -113,16 +119,16 @@ export class DepartmentDetailComponent implements OnInit {
             heroImage: 'assets/images/images_iset/BD34_1.JPG',
             description: 'Le département Génie Mécanique offre une formation solide en conception, fabrication et maintenance des systèmes mécaniques. Nos étudiants maîtrisent la CAO/DAO et les procédés de fabrication modernes.',
             stats: [
-                { label: 'Étudiants', value: '320+' },
+                { label: 'Étudiants', value: '220' },
                 { label: 'Enseignants', value: '28' },
                 { label: 'Ateliers', value: '6' },
                 { label: 'Machines CNC', value: '15' }
             ],
             headOfDepartment: {
-                name: 'M. Karim Oueslati',
+                name: 'Chargement...',
                 role: 'Chef de Département',
                 image: 'assets/images/staff/generic-avatar.png',
-                message: 'Nous formons des techniciens capables de transformer une idée en un produit tangible et fonctionnel.'
+                message: ''
             },
             specialties: [
                 {
@@ -145,16 +151,16 @@ export class DepartmentDetailComponent implements OnInit {
             heroImage: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1920&q=80',
             description: 'Ce département forme les futurs cadres gestionnaires. Nos programmes allient théorie économique et pratiques managériales pour une insertion rapide dans le monde des affaires.',
             stats: [
-                { label: 'Étudiants', value: '500+' },
+                { label: 'Étudiants', value: '405' },
                 { label: 'Enseignants', value: '40' },
                 { label: 'Clubs', value: '5' },
                 { label: 'Partenaires', value: '20' }
             ],
             headOfDepartment: {
-                name: 'M. Chokri ouertani',
+                name: 'Chargement...',
                 role: 'Chef de Département',
                 image: 'assets/images/staff/generic-avatar.png',
-                message: 'Comprendre l\'économie pour mieux gérer l\'entreprise de demain est notre devise.'
+                message: ''
             },
             specialties: [
                 {
@@ -189,13 +195,10 @@ export class DepartmentDetailComponent implements OnInit {
                 // Attempt to update with real data from backend
                 this.dataService.getDepartments().subscribe(realDepts => {
                     if (this.departmentId) {
-                        const clean = (str: string) => this.normalize(str).replace(/-/g, ' ');
-                        const currentId = clean(this.departmentId || '');
-
+                        const targetCode = this.deptCodeMap[this.departmentId || ''];
                         const matchingRealDept = realDepts.find(d => {
-                            const dbName = clean(d.name || '');
-                            const dbCode = clean(d.code || '');
-                            return dbName.includes(currentId) || (dbCode && currentId.includes(dbCode));
+                            const dbCode = (d.code || '').toUpperCase();
+                            return dbCode === targetCode;
                         });
 
                         if (matchingRealDept && matchingRealDept.headOfDepartment) {
@@ -204,8 +207,8 @@ export class DepartmentDetailComponent implements OnInit {
                                 headOfDepartment: {
                                     name: matchingRealDept.headOfDepartment.name,
                                     role: matchingRealDept.headOfDepartment.grade || 'Chef de Département',
-                                    image: matchingRealDept.headOfDepartment.image || 'assets/images/staff/generic-avatar.png',
-                                    message: this.department!.headOfDepartment.message
+                                    image: matchingRealDept.headOfDepartment.profileImage || 'assets/images/staff/generic-avatar.png',
+                                    message: matchingRealDept.headOfDepartment.bio || this.department!.headOfDepartment.message
                                 }
                             };
                             this.cdr.markForCheck();

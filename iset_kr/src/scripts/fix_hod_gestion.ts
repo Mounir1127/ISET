@@ -21,7 +21,7 @@ async function fixHod() {
     }
 
     // Find or Create Chokri
-    let chokri = await User.findOne({ name: /Chokri/i });
+    let chokri = await User.findOne({ email: 'chokri.ouertani@iset.tn' });
     if (!chokri) {
         console.log('Chokri not found, creating...');
         chokri = await User.create({
@@ -34,7 +34,9 @@ async function fixHod() {
             grade: 'Chef de Département'
         });
     } else {
-        console.log('Found Chokri:', chokri.name);
+        console.log('Found Chokri, updating name...');
+        chokri.name = 'Chokri Ouertani';
+        await chokri.save();
     }
 
     // Update Dept

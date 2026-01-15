@@ -22,6 +22,8 @@ export interface IUser extends Document {
     subjects?: mongoose.Types.ObjectId[];
     resetPasswordToken?: string;
     resetPasswordExpires?: Date;
+    profileImage?: string;
+    bio?: string;
 }
 
 const UserSchema: Schema = new Schema({
@@ -45,7 +47,9 @@ const UserSchema: Schema = new Schema({
     assignedClasses: [{ type: Schema.Types.ObjectId, ref: 'ClassGroup' }],
     subjects: [{ type: Schema.Types.ObjectId, ref: 'Subject' }],
     resetPasswordToken: { type: String },
-    resetPasswordExpires: { type: Date }
+    resetPasswordExpires: { type: Date },
+    profileImage: { type: String },
+    bio: { type: String }
 }, { timestamps: true });
 
 export default mongoose.models['User'] || mongoose.model<IUser>('User', UserSchema);

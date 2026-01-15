@@ -40,10 +40,12 @@ async function seedStaff() {
 
     // Find Departments
     const tiDept = await Department.findOne({ $or: [{ code: 'TI' }, { name: /Informatique/i }, { name: /TI/i }] });
-    const gestionDept = await Department.findOne({ $or: [{ code: 'GEST' }, { name: /Gestion/i }] });
+    const gestionDept = await Department.findOne({ $or: [{ code: 'GESTION' }, { name: /Gestion/i }] });
+    const geDept = await Department.findOne({ $or: [{ code: 'GE' }, { name: /Electrique/i }] });
+    const gmDept = await Department.findOne({ $or: [{ code: 'GM' }, { name: /Mecanique/i }] });
 
-    if (!tiDept || !gestionDept) {
-        console.error('Departments not found. TI:', !!tiDept, 'Gestion:', !!gestionDept);
+    if (!tiDept || !gestionDept || !geDept || !gmDept) {
+        console.error('Some departments not found. TI:', !!tiDept, 'Gestion:', !!gestionDept, 'GE:', !!geDept, 'GM:', !!gmDept);
         // List all for debug
         const all = await Department.find();
         console.log('Available Depts:', all.map(d => `${d.code}: ${d.name}`));
@@ -70,37 +72,45 @@ async function seedStaff() {
             status: 'active',
             department: tiDept._id,
             speciality: 'Informatique',
-            grade: 'Chef de Département'
+            grade: 'Chef de Département',
+            bio: 'Notre mission est de doter nos étudiants des compétences techniques et humaines nécessaires pour exceller dans un secteur en perpétuelle évolution.',
+            profileImage: 'assets/images/staff/generic-avatar.png'
         },
         {
-            name: 'Nabil Mrabat',
-            email: 'nabil.mrabat@iset.tn',
-            matricule: 'STAFF_NABIL',
-            role: 'staff',
-            status: 'active',
-            department: gestionDept._id,
-            speciality: 'Qualité',
-            grade: 'Directeur ISET'
-        },
-        {
-            name: 'Maher Ibdeli',
-            email: 'maher.ibdeli@iset.tn',
-            matricule: 'STAFF_MAHER',
-            role: 'staff',
-            status: 'active',
-            department: tiDept._id,
-            speciality: 'Informatique',
-            grade: 'Enseignant'
-        },
-        {
-            name: 'Chokri ouertani',
+            name: 'Chokri Ouertani',
             email: 'chokri.ouertani@iset.tn',
             matricule: 'STAFF_CHOKRI',
             role: 'chef',
             status: 'active',
             department: gestionDept._id,
             speciality: 'Economie et Gestion',
-            grade: 'Chef de Département'
+            grade: 'Chef de Département',
+            bio: 'Comprendre l\'économie pour mieux gérer l\'entreprise de demain est notre devise.',
+            profileImage: 'assets/images/staff/generic-avatar.png'
+        },
+        {
+            name: 'Mourad SELMI',
+            email: 'mourad.selmi@iset.tn',
+            matricule: 'STAFF_MOURAD',
+            role: 'chef',
+            status: 'active',
+            department: geDept._id,
+            speciality: 'Génie Électrique',
+            grade: 'Chef de Département',
+            bio: 'L\'innovation et la pratique sont au cœur de notre pédagogie pour former les ingénieurs de demain.',
+            profileImage: 'assets/images/staff/generic-avatar.png'
+        },
+        {
+            name: 'Nizar Ouni',
+            email: 'nizar.ouni@iset.tn',
+            matricule: 'STAFF_NIZAR',
+            role: 'chef',
+            status: 'active',
+            department: gmDept._id,
+            speciality: 'Génie Mécanique',
+            grade: 'Chef de Département',
+            bio: 'Nous formons des techniciens capables de transformer une idée en un produit tangible et fonctionnel.',
+            profileImage: 'assets/images/staff/generic-avatar.png'
         }
     ];
 
@@ -115,9 +125,11 @@ async function seedStaff() {
         }
     }
 
-    // Update Head of Department for TI and Gestion
+    // Update Head of Department for all departments
     await Department.findByIdAndUpdate(tiDept._id, { headOfDepartment: (await User.findOne({ email: 'kawthar.mtawaa@iset.tn' }))?._id });
     await Department.findByIdAndUpdate(gestionDept._id, { headOfDepartment: (await User.findOne({ email: 'chokri.ouertani@iset.tn' }))?._id });
+    await Department.findByIdAndUpdate(geDept._id, { headOfDepartment: (await User.findOne({ email: 'mourad.selmi@iset.tn' }))?._id });
+    await Department.findByIdAndUpdate(gmDept._id, { headOfDepartment: (await User.findOne({ email: 'nizar.ouni@iset.tn' }))?._id });
 
     console.log('Staff seeding completed successfully.');
     await mongoose.disconnect();

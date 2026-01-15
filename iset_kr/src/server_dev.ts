@@ -81,10 +81,11 @@ const connectWithRetry = () => {
 
 connectWithRetry();
 
-import nodemailer from 'nodemailer';
+// import nodemailer from 'nodemailer';
 import crypto from 'crypto';
 
 // --- Email Transporter Configuration ---
+/*
 const smtpPort = parseInt(process.env.SMTP_PORT || '587');
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST || 'smtp.ethereal.email',
@@ -95,12 +96,14 @@ const transporter = nodemailer.createTransport({
     pass: process.env.SMTP_PASS || 'ethereal_pass'
   }
 });
+*/
 
 /**
  * Forgot Password Endpoint
  */
 app.post('/api/forgot-password', async (req: any, res: any) => {
-  console.log('>>> [API] Forgot Password Request');
+  console.log('>>> [API] Forgot Password Request (Stubbed)');
+  /*
   try {
     const { email } = req.body;
     const user = await User.findOne({ email });
@@ -152,6 +155,8 @@ app.post('/api/forgot-password', async (req: any, res: any) => {
     console.error('Forgot password error:', err);
     res.status(500).json({ message: 'Erreur serveur.' });
   }
+  */
+  res.status(200).json({ message: 'Fonctionnalité désactivée temporairement.' });
 });
 
 // --- Existing Endpoints ... ---
