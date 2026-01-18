@@ -37,6 +37,12 @@ const app = express();
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+// Root Route (Health Check)
+app.get('/', (req, res) => { // @ts-ignore
+  res.status(200).json({ status: 'online', message: 'Backend server is running correctly' });
+});
+
 app.use('/uploads', express.static(join(process.cwd(), 'uploads')));
 
 // Storage configuration for Multer

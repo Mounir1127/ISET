@@ -34,6 +34,11 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Root Route (Health Check)
+app.get('/', (req, res) => { // @ts-ignore
+    res.status(200).json({ status: 'online', message: 'Backend server is running correctly' });
+});
+
 // Request logging for debugging production
 app.use((req, res, next) => {
     console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
