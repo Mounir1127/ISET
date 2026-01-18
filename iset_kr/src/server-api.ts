@@ -824,15 +824,36 @@ app.put('/api/notifications/:id/read', async (req: any, res: any) => {
 // Port
 const port = process.env['PORT'] || 4000;
 
-// Catch-all 404 for debugging
-app.use((req, res) => {
-    console.warn(`[404] Unmatched Request: ${req.method} ${req.url}`);
-    res.status(404).json({
-        message: 'Endpoint non trouvé (Backend Production)',
-        method: req.method,
-        url: req.url
+// Serve Angular Static Files (Production)
+const angularDistPath = join(process.cwd(), 'dist/iset_kr/browser');
+// Check if browser folder exists (Angular 17+ structure), otherwise try root dist
+const finalDistPath = existsSync(angularDistPath) ? angularDistPath : join(process.cwd(), 'dist/iset_kr');
+
+if (existsSync(finalDistPath)) {
+    console.log(`Serving static files from: ${finalDistPath}`);
+    app.use(express.static(finalDistPath));
+
+    // API 404 Handler (First)
+    app.use('/api/*', (req, res) => {
+        res.status(404).json({ message: 'API Endpoint not found', url: req.url });
     });
-});
+
+    // Angular Catch-all
+    app.get('*', (req, res) => {
+        res.sendFile(join(finalDistPath, 'index.html'));
+    });
+} else {
+    console.warn('⚠️ Angular dist folder not found. Serving API only.');
+    // Catch-all 404 for debugging if frontend is missing
+    app.use((req, res) => {
+        console.warn(`[404] Unmatched Request: ${req.method} ${req.url}`);
+        res.status(404).json({
+            message: 'Endpoint non trouvé (Backend Production)',
+            method: req.method,
+            url: req.url
+        });
+    });
+}
 
 app.listen(port, () => {
     console.log(`API Server listening on port ${port}`);

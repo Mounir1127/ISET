@@ -3,7 +3,7 @@ services:
     name: iset-backend
     env: node
     plan: free
-    buildCommand: npm install && npm run backend:build
+    buildCommand: npm install && npm run build && npm run backend:build
     startCommand: npm run backend:start
     envVars:
       - key: NODE_VERSION
