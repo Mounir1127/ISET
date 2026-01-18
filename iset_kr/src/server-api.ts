@@ -866,6 +866,49 @@ app.delete('/api/admin/gallery/:id', async (req: any, res: any) => {
     }
 });
 
+app.get('/api/admin/seed-gallery', async (req: any, res: any) => {
+    try {
+        const imagesDir = join(process.cwd(), 'dist/iset_kr/browser/assets/images/vie_etudiants');
+        // Fallback for different build structures
+        const alternativeDir = join(process.cwd(), 'src/assets/images/vie_etudiants');
+
+        let targetDir = existsSync(imagesDir) ? imagesDir : alternativeDir;
+        if (!existsSync(targetDir)) {
+            // Try looking in root assets
+            targetDir = join(process.cwd(), 'assets/images/vie_etudiants');
+        }
+
+        if (!existsSync(targetDir)) {
+            return res.status(404).json({ message: 'Images directory not found', checkedPaths: [imagesDir, alternativeDir, targetDir] });
+        }
+
+        const files = readdirSync(targetDir);
+        let addedCount = 0;
+
+        for (const file of files) {
+            if (!file.match(/\.(jpg|jpeg|png|gif)$/i)) continue;
+
+            // Note: URL path depends on how static files are served. 
+            // In Angular prod build, they are usually at root or /assets
+            const publicUrl = `assets/images/vie_etudiants/${file}`;
+
+            const existing = await GalleryImage.findOne({ url: publicUrl });
+            if (!existing) {
+                await new GalleryImage({
+                    url: publicUrl,
+                    category: 'student_life',
+                    caption: 'Vie Universitaire ISET Kairouan'
+                }).save();
+                addedCount++;
+            }
+        }
+        res.status(200).json({ message: `Seeding complete. Added ${addedCount} images.` });
+    } catch (err: any) {
+        res.status(500).json({ message: 'Seeding failed', error: err.message });
+    }
+});
+
+
 // Port
 const port = process.env['PORT'] || 4000;
 
