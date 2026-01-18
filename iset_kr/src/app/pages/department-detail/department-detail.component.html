@@ -47,6 +47,11 @@
                         <div class="card-icon-main"><i class="fas" [class]="spec.icon"></i></div>
                         <h3 class="fw-black text-navy mb-3 fs-3">{{ spec.name }}</h3>
                         <p class="text-secondary fs-5">{{ spec.description }}</p>
+                        <div class="mt-4" *ngIf="spec.pdf">
+                            <a [href]="spec.pdf" target="_blank" class="btn-pro-link text-gold">
+                                <i class="fas fa-file-pdf me-2"></i> Visualiser Plan d'Étude
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>

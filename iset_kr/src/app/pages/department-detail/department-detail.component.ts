@@ -35,7 +35,7 @@ export class DepartmentDetailComponent implements OnInit {
     departmentId: string | null = null;
     department: DepartmentData | undefined;
     private deptCodeMap: { [key: string]: string } = {
-        'informatique': 'TI',
+        'technologie-informatique': 'TI',
         'genie-electrique': 'GE',
         'genie-mecanique': 'GM',
         'gestion': 'GESTION'
@@ -43,12 +43,12 @@ export class DepartmentDetailComponent implements OnInit {
 
     // Mock data for departments
     departmentsData: { [key: string]: DepartmentData } = {
-        'informatique': {
-            id: 'informatique',
-            name: 'Département Informatique',
+        'technologie-informatique': {
+            id: 'technologie-informatique',
+            name: 'Département Technologie Informatique',
             icon: 'fa-laptop-code',
             heroImage: 'https://images.unsplash.com/photo-1571171637578-41bc2dd41cd2?w=1920&q=80',
-            description: 'Le département Informatique forme des experts en technologies numériques, capables de concevoir, développer et sécuriser des systèmes d\'information complexes. Nos programmes couvrent le développement logiciel, les systèmes embarqués, et l\'administration des systèmes.',
+            description: 'Le département Technologie Informatique forme des experts en technologies numériques, capables de concevoir, développer et sécuriser des systèmes d\'information complexes. Nos programmes couvrent le développement logiciel, les systèmes embarqués, et l\'administration des systèmes.',
             stats: [
                 { label: 'Étudiants', value: '254' },
                 { label: 'Enseignants', value: '35' },
@@ -68,14 +68,9 @@ export class DepartmentDetailComponent implements OnInit {
                     icon: 'fa-code'
                 },
                 {
-                    name: 'Administration des Réseaux et Services (ARS)',
+                    name: 'Réseaux et Services Informatiques (RSI)',
                     description: 'Gestion des infrastructures réseaux et sécurité des systèmes.',
                     icon: 'fa-network-wired'
-                },
-                {
-                    name: 'Systèmes Embarqués et Mobiles (SEM)',
-                    description: 'Développement pour l\'IoT et les systèmes temps réel.',
-                    icon: 'fa-microchip'
                 }
             ],
             labs: ['Laboratoire IA & Big Data', 'Cisco Academy', 'Microsoft Club', 'Cyber Security Lab']
