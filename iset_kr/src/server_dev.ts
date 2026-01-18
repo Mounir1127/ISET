@@ -381,6 +381,44 @@ app.put('/api/notifications/:id/read', async (req: any, res: any) => {
   }
 });
 
+// --- Gallery API ---
+app.get('/api/public/gallery/:category', async (req: any, res: any) => {
+  try {
+    const { category } = req.params;
+    const images = await GalleryImage.find({ category }).sort({ createdAt: -1 });
+    res.status(200).json(images);
+  } catch (err) {
+    res.status(500).json({ message: 'Error fetching gallery images' });
+  }
+});
+
+app.post('/api/admin/gallery/upload', upload.single('image'), async (req: any, res: any) => {
+  try {
+    if (!req.file) return res.status(400).json({ message: 'No image uploaded' });
+
+    const { category, caption } = req.body;
+    const newImage = new GalleryImage({
+      url: `/uploads/${req.file.filename}`,
+      category: category || 'student_life',
+      caption: caption
+    });
+
+    await newImage.save();
+    res.status(201).json(newImage);
+  } catch (err) {
+    res.status(500).json({ message: 'Error uploading image' });
+  }
+});
+
+app.delete('/api/admin/gallery/:id', async (req: any, res: any) => {
+  try {
+    await GalleryImage.findByIdAndDelete(req.params.id);
+    res.status(200).json({ message: 'Image deleted' });
+  } catch (err) {
+    res.status(500).json({ message: 'Error deleting image' });
+  }
+});
+
 // --- Messaging API ---
 app.get('/api/messages', async (req: any, res: any) => {
   try {
