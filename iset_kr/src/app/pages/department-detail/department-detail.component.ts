@@ -101,12 +101,12 @@ export class DepartmentDetailComponent implements OnInit {
             specialties: [
                 {
                     name: 'Automatismes et Informatique Industrielle (AII)',
-                    description: 'Pilotage des systèmes automatisés et robotique.',
+                    description: 'La filière Automatismes et Informatique Industrielle (AII) forme des spécialistes capables de concevoir, superviser et optimiser les systèmes automatisés et les processus industriels en intégrant l\'informatique, l\'électronique et la robotique.',
                     icon: 'fa-robot'
                 },
                 {
                     name: 'Électricité Industrielle (EI)',
-                    description: 'Installation et maintenance des équipements électriques.',
+                    description: 'La filière Électricité Industrielle (EI) forme des licences capables de concevoir, installer, maintenir et optimiser les systèmes électriques et automatisés dans les environnements industriels.',
                     icon: 'fa-plug'
                 }
             ],
