@@ -97,7 +97,7 @@ async function seedStaff() {
             department: geDept._id,
             speciality: 'Génie Électrique',
             grade: 'Chef de Département',
-            bio: 'L\'innovation et la pratique sont au cœur de notre pédagogie pour former les ingénieurs de demain.',
+            bio: 'L\'innovation et la pratique sont au cœur de notre pédagogie pour former les leaders de demain.',
             profileImage: 'assets/images/staff/generic-avatar.png'
         },
         {
