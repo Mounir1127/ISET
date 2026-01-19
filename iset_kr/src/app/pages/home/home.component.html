@@ -122,6 +122,41 @@
     </div>
   </section>
 
+  <!-- 3b. Manifestations Section (Duplicate Style) -->
+  <section class="manifestations-section py-10 bg-light position-relative">
+    <div class="container position-relative z-2">
+      <!-- Section Header Pro -->
+      <div class="row align-items-end mb-5">
+        <div class="col-lg-7">
+          <div class="d-inline-flex align-items-center gap-3 mb-2">
+            <span class="d-inline-block bg-gold" style="width: 40px; height: 4px; border-radius: 2px;"></span>
+            <span class="text-gold fw-bold ls-2 text-uppercase small">Événements & Culture</span>
+          </div>
+          <h2 class="display-4 fw-black text-navy mb-0 ls-tight">Nos <span
+              class="text-gold-gradient">Manifestations</span></h2>
+        </div>
+        <div class="col-lg-5 text-lg-end mt-4 mt-lg-0">
+          <a routerLink="/actualites" [queryParams]="{tab: 'event'}"
+            class="btn-pro-link text-navy fw-bold text-decoration-none ls-1">
+            VOIR L'AGENDA COMPLET <i class="fas fa-arrow-right ms-2 text-gold"></i>
+          </a>
+        </div>
+      </div>
+
+      <div class="row g-4">
+        <!-- Display Manifestations (Events) -->
+        <div class="col-md-6 col-lg-4 d-flex" *ngFor="let item of manifestations.slice(0, 3)">
+          <app-announcement-card [announcement]="item" class="w-100"></app-announcement-card>
+        </div>
+      </div>
+
+      <div *ngIf="manifestations.length === 0" class="text-center py-5">
+        <div class="empty-state-icon mb-4"><i class="fas fa-calendar-times display-1 text-muted opacity-25"></i></div>
+        <p class="h5 text-muted fw-light">Aucune manifestation prévue pour le moment.</p>
+      </div>
+    </div>
+  </section>
+
   <!-- New: Certifications Excellence Section (Ultra Pro) -->
   <section class="certifications-home-section py-12 bg-white position-relative overflow-hidden">
     <div class="cert-mesh-bg position-absolute w-100 h-100 top-0"></div>
