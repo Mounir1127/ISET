@@ -263,6 +263,107 @@ app.get('/api/public/modules', async (req: any, res: any) => {
     }
 });
 
+// Teachers Public API
+app.get('/api/public/teachers/department/:deptId', async (req: any, res: any) => {
+    const deptId = (req.params.deptId || '').trim();
+    console.log(`[TEACHERS] Request for deptId: "${deptId}"`);
+    try {
+        let department;
+        if (mongoose.Types.ObjectId.isValid(deptId)) {
+            department = await Department.findById(deptId);
+        }
+        if (!department) {
+            department = await Department.findOne({ code: { $regex: new RegExp(`^${deptId}$`, 'i') } });
+        }
+        if (!department) {
+            const slugMap: { [key: string]: string } = {
+                // Informatique
+                'technologie-informatique': 'TI',
+                'informatique': 'TI',
+                'ti': 'TI',
+
+                // Génie Électrique
+                'genie-electrique': 'GE',
+                'electrique': 'GE',
+                'ge': 'GE',
+
+                // Génie Mécanique
+                'genie-mecanique': 'GM',
+                'mecanique': 'GM',
+                'gm': 'GM',
+
+                // Gestion / Administration
+                'administration-des-affaires': 'AA',
+                'gestion': 'AA',
+                'sciences-economiques-et-gestion': 'SEG',
+                'economie-et-gestion': 'GESTION',
+                'seg': 'SEG',
+
+                // Génie des Procédés
+                'génie-des-procédés': 'GP',
+                'genie-des-procedes': 'GP',
+                'gp': 'GP'
+            };
+            const code = slugMap[deptId.toLowerCase()];
+            if (code) {
+                department = await Department.findOne({ code: { $regex: new RegExp(`^${code}$`, 'i') } });
+            }
+        }
+        if (!department) {
+            const searchName = deptId.replace(/-/g, ' ');
+            department = await Department.findOne({
+                $or: [
+                    { name: { $regex: new RegExp(searchName, 'i') } },
+                    { name: { $regex: new RegExp(deptId.split('-')[0], 'i') } }
+                ]
+            });
+        }
+
+        if (!department) {
+            return res.status(404).json({ message: 'Department not found' });
+        }
+
+        const teachers = await User.find({
+            department: department._id,
+            role: 'staff',
+            status: 'active'
+        }).select('-password').sort({ name: 1 }).lean();
+
+        res.status(200).json(teachers);
+    } catch (err) {
+        console.error('[TEACHERS] Error fetching teachers:', err);
+        res.status(500).json({ message: 'Error fetching teachers' });
+    }
+});
+
+app.get('/api/public/teachers/:id', async (req: any, res: any) => {
+    try {
+        const teacher = await User.findById(req.params.id)
+            .select('-password')
+            .populate('department')
+            .lean();
+
+        if (!teacher || teacher.role !== 'staff') {
+            return res.status(404).json({ message: 'Teacher not found' });
+        }
+
+        res.status(200).json(teacher);
+    } catch (err) {
+        res.status(500).json({ message: 'Error fetching teacher details' });
+    }
+});
+
+// Partners API
+app.get('/api/partners', async (req: any, res: any) => {
+    try {
+        const partners = await Partner.find().sort({ createdAt: -1 });
+        res.status(200).json(partners);
+    } catch (err) {
+        console.error('Error fetching partners:', err);
+        res.status(500).json({ message: 'Error fetching partners' });
+    }
+});
+
 // --- Admin API Endpoints ---
 
 // User Management
@@ -585,6 +686,7 @@ app.post('/api/admin/schedules', async (req: any, res: any) => {
                 startTime,
                 room: { $regex: new RegExp(`^${roomStr}$`, 'i') }
             });
+
 
             if (roomConflict) {
                 return res.status(409).json({
