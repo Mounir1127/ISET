@@ -16,6 +16,7 @@
     "src/server.ts",
     "src/server_dev.ts",
     "src/server-api.ts",
-    "src/main.server.ts"
+    "src/main.server.ts",
+    "src/scripts/**/*"
   ]
 }

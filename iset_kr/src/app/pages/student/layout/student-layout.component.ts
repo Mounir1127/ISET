@@ -58,6 +58,10 @@ import { AuthService } from '../../../services/auth.service';
               <i class="fas fa-folder-open"></i>
               <span>Cours & Supports</span>
             </a>
+            <a routerLink="/student/rattrapage" routerLinkActive="active" class="nav-item" (click)="isMobileMenuOpen = false">
+              <i class="fas fa-calendar-check"></i>
+              <span>Rattrapages</span>
+            </a>
           </div>
 
           <div class="nav-divider"></div>

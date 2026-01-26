@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AdminService } from '../../../services/admin.service';
 import { DataService } from '../../../services/data.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-admin-news',
@@ -26,7 +27,8 @@ export class AdminNewsComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private adminService: AdminService,
-    private dataService: DataService
+    private dataService: DataService,
+    private route: ActivatedRoute
   ) {
     this.announcementForm = this.initForm();
   }
@@ -66,6 +68,14 @@ export class AdminNewsComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadAnnouncements();
+
+    // Listen for query params to set initial filter
+    this.route.queryParams.subscribe(params => {
+      if (params['filter']) {
+        this.currentFilter = params['filter'];
+        this.applyFilter();
+      }
+    });
 
     // Watch for type changes
     this.announcementForm.get('type')?.valueChanges.subscribe(value => {
@@ -118,12 +128,18 @@ export class AdminNewsComponent implements OnInit {
   openAddModal() {
     this.isEditing = false;
     this.currentItemId = null;
+
+    // Default type based on current filter
+    let defaultType = 'news';
+    if (this.currentFilter === 'event') defaultType = 'event';
+    if (this.currentFilter === 'tender') defaultType = 'tender';
+
     this.announcementForm.reset({
-      type: 'news',
+      type: defaultType,
       status: 'published',
       publishDate: new Date().toISOString().split('T')[0]
     });
-    this.selectedType = 'news';
+    this.selectedType = defaultType as any;
     this.showModal = true;
   }
 

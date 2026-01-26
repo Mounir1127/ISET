@@ -39,15 +39,26 @@ import { AuthService } from '../../../services/auth.service';
             <i class="fas fa-graduation-cap"></i>
             <span>Académique</span>
           </a>
+          <a routerLink="/admin/teachers" routerLinkActive="active" class="nav-item" (click)="closeMobileMenu()">
+            <i class="fas fa-chalkboard-teacher"></i>
+            <span>Enseignants</span>
+          </a>
           
           <span class="menu-label">Communication</span>
-          <a routerLink="/admin/news" routerLinkActive="active" class="nav-item" (click)="closeMobileMenu()">
+          <a routerLink="/admin/news" [queryParams]="{filter: 'event'}" routerLinkActive="active" class="nav-item" (click)="closeMobileMenu()">
+            <i class="fas fa-calendar-alt"></i>
+            <span>Manifestations</span>
+          </a>
+          <a routerLink="/admin/news" [queryParams]="{filter: 'news'}" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-item" (click)="closeMobileMenu()">
             <i class="fas fa-newspaper"></i>
             <span>Actualités</span>
           </a>
           <a routerLink="/admin/gallery" routerLinkActive="active" class="nav-item" (click)="closeMobileMenu()">
-            <i class="fas fa-images"></i>
             <span>Galerie</span>
+          </a>
+          <a routerLink="/admin/partners" routerLinkActive="active" class="nav-item" (click)="closeMobileMenu()">
+            <i class="fas fa-handshake"></i>
+            <span>Partenaires</span>
           </a>
           <a routerLink="/admin/messages" routerLinkActive="active" class="nav-item" (click)="closeMobileMenu()">
             <i class="fas fa-envelope-open-text"></i>

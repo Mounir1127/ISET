@@ -99,6 +99,10 @@ import { environment } from '../../../../environments/environment';
                 <div class="icon"><i class="fas fa-book"></i></div>
                 <span>Mes Cours</span>
               </a>
+              <a routerLink="/student/rattrapage" class="shortcut-item">
+                <div class="icon"><i class="fas fa-calendar-alt"></i></div>
+                <span>Rattrapages</span>
+              </a>
               <a href="#" class="shortcut-item">
                 <div class="icon"><i class="fas fa-envelope"></i></div>
                 <span>Messages</span>

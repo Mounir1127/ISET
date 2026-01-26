@@ -1135,3 +1135,219 @@ body {
 .menu-sidebar-blue::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.4);
 }
+
+/* --- Ultra-Pro Button Suite --- */
+.btn-pro {
+  position: relative;
+  padding: 1rem 2.8rem;
+  border-radius: 50px;
+  font-weight: 850;
+  font-size: 0.8rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  transition: all 0.4s cubic-bezier(0.2, 1, 0.3, 1);
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  cursor: pointer;
+  overflow: hidden;
+  z-index: 1;
+  white-space: nowrap;
+}
+
+.btn-pro-primary {
+  background: linear-gradient(135deg, #001b44 0%, #004482 100%);
+  color: white !important;
+  box-shadow: 0 10px 30px rgba(0, 27, 68, 0.2);
+}
+
+.btn-pro-gold {
+  background: linear-gradient(135deg, #c5a021 0%, #e3c04d 100%);
+  color: #001b44 !important;
+  box-shadow: 0 10px 30px rgba(197, 160, 33, 0.25);
+}
+
+.btn-pro-glass {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  color: white !important;
+}
+
+.btn-pro:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.btn-pro-primary:hover {
+  background: linear-gradient(135deg, #004482 0%, #0066cc 100%);
+}
+
+.btn-pro-gold:hover {
+  background: linear-gradient(135deg, #e3c04d 0%, #f1d97c 100%);
+}
+
+.btn-pro-glass:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5) !important;
+}
+
+/* Nav Round Pro - Correct visibility on light/dark */
+.btn-nav-pro {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: white;
+  border: 1.5px solid rgba(0, 27, 68, 0.08);
+  color: #001b44;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-nav-pro i {
+  font-size: 1.1rem;
+  transition: transform 0.4s;
+  z-index: 2;
+}
+
+.btn-nav-pro::before {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #001b44;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 1;
+}
+
+.btn-nav-pro:hover {
+  color: #c5a021;
+  transform: translateY(-4px) scale(1.1);
+  box-shadow: 0 12px 24px rgba(0, 27, 68, 0.12);
+  border-color: #001b44;
+}
+
+.btn-nav-pro:hover::before {
+  top: 0;
+}
+
+.btn-nav-pro:active {
+  transform: translateY(-2px) scale(0.95);
+}
+
+.btn-nav-pro.sm {
+  width: 42px;
+  height: 42px;
+}
+
+.btn-nav-pro.sm i {
+  font-size: 0.9rem;
+}
+
+
+/* Shine Animation Utility */
+.shine-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.shine-effect::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -150%;
+  width: 50%;
+  height: 200%;
+  background: linear-gradient(to right,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.4) 50%,
+      rgba(255, 255, 255, 0) 100%);
+  transform: rotate(30deg);
+  transition: all 0.7s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.shine-effect:hover::after {
+  left: 150%;
+}
+
+/* --- Pro Badges & Labels --- */
+.badge-pro {
+  padding: 0.5rem 1.2rem;
+  border-radius: 50px;
+  font-weight: 900;
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.badge-pro-gold {
+  background: linear-gradient(135deg, #c5a021 0%, #e3c04d 100%);
+  color: #001b44;
+}
+
+.badge-pro-navy {
+  background: #001b44;
+  color: #c5a021;
+}
+
+.badge-pro-glass {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.label-pro {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #c5a021;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.section-title-pro {
+  font-weight: 950;
+  color: #001b44;
+  line-height: 1.1;
+  position: relative;
+  display: inline-block;
+}
+
+.section-title-pro span {
+  color: #c5a021;
+}
+
+/* Animations */
+@keyframes pulse-gold {
+  0% {
+    box-shadow: 0 0 0 0 rgba(197, 160, 33, 0.4);
+  }
+
+  70% {
+    box-shadow: 0 0 0 10px rgba(197, 160, 33, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(197, 160, 33, 0);
+  }
+}
+
+.pulse-gold {
+  animation: pulse-gold 2s infinite;
+}

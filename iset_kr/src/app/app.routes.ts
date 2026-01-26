@@ -26,6 +26,14 @@ import { StudentLayoutComponent } from './pages/student/layout/student-layout.co
 
 export const routes: Routes = [
     { path: '', component: HomeComponent, pathMatch: 'full' },
+    {
+        path: 'departement/:id/enseignants',
+        loadComponent: () => import('./pages/department-teachers/department-teachers.component').then(c => c.DepartmentTeachersComponent)
+    },
+    {
+        path: 'enseignant/:id',
+        loadComponent: () => import('./pages/teacher-profile/teacher-profile.component').then(c => c.TeacherProfileComponent)
+    },
     { path: 'login', component: LoginComponent },
     {
         path: 'forgot-password',
@@ -77,6 +85,40 @@ export const routes: Routes = [
     },
     { path: 'contact', component: ContactComponent },
 
+    // Specialty Routes
+    {
+        path: 'specialite/dsi',
+        loadComponent: () => import('./pages/specialties/specialty-dsi.component').then(c => c.SpecialtyDSIComponent)
+    },
+    {
+        path: 'specialite/rsi',
+        loadComponent: () => import('./pages/specialties/specialty-rsi.component').then(c => c.SpecialtyRSIComponent)
+    },
+    {
+        path: 'specialite/aii',
+        loadComponent: () => import('./pages/specialties/specialty-aii.component').then(c => c.SpecialtyAIIComponent)
+    },
+    {
+        path: 'specialite/ei',
+        loadComponent: () => import('./pages/specialties/specialty-ei.component').then(c => c.SpecialtyEIComponent)
+    },
+    {
+        path: 'specialite/cfm',
+        loadComponent: () => import('./pages/specialties/specialty-cfm.component').then(c => c.SpecialtyCFMComponent)
+    },
+    {
+        path: 'specialite/mi',
+        loadComponent: () => import('./pages/specialties/specialty-mi.component').then(c => c.SpecialtyMIComponent)
+    },
+    {
+        path: 'specialite/comptabilite',
+        loadComponent: () => import('./pages/specialties/specialty-comptabilite.component').then(c => c.SpecialtyComptabiliteComponent)
+    },
+    {
+        path: 'specialite/management',
+        loadComponent: () => import('./pages/specialties/specialty-management.component').then(c => c.SpecialtyManagementComponent)
+    },
+
     // Student Routes
     {
         path: 'student',
@@ -99,6 +141,10 @@ export const routes: Routes = [
             {
                 path: 'materials',
                 loadComponent: () => import('./pages/student/materials/student-materials.component').then(c => c.StudentMaterialsComponent)
+            },
+            {
+                path: 'rattrapage',
+                loadComponent: () => import('./pages/student/rattrapage/rattrapage.component').then(c => c.RattrapageComponent)
             }
         ]
     },
@@ -117,6 +163,14 @@ export const routes: Routes = [
             { path: 'news', component: AdminNewsComponent },
             { path: 'messages', component: AdminMessagesComponent },
             { path: 'gallery', component: AdminGalleryComponent },
+            {
+                path: 'partners',
+                loadComponent: () => import('./pages/admin/partners/admin-partners.component').then(c => c.AdminPartnersComponent)
+            },
+            {
+                path: 'teachers',
+                loadComponent: () => import('./pages/admin/teachers/admin-teachers.component').then(c => c.AdminTeachersComponent)
+            },
             { path: 'settings', component: AdminSettingsComponent }
         ]
     },
@@ -155,6 +209,10 @@ export const routes: Routes = [
             {
                 path: 'claims',
                 loadComponent: () => import('./pages/staff/claims/staff-claims.component').then(c => c.StaffClaimsComponent)
+            },
+            {
+                path: 'rattrapage',
+                loadComponent: () => import('./pages/staff/rattrapage/staff-rattrapage.component').then(c => c.StaffRattrapageComponent)
             }
         ]
     },

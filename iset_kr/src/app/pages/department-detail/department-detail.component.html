@@ -52,6 +52,11 @@
                                 <i class="fas fa-file-pdf me-2"></i> Visualiser Plan d'Étude
                             </a>
                         </div>
+                        <div class="mt-3" *ngIf="spec.route">
+                            <a [routerLink]="['/specialite', spec.route]" class="btn btn-primary">
+                                <i class="fas fa-arrow-right me-2"></i> En savoir plus
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -110,7 +115,43 @@
         </div>
     </section>
 
-    <!-- 4. CTA -->
+    <!-- 4. Faculty Preview -->
+    <section class="py-12 bg-white" *ngIf="teachers && teachers.length > 0">
+        <div class="container text-center">
+            <h2 class="display-5 fw-bold mb-4 text-navy">Notre Corps Enseignant</h2>
+            <p class="lead mb-8 text-muted mx-auto" style="max-width: 700px;">
+                Découvrez les experts qui accompagnent nos étudiants vers l'excellence académique et professionnelle.
+            </p>
+
+            <div class="row g-4 justify-content-center">
+                <!-- Top 5 Teachers -->
+                <div class="col-6 col-md-4 col-lg-2" *ngFor="let teacher of teachers">
+                    <div class="teacher-preview-card text-center h-100 animate-fade-up">
+                        <div class="teacher-img-wrapper mb-3 mx-auto">
+                            <img [src]="dataService.getImageUrl(teacher.profileImage, teacher.name)"
+                                [alt]="teacher.name" class="teacher-img">
+                        </div>
+                        <h5 class="teacher-name mb-1 small fw-bold">{{ teacher.name }}</h5>
+                        <p class="teacher-grade tiny text-muted mb-0">{{ teacher.grade }}</p>
+                    </div>
+                </div>
+
+                <!-- See More Card -->
+                <div class="col-6 col-md-4 col-lg-2">
+                    <a [routerLink]="['/departement', departmentId, 'enseignants']"
+                        class="teacher-preview-card plus-card text-center d-flex flex-column align-items-center justify-content-center h-100 animate-fade-up border-dashed">
+                        <div class="plus-icon-wrapper mb-3">
+                            <i class="fas fa-plus fa-2x"></i>
+                        </div>
+                        <h5 class="teacher-name mb-1 small fw-black">Voir Plus</h5>
+                        <p class="teacher-grade tiny text-muted mb-0">Tout le corps enseignant</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. CTA -->
     <section class="py-12 bg-white text-center animate-on-scroll">
         <div class="container">
             <h2 class="display-5 fw-black text-navy mb-5">Prêt à intégrer le département {{ department.name }} ?</h2>

@@ -70,6 +70,10 @@ import { AuthService } from '../../../services/auth.service';
               <i class="fas fa-bullhorn"></i>
               <span>Annonces</span>
             </a>
+            <a routerLink="/staff/rattrapage" routerLinkActive="active" class="nav-item" (click)="isMobileMenuOpen = false">
+              <i class="fas fa-calendar-check"></i>
+              <span>Rattrapages</span>
+            </a>
           </div>
 
           <div class="nav-section">
@@ -427,6 +431,7 @@ export class StaffLayoutComponent {
     if (path.includes('notes')) return 'Notes & Évaluations';
     if (path.includes('announcements')) return 'Annonces';
     if (path.includes('claims')) return 'Réclamations';
+    if (path.includes('rattrapage')) return 'Rattrapages';
     return 'Dashboard';
   }
 }

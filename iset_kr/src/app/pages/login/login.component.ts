@@ -114,7 +114,7 @@ export class LoginComponent implements OnInit {
     this.registerForm = this.fb.group({
       fullName: ['', [Validators.required, Validators.minLength(3)]],
       matricule: ['', [Validators.required, Validators.minLength(4)]],
-      email: ['', [Validators.required, Validators.email, Validators.pattern(/^[a-zA-Z0-9._%+-]+@.*rnu\.tn$/)]],
+      email: ['', [Validators.required, Validators.email]],
       phone: ['', [Validators.required]],
       role: ['student', [Validators.required]],
       // New fields

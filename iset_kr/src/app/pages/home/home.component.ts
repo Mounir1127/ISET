@@ -19,6 +19,8 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 })
 export class HomeComponent implements OnInit, OnDestroy {
   galleryScrollInterval: any;
+  newsScrollInterval: any;
+  eventsScrollInterval: any;
   // Services
   services: Service[] = [];
 
@@ -195,6 +197,36 @@ export class HomeComponent implements OnInit, OnDestroy {
   @ViewChild('academicScrollContainer') academicScrollContainer!: ElementRef;
   @ViewChild('industrialScrollContainer') industrialScrollContainer!: ElementRef;
   @ViewChild('internationalScrollContainer') internationalScrollContainer!: ElementRef;
+  @ViewChild('newsScrollContainer') newsScrollContainer!: ElementRef;
+  @ViewChild('eventsScrollContainer') eventsScrollContainer!: ElementRef;
+
+  scrollNews(direction: 'left' | 'right'): void {
+    const container = this.newsScrollContainer.nativeElement;
+    const scrollAmount = 400;
+    const maxScroll = container.scrollWidth - container.clientWidth;
+
+    if (direction === 'left') {
+      if (container.scrollLeft <= 0) container.scrollTo({ left: maxScroll, behavior: 'smooth' });
+      else container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+    } else {
+      if (container.scrollLeft >= maxScroll - 10) container.scrollTo({ left: 0, behavior: 'smooth' });
+      else container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    }
+  }
+
+  scrollEvents(direction: 'left' | 'right'): void {
+    const container = this.eventsScrollContainer.nativeElement;
+    const scrollAmount = 400;
+    const maxScroll = container.scrollWidth - container.clientWidth;
+
+    if (direction === 'left') {
+      if (container.scrollLeft <= 0) container.scrollTo({ left: maxScroll, behavior: 'smooth' });
+      else container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+    } else {
+      if (container.scrollLeft >= maxScroll - 10) container.scrollTo({ left: 0, behavior: 'smooth' });
+      else container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    }
+  }
 
   scrollClubs(direction: 'left' | 'right'): void {
     const container = this.clubsScrollContainer.nativeElement;
@@ -239,36 +271,36 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
-  internationalPartners: { name: string, logo: string }[] = [
-    { name: 'AUF', logo: 'assets/images/nos_parteners/AUF.png' },
-    { name: 'KOICA', logo: 'assets/images/nos_parteners/KOICA.png' },
-    { name: 'PNUD', logo: 'assets/images/nos_parteners/UNDP.png' },
-    { name: 'AFD', logo: 'assets/images/nos_parteners/AFD.jpg' }
+  internationalPartners: any[] = [
+    { name: 'AUF', logo: 'assets/images/nos_parteners/AUF.png', type: 'international' },
+    { name: 'KOICA', logo: 'assets/images/nos_parteners/KOICA.png', type: 'international' },
+    { name: 'PNUD', logo: 'assets/images/nos_parteners/UNDP.png', type: 'international' },
+    { name: 'AFD', logo: 'assets/images/nos_parteners/AFD.jpg', type: 'international' }
   ];
 
-  academicPartners: { name: string, logo: string, link?: string }[] = [
-    { name: 'Université de Kairouan', logo: 'assets/images/nos_parteners/Université%20de%20Kairouan.png' },
-    { name: 'Canada', logo: 'assets/images/nos_parteners/canada.png' },
-    { name: 'CNFCPP', logo: 'assets/images/nos_parteners/CNFCPP.png' },
-    { name: 'CNFCCP', logo: 'assets/images/nos_parteners/CNFCCP.jpg' },
-    { name: 'ESPITA', logo: 'assets/images/nos_parteners/ESPITA.jpg' },
-    { name: 'IHE Sousse', logo: 'assets/images/nos_parteners/ihesousse_logo.jpg' },
-    { name: 'ASH', logo: 'assets/images/nos_parteners/ASH.jpg' },
-    { name: 'Jannet', logo: 'assets/images/nos_parteners/Jannet.jpg' },
-    { name: 'MTK', logo: 'assets/images/nos_parteners/MTK.jpg' }
+  academicPartners: any[] = [
+    { name: 'Université de Kairouan', logo: 'assets/images/nos_parteners/Université%20de%20Kairouan.png', type: 'academic' },
+    { name: 'Canada', logo: 'assets/images/nos_parteners/canada.png', type: 'academic' },
+    { name: 'CNFCPP', logo: 'assets/images/nos_parteners/CNFCPP.png', type: 'academic' },
+    { name: 'CNFCCP', logo: 'assets/images/nos_parteners/CNFCCP.jpg', type: 'academic' },
+    { name: 'ESPITA', logo: 'assets/images/nos_parteners/ESPITA.jpg', type: 'academic' },
+    { name: 'IHE Sousse', logo: 'assets/images/nos_parteners/ihesousse_logo.jpg', type: 'academic' },
+    { name: 'ASH', logo: 'assets/images/nos_parteners/ASH.jpg', type: 'academic' },
+    { name: 'Jannet', logo: 'assets/images/nos_parteners/Jannet.jpg', type: 'academic' },
+    { name: 'MTK', logo: 'assets/images/nos_parteners/MTK.jpg', type: 'academic' }
   ];
 
-  industrialPartners = [
-    { name: 'Orange Digital Center', logo: 'assets/images/nos_parteners/orange.png', link: 'https://engageforchange.orange.com' },
-    { name: '4C ISET Kairouan', logo: 'assets/images/nos_parteners/4C.png' },
-    { name: 'GoMyCode', logo: 'assets/images/nos_parteners/GomyCode.png' },
-    { name: 'JCI Kairouan', logo: 'assets/images/nos_parteners/jci_kr.jpg' },
-    { name: 'ANME', logo: 'assets/images/nos_parteners/ANME.jpg' },
-    { name: 'APII', logo: 'assets/images/nos_parteners/APII.png' },
-    { name: 'UTICA', logo: 'assets/images/nos_parteners/Logo_UTICA.gif' },
-    { name: 'Landor', logo: 'assets/images/nos_parteners/LANDOR.jpg' },
-    { name: 'Sabrine', logo: 'assets/images/nos_parteners/Sabrine.jpg' },
-    { name: 'Vizmerald', logo: 'assets/images/nos_parteners/vizmerald.png' }
+  industrialPartners: any[] = [
+    { name: 'Orange Digital Center', logo: 'assets/images/nos_parteners/orange.png', link: 'https://engageforchange.orange.com', type: 'industrial' },
+    { name: '4C ISET Kairouan', logo: 'assets/images/nos_parteners/4C.png', type: 'industrial' },
+    { name: 'GoMyCode', logo: 'assets/images/nos_parteners/GomyCode.png', type: 'industrial' },
+    { name: 'JCI Kairouan', logo: 'assets/images/nos_parteners/jci_kr.jpg', type: 'industrial' },
+    { name: 'ANME', logo: 'assets/images/nos_parteners/ANME.jpg', type: 'industrial' },
+    { name: 'APII', logo: 'assets/images/nos_parteners/APII.png', type: 'industrial' },
+    { name: 'UTICA', logo: 'assets/images/nos_parteners/Logo_UTICA.gif', type: 'industrial' },
+    { name: 'Landor', logo: 'assets/images/nos_parteners/LANDOR.jpg', type: 'industrial' },
+    { name: 'Sabrine', logo: 'assets/images/nos_parteners/Sabrine.jpg', type: 'industrial' },
+    { name: 'Vizmerald', logo: 'assets/images/nos_parteners/vizmerald.png', type: 'industrial' }
   ];
 
   constructor(
@@ -289,6 +321,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.startHeroCarousel();
     this.initScrollAnimations();
     this.startGalleryAutoScroll();
+    this.startNewsAutoScroll();
+    this.startEventsAutoScroll();
 
     // Auto-refresh when notified
     this.dataService.refreshAnnouncementsRequested$.subscribe(() => {
@@ -298,9 +332,29 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.galleryScrollInterval) {
-      clearInterval(this.galleryScrollInterval);
+    if (this.galleryScrollInterval) clearInterval(this.galleryScrollInterval);
+    if (this.newsScrollInterval) clearInterval(this.newsScrollInterval);
+    if (this.eventsScrollInterval) clearInterval(this.eventsScrollInterval);
+  }
+
+  startNewsAutoScroll(): void {
+    if (typeof window !== 'undefined') {
+      this.newsScrollInterval = setInterval(() => this.scrollNews('right'), 4000);
     }
+  }
+
+  stopNewsAutoScroll(): void {
+    if (this.newsScrollInterval) clearInterval(this.newsScrollInterval);
+  }
+
+  startEventsAutoScroll(): void {
+    if (typeof window !== 'undefined') {
+      this.eventsScrollInterval = setInterval(() => this.scrollEvents('right'), 3500);
+    }
+  }
+
+  stopEventsAutoScroll(): void {
+    if (this.eventsScrollInterval) clearInterval(this.eventsScrollInterval);
   }
 
   startGalleryAutoScroll(): void {
@@ -364,6 +418,21 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.loadCertificates();
     this.loadAnnouncements();
     this.loadStats();
+    this.loadPartners();
+  }
+
+  loadPartners(): void {
+    this.dataService.getPartners().subscribe({
+      next: (partners) => {
+        if (partners && partners.length > 0) {
+          this.academicPartners = partners.filter(p => p.type === 'academic');
+          this.industrialPartners = partners.filter(p => p.type === 'industrial');
+          this.internationalPartners = partners.filter(p => p.type === 'international');
+          this.cdr.detectChanges();
+        }
+      },
+      error: (err) => console.error('Error loading partners', err)
+    });
   }
 
   loadServices(): void {
@@ -456,7 +525,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   get filteredItems(): any[] {
     switch (this.activeTab) {
-      case 'all': return this.announcements; // New case for 'all'
+      case 'all': return this.announcements.filter(a => a.type !== 'event'); // Exclude events from 'all' view
       case 'news': return this.nouveautes;
       case 'event': return this.manifestations;
       case 'tender': return this.appelsOffre;

@@ -91,11 +91,61 @@ import { StaffService } from '../../../services/staff.service';
             </tbody>
           </table>
           
-          <!-- EMPTY STATE -->
           <div class="empty-state" *ngIf="filteredStudents.length === 0">
             <i class="fas fa-user-slash"></i>
             <h3>Aucun étudiant trouvé</h3>
             <p>Essayez d'ajuster vos filtres de recherche.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- STUDENT DETAIL MODAL -->
+      <div class="modal-overlay" *ngIf="selectedStudent" (click)="closeProfile()">
+        <div class="modal-card" (click)="$event.stopPropagation()">
+          <button class="close-btn" (click)="closeProfile()"><i class="fas fa-times"></i></button>
+          
+          <div class="modal-header-profile">
+            <div class="profile-big-avatar">
+              <span *ngIf="!selectedStudent.photo">{{ selectedStudent.name.charAt(0) }}</span>
+              <img *ngIf="selectedStudent.photo" [src]="selectedStudent.photo" alt="avatar">
+            </div>
+            <h2>{{ selectedStudent.name }}</h2>
+            <p class="role-badge">Étudiant</p>
+          </div>
+
+          <div class="modal-body-grid">
+            <div class="info-item">
+              <label>Matricule</label>
+              <span>{{ selectedStudent.matricule }}</span>
+            </div>
+            <div class="info-item">
+              <label>Email</label>
+              <span>{{ selectedStudent.email }}</span>
+            </div>
+            <div class="info-item">
+              <label>Téléphone</label>
+              <span>{{ selectedStudent.phone || 'Non renseigné' }}</span>
+            </div>
+            <div class="info-item">
+              <label>CIN</label>
+              <span>{{ selectedStudent.cin || 'Non renseigné' }}</span>
+            </div>
+            <div class="info-item">
+              <label>Date de Naissance</label>
+              <span>{{ selectedStudent.birthDate | date:'dd/MM/yyyy' }}</span>
+            </div>
+            <div class="info-item">
+              <label>Genre</label>
+              <span>{{ selectedStudent.gender || 'Non renseigné' }}</span>
+            </div>
+            <div class="info-item full">
+              <label>Département</label>
+              <span>{{ selectedStudent.department?.name || 'Non assigné' }}</span>
+            </div>
+             <div class="info-item full">
+              <label>Classe</label>
+              <span>{{ selectedStudent.classGroup?.name || 'Non assigné' }}</span>
+            </div>
           </div>
         </div>
       </div>
@@ -110,6 +160,14 @@ import { StaffService } from '../../../services/staff.service';
     .premium-table { width: 100%; border-collapse: separate; border-spacing: 0 0.8rem; th { padding: 1rem 1.5rem; text-align: left; font-size: 0.75rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; } .student-row { background: white; transition: all 0.3s; td { padding: 1.2rem 1.5rem; border-top: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9; vertical-align: middle; &:first-child { border-left: 1px solid #f1f5f9; border-radius: 16px 0 0 16px; } &:last-child { border-right: 1px solid #f1f5f9; border-radius: 0 16px 16px 0; } } &:hover { transform: scale(1.01); box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05); td { border-color: #0055a4; background: #f0f7ff; } } } .student-avatar, .student-avatar-placeholder { width: 45px; height: 45px; border-radius: 12px; background-size: cover; background-position: center; } .student-avatar-placeholder { background: linear-gradient(135deg, #0055a4, #0077c8); color: white; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1.2rem; } .name-cell { display: flex; flex-direction: column; .full-name { font-weight: 800; color: #0f172a; font-size: 1rem; } .email { font-size: 0.8rem; color: #64748b; font-weight: 500; } } .matricule-tag { background: #f1f5f9; padding: 0.4rem 0.8rem; border-radius: 10px; font-size: 0.8rem; font-weight: 900; color: #0055a4; font-family: monospace; } .specialty-badge { font-weight: 700; color: #d97706; background: #fffbeb; padding: 0.3rem 0.8rem; border-radius: 8px; font-size: 0.8rem; } .class-badge { font-weight: 700; color: #0055a4; background: #eff6ff; padding: 0.3rem 0.8rem; border-radius: 8px; font-size: 0.8rem; } .action-btn { background: white; border: 1px solid #e2e8f0; width: 38px; height: 38px; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; margin-right: 0.5rem; cursor: pointer; transition: all 0.3s; color: #64748b; &:hover { background: #0055a4; color: white; border-color: #0055a4; transform: translateY(-2px); } } }
     .empty-state { padding: 5rem 2rem; text-align: center; i { font-size: 4rem; color: #f1f5f9; margin-bottom: 2rem; display: block; } h3 { font-size: 1.5rem; color: #0f172a; margin-bottom: 0.5rem; } p { color: #64748b; font-weight: 500; } }
     .loading-state { padding: 4rem; text-align: center; color: #64748b; i { font-size: 2.5rem; margin-bottom: 1rem; color: #cbd5e1; } }
+    /* Modal Styles */
+    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(5px); z-index: 1000; display: flex; align-items: center; justify-content: center; animation: fadeIn 0.3s; }
+    .modal-card { background: white; width: 90%; max-width: 600px; border-radius: 20px; padding: 2rem; position: relative; animation: popIn 0.3s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 0 20px 50px rgba(0,0,0,0.2); }
+    .close-btn { position: absolute; top: 1.5rem; right: 1.5rem; background: #f1f5f9; border: none; width: 32px; height: 32px; border-radius: 50%; color: #64748b; cursor: pointer; transition: 0.2s; &:hover { background: #e2e8f0; color: #ef4444; } }
+    .modal-header-profile { text-align: center; margin-bottom: 2rem; .profile-big-avatar { width: 100px; height: 100px; margin: 0 auto 1.5rem; background: linear-gradient(135deg, #0055a4, #0077c8); border-radius: 25px; display: flex; align-items: center; justify-content: center; color: white; font-size: 2.5rem; font-weight: 900; img { width: 100%; height: 100%; object-fit: cover; border-radius: 25px; } } h2 { color: #0f172a; font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem; } .role-badge { display: inline-block; background: #eff6ff; color: #0055a4; padding: 0.3rem 0.8rem; border-radius: 8px; font-weight: 700; font-size: 0.8rem; } }
+    .modal-body-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; .info-item { display: flex; flex-direction: column; gap: 0.3rem; label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: #94a3b8; font-weight: 800; } span { font-weight: 600; color: #334155; font-size: 1rem; } &.full { grid-column: span 2; } } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
   `]
 })
 export class StaffStudentsComponent implements OnInit {
@@ -162,7 +220,11 @@ export class StaffStudentsComponent implements OnInit {
     });
   }
 
-  viewProfile(student: any) { alert(`Détails de l'étudiant : ${student.name}`); }
-  messageStudent(student: any) { alert(`Contacter ${student.name}`); }
-  exportList() { alert('Exportation de la liste au format Excel...'); }
+  viewProfile(student: any) { this.selectedStudent = student; }
+  closeProfile() { this.selectedStudent = null; }
+  messageStudent(student: any) { alert(`Start chat with ${student.name}`); }
+  exportList() { alert('Exporting student list...'); }
+
+  selectedStudent: any = null;
 }
+

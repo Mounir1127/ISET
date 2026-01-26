@@ -1,0 +1,51 @@
+[
+  {
+    "name": "Hiba Khalil",
+    "role": "staff",
+    "deptId": "67727181f5c697841cffd26e",
+    "deptName": "NOT_FOUND_IN_DEPTS",
+    "profileImage": "/uploads/test-link-v2.jpg"
+  },
+  {
+    "name": "Kawthar Mtawaa",
+    "role": "chef",
+    "deptId": "6965860310925fc133c9daec",
+    "deptName": "Technologie De L'informatique",
+    "profileImage": "assets/images/staff/generic-avatar.png"
+  },
+  {
+    "name": "Nabil Mrabat",
+    "role": "staff",
+    "deptId": "6965860210925fc133c9dab8",
+    "deptName": "Economie Et Gestion",
+    "profileImage": "NONE"
+  },
+  {
+    "name": "Maher Ibdeli",
+    "role": "staff",
+    "deptId": "6965860310925fc133c9daec",
+    "deptName": "Technologie De L'informatique",
+    "profileImage": "NONE"
+  },
+  {
+    "name": "Chokri Ouertani",
+    "role": "chef",
+    "deptId": "6965860210925fc133c9dab8",
+    "deptName": "Economie Et Gestion",
+    "profileImage": "assets/images/staff/generic-avatar.png"
+  },
+  {
+    "name": "Mourad SELMI",
+    "role": "chef",
+    "deptId": "6965860510925fc133c9db1c",
+    "deptName": "Génie Électrique",
+    "profileImage": "/uploads/1768925187149-998193566-602977143_25340200965629505_3930233988888865755_n.jpg"
+  },
+  {
+    "name": "Nizar Ouni",
+    "role": "chef",
+    "deptId": "6965860710925fc133c9db49",
+    "deptName": "Génie Mécanique",
+    "profileImage": "assets/images/staff/generic-avatar.png"
+  }
+]

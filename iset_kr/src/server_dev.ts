@@ -1,4 +1,5 @@
 import express from 'express';
+import bcrypt from 'bcryptjs';
 // @ts-ignore
 import cors from 'cors';
 import multer from 'multer';
@@ -21,6 +22,13 @@ import Notification from './models/Notification';
 import Message from './models/Message';
 import Contact from './models/Contact';
 import GalleryImage from './models/GalleryImage';
+import Partner from './models/Partner';
+import CatchupSession from './models/CatchupSession';
+
+// ...
+
+// Partner model imported above
+
 import { readdirSync } from 'node:fs';
 
 const envPath = join(process.cwd(), '.env');
@@ -72,6 +80,8 @@ mongoose.set('debug', true);
 
 // MongoDB Connection
 const mongodbUri = process.env['MONGODB_URI'] || process.env['MONGO_URI'] || 'mongodb://localhost:27017/iset_kr';
+const maskedUri = mongodbUri ? mongodbUri.replace(/:([^@]+)@/, ':****@') : 'undefined';
+console.log('Connecting to MongoDB:', maskedUri);
 console.log('Connecting to MongoDB...');
 
 const connectWithRetry = () => {
@@ -87,8 +97,16 @@ const connectWithRetry = () => {
 
 connectWithRetry();
 
-// import nodemailer from 'nodemailer';
-import crypto from 'crypto';
+// DB Diagnostic on startup
+mongoose.connection.once('open', async () => {
+  try {
+    const depts = await Department.find({});
+    console.log(`>>> [STARTUP DIAG] Found ${depts.length} departments in DB`);
+    depts.forEach(d => console.log(`  - [${d.name}] code:[${d.code}] ID:${d._id}`));
+  } catch (err) {
+    console.error('>>> [STARTUP DIAG] Error:', err);
+  }
+});
 
 // --- Email Transporter Configuration ---
 /*
@@ -195,6 +213,8 @@ app.post('/api/register', async (req: any, res: any) => {
       cleanData[key] = (value === '' || (Array.isArray(value) && value.length === 0)) ? undefined : value;
     });
 
+    const hashedPassword = cleanData.password ? bcrypt.hashSync(cleanData.password, 10) : undefined;
+
     console.log('>>> Creating User instance with role:', cleanData.role);
     const newUser = new User({
       name: cleanData.fullName,
@@ -204,7 +224,7 @@ app.post('/api/register', async (req: any, res: any) => {
       cin: cleanData.cin,
       birthDate: cleanData.birthDate,
       gender: cleanData.gender,
-      password: cleanData.password,
+      password: hashedPassword,
       role: cleanData.role || 'student',
       status: 'pending',
       department: cleanData.department,
@@ -269,22 +289,118 @@ app.get('/api/public/departments', async (req: any, res: any) => {
   }
 });
 
+app.get('/api/public/debug-departments', async (req: any, res: any) => {
+  try {
+    const depts = await Department.find({});
+    res.status(200).json(depts.map((d: any) => ({ name: d.name, code: d.code, id: d._id })));
+  } catch (err) {
+    res.status(500).json({ error: err });
+  }
+});
+
+app.get('/api/public/teachers/department/:deptId', async (req: any, res: any) => {
+  const deptId = (req.params.deptId || '').trim();
+  console.log(`[TEACHERS] Request for deptId: "${deptId}" (length: ${deptId.length})`);
+  try {
+    let department;
+    if (mongoose.Types.ObjectId.isValid(deptId)) {
+      console.log(`[TEACHERS] Checking as ObjectId: ${deptId}`);
+      department = await Department.findById(deptId);
+    }
+    if (!department) {
+      console.log(`[TEACHERS] Checking as Code: ${deptId}`);
+      department = await Department.findOne({ code: { $regex: new RegExp(`^${deptId}$`, 'i') } });
+    }
+    if (!department) {
+      const slugMap: { [key: string]: string } = {
+        'technologie-informatique': 'TI',
+        'genie-electrique': 'GE',
+        'genie-mecanique': 'GM',
+        'administration-des-affaires': 'AA',
+        'gestion': 'AA',
+        'génie-des-procédés': 'GP'
+      };
+      const code = slugMap[deptId.toLowerCase()];
+      console.log(`[TEACHERS] Slug mapping for "${deptId.toLowerCase()}": ${code}`);
+      if (code) {
+        department = await Department.findOne({ code: { $regex: new RegExp(`^${code}$`, 'i') } });
+      }
+    }
+    if (!department) {
+      const searchName = deptId.replace(/-/g, ' ');
+      console.log(`[TEACHERS] Checking as Name: "${searchName}"`);
+      department = await Department.findOne({
+        $or: [
+          { name: { $regex: new RegExp(searchName, 'i') } },
+          { name: { $regex: new RegExp(deptId.split('-')[0], 'i') } }
+        ]
+      });
+    }
+
+    if (!department) {
+      console.log(`[TEACHERS] NOT FOUND for "${deptId}"`);
+      return res.status(404).json({ message: 'Department not found' });
+    }
+
+    console.log(`[TEACHERS] Found Dept: "${department.name}" (${department._id})`);
+    const teachers = await User.find({
+      department: department._id,
+      role: 'staff',
+      status: 'active'
+    }).select('-password').sort({ name: 1 }).lean();
+
+    console.log(`[TEACHERS] Found ${teachers.length} teachers for ${department.name}`);
+    res.status(200).json(teachers);
+  } catch (err) {
+    console.error('[TEACHERS] Error fetching teachers:', err);
+    res.status(500).json({ message: 'Error fetching teachers' });
+  }
+});
+
+app.get('/api/public/teachers/:id', async (req: any, res: any) => {
+  try {
+    const teacher = await User.findById(req.params.id)
+      .select('-password')
+      .populate('department')
+      .lean();
+
+    if (!teacher || teacher.role !== 'staff') {
+      return res.status(404).json({ message: 'Teacher not found' });
+    }
+
+    res.status(200).json(teacher);
+  } catch (err) {
+    res.status(500).json({ message: 'Error fetching teacher details' });
+  }
+});
+
 app.post('/api/login', async (req: any, res: any) => {
   console.log('Login request body:', req.body);
   try {
     const { username, password } = req.body;
-
     if (!username || !password) {
       return res.status(400).json({ message: 'Veuillez fournir un identifiant et un mot de passe.' });
     }
 
     const user = await User.findOne({
-      $or: [{ email: username }, { matricule: username }],
-      password: password
+      $or: [{ email: username }, { matricule: username }]
     }).populate('department').populate('classGroup');
 
     if (!user) {
-      console.warn(`>>> Login failed: User not found for ${username}`);
+      return res.status(401).json({ message: 'Identifiant ou mot de passe incorrect.' });
+    }
+
+    // Check password (support both hashed and plain text for transition)
+    let isMatch = false;
+    if (user.password) {
+      if (user.password.startsWith('$2a$') || user.password.startsWith('$2b$')) {
+        isMatch = bcrypt.compareSync(password, user.password);
+      } else {
+        isMatch = user.password === password;
+      }
+    }
+
+    if (!isMatch) {
       return res.status(401).json({ message: 'Identifiant ou mot de passe incorrect.' });
     }
 
@@ -325,6 +441,64 @@ app.post('/api/login', async (req: any, res: any) => {
   } catch (err) {
     console.error('Login error:', err);
     res.status(500).json({ message: 'Erreur lors de la connexion.' });
+  }
+});
+
+// Update User Profile
+app.put('/api/user/profile/:id', async (req: any, res: any) => {
+  try {
+    const { email, matricule, name } = req.body;
+    const user = await User.findById(req.params.id);
+    if (!user) return res.status(404).json({ message: 'Utilisateur non trouvé' });
+
+    user.email = email || user.email;
+    user.matricule = matricule || user.matricule;
+    user.name = name || user.name;
+
+    await user.save();
+
+    res.status(200).json({
+      message: 'Profil mis à jour',
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        matricule: user.matricule,
+        role: user.role
+      }
+    });
+  } catch (err) {
+    res.status(500).json({ message: 'Erreur lors de la mise à jour du profil' });
+  }
+});
+
+// Change Password
+app.put('/api/user/password/:id', async (req: any, res: any) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+    const user = await User.findById(req.params.id);
+    if (!user) return res.status(404).json({ message: 'Utilisateur non trouvé' });
+
+    // Check current password
+    let isMatch = false;
+    if (user.password) {
+      if (user.password.startsWith('$2a$') || user.password.startsWith('$2b$')) {
+        isMatch = bcrypt.compareSync(currentPassword, user.password);
+      } else {
+        isMatch = user.password === currentPassword;
+      }
+    }
+
+    if (!isMatch) {
+      return res.status(401).json({ message: 'Ancien mot de passe incorrect' });
+    }
+
+    user.password = bcrypt.hashSync(newPassword, 10);
+    await user.save();
+
+    res.status(200).json({ message: 'Mot de passe modifié avec succès' });
+  } catch (err) {
+    res.status(500).json({ message: 'Erreur lors du changement de mot de passe' });
   }
 });
 
@@ -410,6 +584,28 @@ app.post('/api/admin/gallery/upload', upload.single('image'), async (req: any, r
   }
 });
 
+app.post('/api/admin/users/:id/profile-image', upload.single('image'), async (req: any, res: any) => {
+  try {
+    if (!req.file) return res.status(400).json({ message: 'No image uploaded' });
+
+    const imageUrl = `/uploads/${req.file.filename}`;
+    const user = await User.findByIdAndUpdate(
+      req.params.id,
+      { $set: { profileImage: imageUrl } },
+      { new: true }
+    ).select('-password');
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.status(200).json(user);
+  } catch (err) {
+    console.error('Error uploading profile image:', err);
+    res.status(500).json({ message: 'Error uploading profile image' });
+  }
+});
+
 app.delete('/api/admin/gallery/:id', async (req: any, res: any) => {
   try {
     await GalleryImage.findByIdAndDelete(req.params.id);
@@ -475,10 +671,41 @@ app.delete('/api/admin/contacts/:id', async (req: any, res: any) => {
 // List all users
 app.get('/api/admin/users', async (req: any, res: any) => {
   try {
-    const users = await User.find().sort({ createdAt: -1 });
+    const users = await User.find()
+      .populate('department')
+      .sort({ createdAt: -1 });
     res.status(200).json(users);
   } catch (err) {
     res.status(500).json({ message: 'Error fetching users' });
+  }
+});
+
+// Create new user (Admin)
+app.post('/api/admin/users', async (req: any, res: any) => {
+  console.log('>>> [ADMIN] Create User Request Received');
+  try {
+    const { email, matricule, password } = req.body;
+
+    const existingUser = await User.findOne({
+      $or: [{ email }, { matricule }]
+    });
+
+    if (existingUser) {
+      return res.status(400).json({ message: 'Un utilisateur avec cet email ou matricule existe déjà.' });
+    }
+
+    const userData = { ...req.body };
+    const rawPassword = userData.password || 'isetkr2026';
+    userData.password = bcrypt.hashSync(rawPassword, 10);
+
+    const newUser = new User(userData);
+    const savedUser = await newUser.save();
+    const populatedUser = await User.findById(savedUser._id).populate('department');
+
+    res.status(201).json(populatedUser);
+  } catch (err: any) {
+    console.error('>>> Error creating user:', err);
+    res.status(500).json({ message: 'Erreur lors de la création: ' + err.message });
   }
 });
 
@@ -487,11 +714,17 @@ app.put('/api/admin/users/:id', async (req: any, res: any) => {
   console.log(`>>> [ADMIN] Updating user status/data for ID: ${req.params.id}`);
   console.log('>>> Update Data:', req.body);
   try {
+    const updateData = { ...req.body };
+    delete updateData._id;
+    delete updateData.id;
+    delete updateData.createdAt;
+    delete updateData.updatedAt;
+
     const user = await User.findByIdAndUpdate(
       req.params.id,
-      { $set: req.body },
+      { $set: updateData },
       { new: true, runValidators: true }
-    );
+    ).populate('department');
     if (!user) {
       return res.status(404).json({ message: 'Utilisateur non trouvé' });
     }
@@ -1120,7 +1353,248 @@ seedGallery();
 
 // Removed static file serving and Angular rendering for dev server
 
-const port = process.env['PORT'] || 4000;
-app.listen(port, () => {
-  console.log(`Node Express server listening on http://localhost:${port}`);
+// Partner API
+app.get('/api/partners', async (req, res) => {
+  try {
+    const partners = await Partner.find().sort({ createdAt: -1 });
+    res.json(partners);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching partners', error });
+  }
+});
+
+app.post('/api/partners', upload.single('logo'), async (req, res) => {
+  try {
+    const { name, link, type } = req.body;
+    const logo = req.file ? `assets/uploads/${req.file.filename}` : req.body.logo;
+
+    const newPartner = new Partner({ name, link, type, logo });
+    await newPartner.save();
+    res.status(201).json(newPartner);
+  } catch (error) {
+    res.status(500).json({ message: 'Error creating partner', error });
+  }
+});
+
+app.put('/api/partners/:id', upload.single('logo'), async (req, res) => {
+  try {
+    const { name, link, type } = req.body;
+    let updateData: any = { name, link, type };
+    if (req.file) {
+      updateData.logo = `assets/uploads/${req.file.filename}`;
+    } else if (req.body.logo) {
+      updateData.logo = req.body.logo;
+    }
+
+    const updatedPartner = await Partner.findByIdAndUpdate(req.params.id, updateData, { new: true });
+    res.json(updatedPartner);
+  } catch (error) {
+    res.status(500).json({ message: 'Error updating partner', error });
+  }
+});
+
+app.delete('/api/partners/:id', async (req, res) => {
+  try {
+    await Partner.findByIdAndDelete(req.params.id);
+    res.json({ message: 'Partner deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error deleting partner', error });
+  }
+});
+
+
+// Staff Students List
+app.get('/api/staff/students', async (req: any, res: any) => {
+  try {
+    const { classGroupId } = req.query;
+    let query: any = { role: 'student' };
+
+    if (classGroupId && classGroupId !== 'all') {
+      query.classGroup = classGroupId;
+    }
+
+    const students = await User.find(query)
+      .populate('department')
+      .populate('classGroup')
+      .select('-password')
+      .sort({ name: 1 });
+
+    res.status(200).json(students);
+  } catch (err) {
+    res.status(500).json({ message: 'Error fetching students' });
+  }
+});
+
+// Staff Announcements
+app.get('/api/staff/announcements', async (req: any, res: any) => {
+  try {
+    const { teacherId } = req.query;
+    let query: any = { type: 'pedagogical' };
+    if (teacherId) query.author = teacherId;
+    const announcements = await Announcement.find(query).sort({ createdAt: -1 });
+    res.json(announcements);
+  } catch (err) {
+    res.status(500).json({ message: 'Error fetching staff announcements' });
+  }
+});
+
+// --- Catchup / Rattrapage API ---
+app.get('/api/catchup', async (req: any, res: any) => {
+  try {
+    const { classGroupId, teacherId, departmentId } = req.query;
+    const filter: any = {};
+
+    if (classGroupId) filter.classGroup = classGroupId;
+    if (teacherId) filter.teacher = teacherId;
+
+    // Filter by Department (Show all sessions for classes in this department)
+    if (departmentId) {
+      // Find all classes in this department
+      const classesInDept = await ClassGroup.find({ department: departmentId }).select('_id');
+      const classIds = classesInDept.map(c => c._id);
+
+      // If classGroupId was also provided, we strictly respect it (intersection), 
+      // but typically we just overwrite if the intent is "show all".
+      // Let's assume departmentId overrides or expands scope.
+      // Actually, if we want "all students of their department", we filter by the list of classes in that dept.
+      filter.classGroup = { $in: classIds };
+    }
+
+    const sessions = await CatchupSession.find(filter)
+      .populate('classGroup')
+      .populate('subject')
+      .populate('teacher')
+      .sort({ date: 1, startTime: 1 });
+
+    res.status(200).json(sessions);
+  } catch (err) {
+    console.error('Error fetching catchup sessions:', err);
+    res.status(500).json({ message: 'Error fetching catchup sessions' });
+  }
+});
+
+app.post('/api/catchup', async (req: any, res: any) => {
+  try {
+    const session = new CatchupSession(req.body);
+    await session.save();
+    res.status(201).json(session);
+  } catch (err: any) {
+    res.status(500).json({ message: 'Error creating catchup session', error: err.message });
+  }
+});
+
+app.put('/api/catchup/:id', async (req: any, res: any) => {
+  try {
+    const session = await CatchupSession.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.status(200).json(session);
+  } catch (err) {
+    res.status(500).json({ message: 'Error updating catchup session' });
+  }
+});
+
+app.delete('/api/catchup/:id', async (req: any, res: any) => {
+  try {
+    await CatchupSession.findByIdAndDelete(req.params.id);
+    res.status(200).json({ message: 'Catchup session deleted' });
+  } catch (err) {
+    res.status(500).json({ message: 'Error deleting catchup session' });
+  }
+});
+
+
+
+// --- Catchup / Rattrapage API ---
+app.get('/api/catchup', async (req: any, res: any) => {
+  try {
+    const { classGroupId, teacherId, departmentId } = req.query;
+    const filter: any = {};
+
+    if (classGroupId) filter.classGroup = classGroupId;
+    if (teacherId) filter.teacher = teacherId;
+
+    // Filter by Department (Show all sessions for classes in this department)
+    if (departmentId) {
+      const classesInDept = await ClassGroup.find({ department: departmentId }).select('_id');
+      const classIds = classesInDept.map(c => c._id);
+      filter.classGroup = { $in: classIds };
+    }
+
+    const sessions = await CatchupSession.find(filter)
+      .populate('classGroup')
+      .populate('subject')
+      .populate('teacher')
+      .sort({ date: 1, startTime: 1 });
+
+    res.status(200).json(sessions);
+  } catch (err) {
+    console.error('Error fetching catchup sessions:', err);
+    res.status(500).json({ message: 'Error fetching catchup sessions' });
+  }
+});
+
+app.post('/api/catchup', async (req: any, res: any) => {
+  try {
+    const session = new CatchupSession(req.body);
+    await session.save();
+    res.status(201).json(session);
+  } catch (err: any) {
+    res.status(500).json({ message: 'Error creating catchup session', error: err.message });
+  }
+});
+
+app.put('/api/catchup/:id', async (req: any, res: any) => {
+  try {
+    const session = await CatchupSession.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.status(200).json(session);
+  } catch (err) {
+    res.status(500).json({ message: 'Error updating catchup session' });
+  }
+});
+
+app.delete('/api/catchup/:id', async (req: any, res: any) => {
+  try {
+    await CatchupSession.findByIdAndDelete(req.params.id);
+    res.status(200).json({ message: 'Catchup session deleted' });
+  } catch (err) {
+    res.status(500).json({ message: 'Error deleting catchup session' });
+  }
+});
+
+app.post('/api/staff/announcements', async (req: any, res: any) => {
+  try {
+    const newAnnouncement = new Announcement({
+      ...req.body,
+      type: 'pedagogical', // Force type for staff announcements
+      publishDate: new Date()
+    });
+    await newAnnouncement.save();
+    res.status(201).json(newAnnouncement);
+  } catch (error) {
+    res.status(500).json({ message: 'Error creating announcement', error });
+  }
+});
+
+app.put('/api/staff/announcements/:id', async (req: any, res: any) => {
+  try {
+    const updated = await Announcement.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.json(updated);
+  } catch (error) {
+    res.status(500).json({ message: 'Error updating announcement', error });
+  }
+});
+
+app.delete('/api/staff/announcements/:id', async (req: any, res: any) => {
+  try {
+    await Announcement.findByIdAndDelete(req.params.id);
+    res.json({ message: 'Announcement deleted' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error deleting announcement', error });
+  }
+});
+
+// Start Server
+const PORT = process.env.PORT || 4000;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+  console.log(`API URL: http://localhost:${PORT}`);
 });

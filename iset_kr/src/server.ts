@@ -29,6 +29,7 @@ import Subject from './models/Subject';
 import Notification from './models/Notification';
 import Message from './models/Message';
 import Contact from './models/Contact';
+import CatchupSession from './models/CatchupSession';
 
 const envPath = join(process.cwd(), '.env');
 dotenv.config({ path: envPath });
@@ -952,15 +953,50 @@ app.delete('/api/admin/schedules/:id', async (req: any, res: any) => {
   }
 });
 
-// Schedule (Staff View)
-app.get('/api/staff/schedule', async (req: any, res: any) => {
+// Make-up Sessions (Catchup) API
+app.get('/api/catchup', async (req: any, res: any) => {
   try {
-    const schedule = await Schedule.find({ staff: req.query.staffId })
-      .populate('module')
-      .populate('classGroup');
-    res.status(200).json(schedule);
+    const { classGroupId, teacherId } = req.query;
+    const filter: any = {};
+    if (classGroupId) filter.classGroup = classGroupId;
+    if (teacherId) filter.teacher = teacherId;
+
+    const sessions = await CatchupSession.find(filter)
+      .populate('classGroup')
+      .populate('subject')
+      .populate('teacher')
+      .sort({ date: 1, startTime: 1 });
+    res.status(200).json(sessions);
   } catch (err) {
-    res.status(500).json({ message: 'Error fetching schedule' });
+    res.status(500).json({ message: 'Error fetching catchup sessions' });
+  }
+});
+
+app.post('/api/catchup', async (req: any, res: any) => {
+  try {
+    const session = new CatchupSession(req.body);
+    await session.save();
+    res.status(201).json(session);
+  } catch (err: any) {
+    res.status(500).json({ message: 'Error creating catchup session', error: err.message });
+  }
+});
+
+app.put('/api/catchup/:id', async (req: any, res: any) => {
+  try {
+    const session = await CatchupSession.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.status(200).json(session);
+  } catch (err) {
+    res.status(500).json({ message: 'Error updating catchup session' });
+  }
+});
+
+app.delete('/api/catchup/:id', async (req: any, res: any) => {
+  try {
+    await CatchupSession.findByIdAndDelete(req.params.id);
+    res.status(200).json({ message: 'Catchup session deleted' });
+  } catch (err) {
+    res.status(500).json({ message: 'Error deleting catchup session' });
   }
 });
 

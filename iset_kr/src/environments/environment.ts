@@ -1,6 +1,6 @@
 export const environment = {
     production: false,
-    apiUrl: 'http://localhost:4000/api',
+    apiUrl: '/api',
     firebase: {
         apiKey: "AIzaSyANJ5t03u4KCY1KfcfVDgGmy_IsPYp87zs",
         authDomain: "iset-kr.firebaseapp.com",

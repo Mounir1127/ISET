@@ -381,52 +381,7 @@ $white-70: rgba(255, 255, 255, 0.7);
     }
   }
 
-  .btn-gold {
-    background: $gold;
-    color: $navy;
-    border: none;
 
-    &:hover {
-      background: color.adjust($gold, $lightness: 10%);
-      transform: scale(1.05);
-      box-shadow: 0 0 20px rgba($gold, 0.4);
-    }
-  }
-
-  .btn-nav-round {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    cursor: pointer;
-
-    i {
-      transition: transform 0.3s;
-    }
-
-    &:hover {
-      background: $gold;
-      color: $navy;
-      border-color: $gold;
-      transform: scale(1.1);
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-
-      i {
-        transform: scale(1.2);
-      }
-    }
-
-    &.sm {
-      width: 50px;
-      height: 50px;
-    }
-  }
 
   .clubs-carousel-pro {
     padding-bottom: 2rem;
@@ -754,6 +709,53 @@ $white-70: rgba(255, 255, 255, 0.7);
   &::-webkit-scrollbar {
     display: none;
   }
+}
+
+// --- News & Events ---
+.news-section,
+.events-section {
+  .carousel-nav-pro {
+    @media (max-width: 768px) {
+      display: none !important;
+    }
+  }
+}
+
+.news-inner,
+.events-inner {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding-bottom: 2rem !important;
+
+  &::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba($gold, 0.2);
+    border-radius: 2px;
+  }
+}
+
+.btn-navy-outline {
+  border: 2px solid $navy;
+  color: $navy;
+  background: transparent;
+
+  &:hover {
+    background: $navy;
+    color: white;
+  }
+}
+
+.badge-gold-gradient {
+  background: linear-gradient(135deg, $gold, color.adjust($gold, $lightness: 10%));
+  box-shadow: 0 4px 10px rgba($gold, 0.2);
+}
+
+.fw-900 {
+  font-weight: 900 !important;
 }
 
 // --- Scroll Reveal System ---

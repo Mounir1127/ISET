@@ -21,6 +21,12 @@ import Notification from './models/Notification';
 import Message from './models/Message';
 import Contact from './models/Contact';
 import GalleryImage from './models/GalleryImage';
+import Partner from './models/Partner'; // Imported Partner model
+
+// ...
+
+// Partner model imported above
+
 import { readdirSync } from 'fs';
 import bcrypt from 'bcryptjs';
 
@@ -836,6 +842,62 @@ app.get('/api/public/gallery/:category', async (req: any, res: any) => {
         res.status(200).json(images);
     } catch (err) {
         res.status(500).json({ message: 'Error fetching gallery images' });
+    }
+});
+
+// ------------------------------------------------------------------
+// PARTNERS ENDPOINTS
+// ------------------------------------------------------------------
+
+// GET Public Partners
+app.get('/api/partners', async (req, res) => {
+    try {
+        const partners = await Partner.find().sort({ createdAt: -1 });
+        res.json(partners);
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching partners', error });
+    }
+});
+
+// POST Create Partner (Admin)
+app.post('/api/partners', upload.single('logo'), async (req, res) => {
+    try {
+        const { name, link, type } = req.body;
+        const logo = req.file ? `assets/uploads/${req.file.filename}` : req.body.logo; // Support URL or Upload
+
+        const newPartner = new Partner({ name, link, type, logo });
+        await newPartner.save();
+        res.status(201).json(newPartner);
+    } catch (error) {
+        res.status(500).json({ message: 'Error creating partner', error });
+    }
+});
+
+// PUT Update Partner (Admin)
+app.put('/api/partners/:id', upload.single('logo'), async (req, res) => {
+    try {
+        const { name, link, type } = req.body;
+        let updateData: any = { name, link, type };
+        if (req.file) {
+            updateData.logo = `assets/uploads/${req.file.filename}`;
+        } else if (req.body.logo) {
+            updateData.logo = req.body.logo;
+        }
+
+        const updatedPartner = await Partner.findByIdAndUpdate(req.params.id, updateData, { new: true });
+        res.json(updatedPartner);
+    } catch (error) {
+        res.status(500).json({ message: 'Error updating partner', error });
+    }
+});
+
+// DELETE Partner
+app.delete('/api/partners/:id', async (req, res) => {
+    try {
+        await Partner.findByIdAndDelete(req.params.id);
+        res.json({ message: 'Partner deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ message: 'Error deleting partner', error });
     }
 });
 

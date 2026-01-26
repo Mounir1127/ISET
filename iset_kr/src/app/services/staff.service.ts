@@ -66,4 +66,23 @@ export class StaffService {
     getStats(staffId: string): Observable<any> {
         return this.http.get<any>(`${this.baseUrl}/stats`, { params: { staffId } });
     }
+
+    // Announcements
+    getAnnouncements(teacherId?: string): Observable<any[]> {
+        const params: any = {};
+        if (teacherId) params.teacherId = teacherId;
+        return this.http.get<any[]>(`${this.baseUrl}/announcements`, { params });
+    }
+
+    createAnnouncement(data: any): Observable<any> {
+        return this.http.post<any>(`${this.baseUrl}/announcements`, data);
+    }
+
+    updateAnnouncement(id: string, data: any): Observable<any> {
+        return this.http.put<any>(`${this.baseUrl}/announcements/${id}`, data);
+    }
+
+    deleteAnnouncement(id: string): Observable<any> {
+        return this.http.delete<any>(`${this.baseUrl}/announcements/${id}`);
+    }
 }

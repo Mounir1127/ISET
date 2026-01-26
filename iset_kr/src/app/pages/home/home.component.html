@@ -15,13 +15,11 @@
               <h1 class="display-1 fw-black text-white mb-4 ls-tight" [innerHTML]="slide.title"></h1>
               <p class="h4 text-white-50 mb-5 fw-light max-w-600">{{ slide.subtitle }}</p>
               <div class="d-flex flex-wrap gap-3 mt-4 flex-col-mobile">
-                <a routerLink="/formations"
-                  class="btn btn-primary btn-lg px-5 py-3 rounded-pill fw-bold shadow-gold w-100-mobile">
-                  <i class="fas fa-graduation-cap me-2"></i> EXPLORER NOS FORMATIONS
+                <a routerLink="/formations" class="btn-pro btn-pro-primary shine-effect w-100-mobile">
+                  <i class="fas fa-graduation-cap"></i> EXPLORER NOS FORMATIONS
                 </a>
-                <button (click)="openStudentSpace()"
-                  class="btn btn-outline-light btn-lg px-5 py-3 rounded-pill fw-bold blur-bg w-100-mobile">
-                  <i class="fas fa-user-graduate me-2"></i> ESPACE ÉTUDIANT
+                <button (click)="openStudentSpace()" class="btn-pro btn-pro-glass w-100-mobile">
+                  <i class="fas fa-user-graduate"></i> ESPACE ÉTUDIANT
                 </button>
               </div>
             </div>
@@ -72,87 +70,74 @@
     </div>
   </section>
 
-  <!-- 3. News & Announcements (Pro Style) -->
-  <section class="news-section py-10 bg-white position-relative">
-    <div class="container position-relative z-2">
-      <!-- Section Header Pro -->
-      <div class="row align-items-end mb-5">
-        <div class="col-lg-7">
-          <div class="d-inline-flex align-items-center gap-3 mb-2">
-            <span class="d-inline-block bg-gold" style="width: 40px; height: 4px; border-radius: 2px;"></span>
-            <span class="text-gold fw-bold ls-2 text-uppercase small">Information en Continu</span>
+  <!-- 3. News Section (Full Width Row) -->
+  <section class="news-section py-10 bg-white">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-end mb-5 animate-on-scroll slide-up">
+        <div>
+          <div class="mb-3">
+            <span class="badge-pro badge-pro-gold pulse-gold">DIRECT</span>
+            <span class="label-pro d-inline-block ms-2 mb-0">Actualités</span>
           </div>
-          <h2 class="display-4 fw-black text-navy mb-0 ls-tight">Actualités & <br> <span class="text-gold-gradient">Vie
-              de l'Institut</span></h2>
+          <h2 class="section-title-pro display-5 mb-0">Le Fil <span>Info</span></h2>
         </div>
-        <div class="col-lg-5 text-lg-end mt-4 mt-lg-0">
-          <div class="nav-filter-pro d-inline-flex gap-4">
-            <button class="filter-btn" [class.active]="activeTab === 'all'" (click)="setActiveTab('all')">
-              Tout
-            </button>
-            <button class="filter-btn" [class.active]="activeTab === 'news'" (click)="setActiveTab('news')">
-              Actualités
-            </button>
-            <button class="filter-btn" [class.active]="activeTab === 'event'" (click)="setActiveTab('event')">
-              Agenda
-            </button>
-            <button class="filter-btn" [class.active]="activeTab === 'tender'" (click)="setActiveTab('tender')">
-              Appels d'Offre
-            </button>
+        <div class="carousel-nav-pro d-flex gap-2">
+          <button class="btn-nav-pro" (click)="scrollNews('left')" aria-label="Précédent"><i
+              class="fas fa-chevron-left"></i></button>
+          <button class="btn-nav-pro" (click)="scrollNews('right')" aria-label="Suivant"><i
+              class="fas fa-chevron-right"></i></button>
+        </div>
+      </div>
+
+      <div class="news-carousel-wrapper animate-on-scroll slide-up delay-1" (mouseenter)="stopNewsAutoScroll()"
+        (mouseleave)="startNewsAutoScroll()">
+        <div class="d-flex gap-4 p-2 news-inner scrollbar-hide" #newsScrollContainer>
+          <div *ngFor="let item of filteredItems.slice(0, 10)" class="flex-shrink-0" style="width: 380px;">
+            <app-announcement-card [announcement]="item" class="w-100"></app-announcement-card>
           </div>
         </div>
-      </div>
-
-      <div class="row g-4">
-        <!-- Limiter à 6 éléments sur la home page -->
-        <div class="col-md-6 col-lg-4 d-flex" *ngFor="let item of filteredItems.slice(0, 6)">
-          <app-announcement-card [announcement]="item" class="w-100"></app-announcement-card>
+        <div *ngIf="filteredItems.length === 0" class="text-center py-5">
+          <p class="text-muted">Aucune actualité pour le moment.</p>
         </div>
-      </div>
-
-      <div *ngIf="filteredItems.length === 0" class="text-center py-5">
-        <div class="empty-state-icon mb-4"><i class="fas fa-newspaper-slash display-1 text-muted opacity-25"></i></div>
-        <p class="h5 text-muted fw-light">Aucune publication dans cette catégorie.</p>
-      </div>
-
-      <div class="text-center mt-5" *ngIf="filteredItems.length > 6">
-        <a routerLink="/actualites" class="btn btn-link text-navy fw-bold text-decoration-none ls-1">VOIR TOUTES les
-          actualités <i class="fas fa-arrow-right ms-2 text-gold"></i></a>
       </div>
     </div>
   </section>
 
-  <!-- 3b. Manifestations Section (Duplicate Style) -->
-  <section class="manifestations-section py-10 bg-light position-relative">
-    <div class="container position-relative z-2">
-      <!-- Section Header Pro -->
-      <div class="row align-items-end mb-5">
-        <div class="col-lg-7">
-          <div class="d-inline-flex align-items-center gap-3 mb-2">
-            <span class="d-inline-block bg-gold" style="width: 40px; height: 4px; border-radius: 2px;"></span>
-            <span class="text-gold fw-bold ls-2 text-uppercase small">Événements & Culture</span>
+  <!-- 3b. Manifestations Section (Full Width Row) -->
+  <section class="events-section py-10 bg-light-gradient">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-end mb-5 animate-on-scroll slide-up">
+        <div>
+          <div class="mb-3">
+            <span class="label-pro d-inline-block mb-0"><i class="fas fa-calendar-alt me-2"></i>Agenda</span>
           </div>
-          <h2 class="display-4 fw-black text-navy mb-0 ls-tight">Nos <span
-              class="text-gold-gradient">Manifestations</span></h2>
+          <h2 class="section-title-pro display-5 mb-0">Nos <span>Manifestations</span></h2>
         </div>
-        <div class="col-lg-5 text-lg-end mt-4 mt-lg-0">
-          <a routerLink="/actualites" [queryParams]="{tab: 'event'}"
-            class="btn-pro-link text-navy fw-bold text-decoration-none ls-1">
-            VOIR L'AGENDA COMPLET <i class="fas fa-arrow-right ms-2 text-gold"></i>
-          </a>
-        </div>
-      </div>
-
-      <div class="row g-4">
-        <!-- Display Manifestations (Events) -->
-        <div class="col-md-6 col-lg-4 d-flex" *ngFor="let item of manifestations.slice(0, 3)">
-          <app-announcement-card [announcement]="item" class="w-100"></app-announcement-card>
+        <div class="carousel-nav-pro d-flex gap-2">
+          <button class="btn-nav-pro" (click)="scrollEvents('left')" aria-label="Précédent"><i
+              class="fas fa-chevron-left"></i></button>
+          <button class="btn-nav-pro" (click)="scrollEvents('right')" aria-label="Suivant"><i
+              class="fas fa-chevron-right"></i></button>
         </div>
       </div>
 
-      <div *ngIf="manifestations.length === 0" class="text-center py-5">
-        <div class="empty-state-icon mb-4"><i class="fas fa-calendar-times display-1 text-muted opacity-25"></i></div>
-        <p class="h5 text-muted fw-light">Aucune manifestation prévue pour le moment.</p>
+      <div class="events-carousel-wrapper animate-on-scroll slide-up delay-1" (mouseenter)="stopEventsAutoScroll()"
+        (mouseleave)="startEventsAutoScroll()">
+        <div class="d-flex gap-4 p-2 events-inner scrollbar-hide" #eventsScrollContainer>
+          <div *ngFor="let event of manifestations.slice(0, 10)" class="flex-shrink-0" style="width: 380px;">
+            <app-announcement-card [announcement]="event"></app-announcement-card>
+          </div>
+        </div>
+        <div *ngIf="manifestations.length === 0" class="text-center py-5">
+          <p class="text-muted">Aucun événement à venir.</p>
+        </div>
+      </div>
+
+      <div class="text-center mt-5">
+        <a routerLink="/actualites" [queryParams]="{tab: 'event'}"
+          class="btn btn-navy-outline rounded-pill px-5 py-3 fw-bold shadow-sm transition-up">
+          VOIR TOUT L'AGENDA <i class="fas fa-arrow-right ms-2 text-gold"></i>
+        </a>
       </div>
     </div>
   </section>
@@ -274,10 +259,10 @@
         </div>
         <div class="col-lg-4 text-end d-none d-lg-block">
           <div class="carousel-nav-pro d-flex justify-content-end gap-3">
-            <button class="btn-nav-round" (click)="scrollClubs('left')" aria-label="Précédent">
+            <button class="btn-nav-pro" (click)="scrollClubs('left')" aria-label="Précédent">
               <i class="fas fa-chevron-left"></i>
             </button>
-            <button class="btn-nav-round" (click)="scrollClubs('right')" aria-label="Suivant">
+            <button class="btn-nav-pro" (click)="scrollClubs('right')" aria-label="Suivant">
               <i class="fas fa-chevron-right"></i>
             </button>
           </div>
@@ -303,8 +288,10 @@
 
         <!-- Mobile arrows -->
         <div class="d-lg-none d-flex justify-content-center gap-4 mt-5">
-          <button class="btn-nav-round sm" (click)="scrollClubs('left')"><i class="fas fa-chevron-left"></i></button>
-          <button class="btn-nav-round sm" (click)="scrollClubs('right')"><i class="fas fa-chevron-right"></i></button>
+          <button class="btn-nav-pro" (click)="scrollClubs('left')" aria-label="Précédent"><i
+              class="fas fa-chevron-left"></i></button>
+          <button class="btn-nav-pro" (click)="scrollClubs('right')" aria-label="Suivant"><i
+              class="fas fa-chevron-right"></i></button>
         </div>
       </div>
     </div>
@@ -402,15 +389,14 @@
           </div>
         </div>
 
-        <!-- Gallery Nav -->
         <button
-          class="btn btn-navy shadow-lg rounded-circle position-absolute top-50 start-0 translate-middle-y ms-neg-20 d-none d-lg-flex"
-          (click)="scrollGallery('left')">
+          class="btn-nav-pro position-absolute top-50 start-0 translate-middle-y ms-neg-20 d-none d-lg-flex shadow-xl"
+          (click)="scrollGallery('left')" aria-label="Précédent">
           <i class="fas fa-chevron-left"></i>
         </button>
         <button
-          class="btn btn-navy shadow-lg rounded-circle position-absolute top-50 end-0 translate-middle-y me-neg-20 d-none d-lg-flex"
-          (click)="scrollGallery('right')">
+          class="btn-nav-pro position-absolute top-50 end-0 translate-middle-y me-neg-20 d-none d-lg-flex shadow-xl"
+          (click)="scrollGallery('right')" aria-label="Suivant">
           <i class="fas fa-chevron-right"></i>
         </button>
       </div>
@@ -502,9 +488,9 @@
         <div class="d-flex justify-content-between align-items-center mb-4">
           <h3 class="partner-category-title">Partenaires Internationaux</h3>
           <div class="partner-nav d-flex gap-2">
-            <button class="partner-nav-round" (click)="scrollPartners('international', 'left')"><i
+            <button class="btn-nav-pro sm" (click)="scrollPartners('international', 'left')" aria-label="Précédent"><i
                 class="fas fa-chevron-left"></i></button>
-            <button class="partner-nav-round" (click)="scrollPartners('international', 'right')"><i
+            <button class="btn-nav-pro sm" (click)="scrollPartners('international', 'right')" aria-label="Suivant"><i
                 class="fas fa-chevron-right"></i></button>
           </div>
         </div>
@@ -522,9 +508,9 @@
         <div class="d-flex justify-content-between align-items-center mb-4">
           <h3 class="partner-category-title">Partenaires Académiques</h3>
           <div class="partner-nav d-flex gap-2">
-            <button class="partner-nav-round" (click)="scrollPartners('academic', 'left')"><i
+            <button class="btn-nav-pro sm" (click)="scrollPartners('academic', 'left')" aria-label="Précédent"><i
                 class="fas fa-chevron-left"></i></button>
-            <button class="partner-nav-round" (click)="scrollPartners('academic', 'right')"><i
+            <button class="btn-nav-pro sm" (click)="scrollPartners('academic', 'right')" aria-label="Suivant"><i
                 class="fas fa-chevron-right"></i></button>
           </div>
         </div>
@@ -542,9 +528,9 @@
         <div class="d-flex justify-content-between align-items-center mb-4">
           <h3 class="partner-category-title">Partenaires Sociaux Professionnels</h3>
           <div class="partner-nav d-flex gap-2">
-            <button class="partner-nav-round" (click)="scrollPartners('industrial', 'left')"><i
+            <button class="btn-nav-pro sm" (click)="scrollPartners('industrial', 'left')" aria-label="Précédent"><i
                 class="fas fa-chevron-left"></i></button>
-            <button class="partner-nav-round" (click)="scrollPartners('industrial', 'right')"><i
+            <button class="btn-nav-pro sm" (click)="scrollPartners('industrial', 'right')" aria-label="Suivant"><i
                 class="fas fa-chevron-right"></i></button>
           </div>
         </div>
@@ -570,13 +556,11 @@
           technologique innovante et transformez votre avenir avec l'ISET Kairouan.</p>
 
         <div class="d-flex flex-wrap justify-content-center gap-4 mt-5">
-          <a routerLink="/formations"
-            class="btn btn-gold btn-xl px-5 py-4 rounded-pill fw-black shadow-gold-xl transition-up d-flex align-items-center">
-            REJOINDRE L'ISET <i class="fas fa-paper-plane ms-3"></i>
+          <a routerLink="/formations" class="btn-pro btn-pro-gold shine-effect">
+            REJOINDRE L'ISET <i class="fas fa-paper-plane"></i>
           </a>
-          <button (click)="openStudentSpace()"
-            class="btn btn-outline-white btn-xl px-5 py-4 rounded-pill fw-black transition-up d-flex align-items-center">
-            CONTACTER UN CONSEILLER <i class="fas fa-headset ms-3"></i>
+          <button (click)="openStudentSpace()" class="btn-pro btn-pro-glass border-white">
+            CONTACTER UN CONSEILLER <i class="fas fa-headset"></i>
           </button>
         </div>
       </div>

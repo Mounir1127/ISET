@@ -17,6 +17,17 @@ export class DataService {
 
   constructor(private http: HttpClient) { }
 
+  getImageUrl(path: string | null | undefined, name: string = 'User'): string {
+    if (!path) return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random&color=fff`;
+    if (path.startsWith('http')) return path;
+    if (path.startsWith('assets/')) return '/' + path;
+
+    // If apiUrl is relative (starts with /), ensure we don't end up with //
+    const baseUrl = this.apiUrl.replace('/api', '');
+    const fullPath = `${baseUrl}${path.startsWith('/') ? '' : '/'}${path}`;
+    return fullPath;
+  }
+
   notifyAnnouncementsChanged() {
     this.refreshAnnouncements$.next();
   }
@@ -108,5 +119,42 @@ export class DataService {
 
   deleteContactMessage(id: string): Observable<any> {
     return this.http.delete(`${this.apiUrl}/admin/contacts/${id}`);
+  }
+
+  // Admin User Management
+  getAdminUsers(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/admin/users`);
+  }
+
+  updateUser(id: string, data: any): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/admin/users/${id}`, data);
+  }
+
+  createAdminUser(data: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/admin/users`, data);
+  }
+
+  deleteUser(id: string): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/admin/users/${id}`);
+  }
+
+  uploadProfileImage(id: string, file: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('image', file);
+    return this.http.post<any>(`${this.apiUrl}/admin/users/${id}/profile-image`, formData);
+  }
+
+  // Teachers
+  getTeachersByDepartment(deptId: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/public/teachers/department/${deptId}`);
+  }
+
+  getTeacherById(id: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/public/teachers/${id}`);
+  }
+
+  // Partners
+  getPartners(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/partners`);
   }
 }
