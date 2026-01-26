@@ -314,6 +314,7 @@ app.get('/api/public/teachers/department/:deptId', async (req: any, res: any) =>
     if (!department) {
       const slugMap: { [key: string]: string } = {
         'technologie-informatique': 'TI',
+        'informatique': 'TI',
         'genie-electrique': 'GE',
         'genie-mecanique': 'GM',
         'administration-des-affaires': 'AA',
