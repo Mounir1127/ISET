@@ -313,13 +313,32 @@ app.get('/api/public/teachers/department/:deptId', async (req: any, res: any) =>
     }
     if (!department) {
       const slugMap: { [key: string]: string } = {
+        // Informatique
         'technologie-informatique': 'TI',
         'informatique': 'TI',
+        'ti': 'TI',
+
+        // Génie Électrique
         'genie-electrique': 'GE',
+        'electrique': 'GE',
+        'ge': 'GE',
+
+        // Génie Mécanique
         'genie-mecanique': 'GM',
+        'mecanique': 'GM',
+        'gm': 'GM',
+
+        // Gestion / Administration
         'administration-des-affaires': 'AA',
-        'gestion': 'AA',
-        'génie-des-procédés': 'GP'
+        'gestion': 'AA', // Souvent utilisé pour AA/Gestion
+        'sciences-economiques-et-gestion': 'SEG', // Code correct à vérifier en base
+        'economie-et-gestion': 'GESTION', // Code vu dans la base de données
+        'seg': 'SEG',
+
+        // Génie des Procédés
+        'génie-des-procédés': 'GP',
+        'genie-des-procedes': 'GP',
+        'gp': 'GP'
       };
       const code = slugMap[deptId.toLowerCase()];
       console.log(`[TEACHERS] Slug mapping for "${deptId.toLowerCase()}": ${code}`);
