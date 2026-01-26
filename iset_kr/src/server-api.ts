@@ -885,7 +885,7 @@ app.put('/api/partners/:id', upload.single('logo'), async (req, res) => {
             updateData.logo = req.body.logo;
         }
 
-        const updatedPartner = await Partner.findByIdAndUpdate(req.params.id, updateData, { new: true });
+        const updatedPartner = await Partner.findByIdAndUpdate(req.params['id'], updateData, { new: true });
         res.json(updatedPartner);
     } catch (error) {
         res.status(500).json({ message: 'Error updating partner', error });
