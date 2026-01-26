@@ -338,7 +338,7 @@ app.get('/api/public/teachers/department/:deptId', async (req: any, res: any) =>
 
 app.get('/api/public/teachers/:id', async (req: any, res: any) => {
     try {
-        const teacher = await User.findById(req.params.id)
+        const teacher: any = await User.findById(req.params.id)
             .select('-password')
             .populate('department')
             .lean();
