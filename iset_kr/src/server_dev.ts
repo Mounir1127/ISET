@@ -666,6 +666,18 @@ app.delete('/api/admin/contacts/:id', async (req: any, res: any) => {
   }
 });
 
+// Partners API
+app.get('/api/partners', async (req: any, res: any) => {
+  try {
+    const partners = await Partner.find().sort({ createdAt: -1 });
+    res.status(200).json(partners);
+  } catch (err) {
+    console.error('Error fetching partners:', err);
+    res.status(500).json({ message: 'Error fetching partners' });
+  }
+});
+
+
 // Admin API Endpoints
 
 // List all users
