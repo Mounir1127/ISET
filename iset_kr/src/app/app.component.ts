@@ -60,7 +60,9 @@ export class AppComponent implements OnInit {
         this.isFourCPage = this.router.url === '/4c';
         this.isMotDirecteurPage = this.router.url.includes('/mot-du-directeur');
         this.isPresentationPage = this.router.url.includes('/presentation');
-        this.isDepartmentPage = this.router.url.includes('/department/'); // Kept original logic for department
+        this.isPresentationPage = this.router.url.includes('/presentation');
+        this.isDepartmentPage = this.router.url.includes('/department/') || this.router.url.includes('/departement/');
+        this.isProjetsPage = this.router.url.includes('/projets');
         this.isProjetsPage = this.router.url.includes('/projets');
         this.isVieEtudiantePage = this.router.url.includes('/vie-universitaire');
         this.isQualitePage = this.router.url.includes('/qualite'); // Added isQualitePage logic
